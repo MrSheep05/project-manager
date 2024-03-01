@@ -163,13 +163,14 @@ const createCall = async (
   }
 };
 
+const allowedChars = /^[A-Za-z0-9\-]+$/;
 const joinVaraibles = (
   variables: (string | undefined)[],
   expected: number
 ): string =>
   expected > 0
     ? [...Array(expected - 1).keys()].reduce((prev, i) => {
-        if (variables[i + 1] !== null) {
+        if (variables[i + 1] !== null && variables[i + 1].match(allowedChars)) {
           return `${prev}, ${variables[i + 1]}`;
         } else {
           return `${prev}, NULL`;
