@@ -16,7 +16,7 @@ const test = async () => {
       type: Procedure.AddStatus,
       payload: {
         uid: adminUserId,
-        name: "",
+        name: "Test",
         color: parseInt("9ff26e", 16),
       },
     });

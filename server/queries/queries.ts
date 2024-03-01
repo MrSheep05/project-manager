@@ -30,85 +30,51 @@ export const runProcedure = async (
   switch (action.type) {
     case Procedure.AddCategory: {
       const { uid, name, color } = action.payload;
-      return await createCall(
-        connection,
-        action.type,
-        [...wrapStrings([uid, name]), color.toString()],
-        3
-      );
+      return await createCall(connection, action.type, [uid, name, color], 3);
     }
     case Procedure.AddConnection: {
       const { uid, connectionId } = action.payload;
-      return await createCall(
-        connection,
-        action.type,
-        wrapStrings([uid, connectionId]),
-        2
-      );
+      return await createCall(connection, action.type, [uid, connectionId], 2);
     }
     case Procedure.AddProject: {
       const { uid, content, title, statusId, categoriesIds } = action.payload;
       return await createCall(
         connection,
         action.type,
-        wrapStrings([
+        [
           uid,
           statusId,
           joinVaraibles(categoriesIds, categoriesIds.length),
           title,
           content,
-        ]),
+        ],
         5
       );
     }
     case Procedure.AddStatus: {
       const { uid, name, color } = action.payload;
-      const [id, n] = wrapStrings([uid, name]);
-      return await createCall(
-        connection,
-        action.type,
-        [n, color.toString(), id],
-        3
-      );
+
+      return await createCall(connection, action.type, [name, color, uid], 3);
     }
     case Procedure.GetStatus: {
       const { uid } = action.payload;
-      return await createCall(connection, action.type, wrapStrings([uid]), 1);
+      return await createCall(connection, action.type, [uid], 1);
     }
     case Procedure.GetCategories: {
-      return await createCall(
-        connection,
-        action.type,
-        [`'${action.payload.uid}'`],
-        1
-      );
+      const { uid } = action.payload;
+      return await createCall(connection, action.type, [uid], 1);
     }
     case Procedure.GetConnection: {
       const { uid, role } = action.payload;
-      return await createCall(
-        connection,
-        action.type,
-        wrapStrings([uid, role]),
-        2
-      );
+      return await createCall(connection, action.type, [uid, role], 2);
     }
     case Procedure.RemoveCategory: {
       const { uid, categoryId } = action.payload;
-      return await createCall(
-        connection,
-        action.type,
-        wrapStrings([uid, categoryId]),
-        2
-      );
+      return await createCall(connection, action.type, [uid, categoryId], 2);
     }
     case Procedure.RemoveConnection: {
       const { connectionId } = action.payload;
-      return await createCall(
-        connection,
-        action.type,
-        wrapStrings([connectionId]),
-        1
-      );
+      return await createCall(connection, action.type, [connectionId], 1);
     }
     case Procedure.RemoveStatus: {
     }
@@ -127,15 +93,17 @@ export const runProcedure = async (
 const createCall = async (
   connection: mysql.Connection,
   procedureName: Procedure,
-  variables: (string | undefined)[],
+  variables: any[],
   args: number
 ): Promise<QueryResponse> => {
+  if (args === 0) return;
   try {
     const response = await connection.query(
-      `CALL ${process.env.MYSQL_DATABASE}.${procedureName}(${joinVaraibles(
-        variables,
-        args
-      )})`
+      `CALL ${process.env.MYSQL_DATABASE}.${procedureName}(${Array.from(
+        { length: args },
+        () => "?"
+      ).join(",")})`,
+      variables
     );
     const responseType = Procedure.getResponse(procedureName);
     const responseData =
@@ -163,14 +131,13 @@ const createCall = async (
   }
 };
 
-const allowedChars = /^[A-Za-z0-9\-]+$/;
 const joinVaraibles = (
   variables: (string | undefined)[],
   expected: number
 ): string =>
   expected > 0
     ? [...Array(expected - 1).keys()].reduce((prev, i) => {
-        if (variables[i + 1] !== null && variables[i + 1].match(allowedChars)) {
+        if (variables[i + 1]) {
           return `${prev}, ${variables[i + 1]}`;
         } else {
           return `${prev}, NULL`;
