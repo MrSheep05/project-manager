@@ -1,3 +1,5 @@
+import { Result } from "../types/index.type";
+
 export enum Role {
   Admin = "admin",
   User = "user",
@@ -15,7 +17,8 @@ export type StoredProcedure =
   | GetStatusProcedure
   | RemoveCategoryProcedure
   | RemoveConnectionProcedure
-  | RemoveStatusProcedure;
+  | RemoveStatusProcedure
+  | GetUserProcedure;
 
 export enum Procedure {
   AddCategory = "AddCategory",
@@ -32,8 +35,9 @@ export enum Procedure {
   RemoveCategory = "RemoveCategory",
   RemoveConnection = "RemoveConnection",
   RemoveStatus = "RemoveStatus",
+  GetUser = "GetUser",
 }
-export type QueryResponse = ResponseError | DataResponse | undefined;
+export type QueryResponse = DataResponse | undefined;
 export type ResponseError = { message: string; state: string; code: number };
 export type DataResponse =
   | StatusResponse
@@ -42,12 +46,13 @@ export type DataResponse =
   | GetCategoriesResponse
   | GetStatusResponse
   | CreateProjectResponse
-  | GetConnectionResponse;
+  | GetConnectionResponse
+  | GetUserResponse;
 
 type AddCategoryProcedure = {
   type: Procedure.AddCategory;
   payload: {
-    uid: string;
+    connectionId: string;
     name: string;
     color: number;
   };
@@ -64,7 +69,7 @@ type AddConnectionProcedure = {
 type AddProjectProcedure = {
   type: Procedure.AddProject;
   payload: {
-    uid: string;
+    connectionId: string;
     statusId: string;
     categoriesIds: string[];
     title: string;
@@ -75,7 +80,7 @@ type AddProjectProcedure = {
 type AddStatusProcedure = {
   type: Procedure.AddStatus;
   payload: {
-    uid: string;
+    connectionId: string;
     name: string;
     color: number;
   };
@@ -84,7 +89,7 @@ type AddStatusProcedure = {
 type CreateUserProcedure = {
   type: Procedure.CreateUser;
   payload: {
-    uid: string;
+    connectionId: string;
     email: string;
   };
 };
@@ -93,14 +98,14 @@ type ActiveAccountProcedure = {
   type: Procedure.DisableAccount | Procedure.EnableAccount;
   payload: {
     uid: string;
-    iss: string;
+    connectionId: string;
   };
 };
 
 type GetCategoriesProcedure = {
   type: Procedure.GetCategories;
   payload: {
-    uid: string;
+    connectionId: string;
   };
 };
 
@@ -115,13 +120,13 @@ type GetConnectionProcedure = {
 type GetStatusProcedure = {
   type: Procedure.GetStatus;
   payload: {
-    uid: string;
+    connectionId: string;
   };
 };
 
 type RemoveCategoryProcedure = {
   type: Procedure.RemoveCategory;
-  payload: { uid: string; categoryId: string };
+  payload: { connectionId: string; categoryId: string };
 };
 
 type RemoveConnectionProcedure = {
@@ -132,8 +137,15 @@ type RemoveConnectionProcedure = {
 type RemoveStatusProcedure = {
   type: Procedure.RemoveStatus;
   payload: {
-    uid: string;
+    connectionId: string;
     statusId: string;
+  };
+};
+
+type GetUserProcedure = {
+  type: Procedure.GetUser;
+  payload: {
+    uid: string;
   };
 };
 
@@ -147,6 +159,7 @@ type ProjectBody = {
   content: string;
   timestamp: number;
 };
+
 type UserResponse = {
   key:
     | ProcedureResponse.DisabledAccount
@@ -168,6 +181,15 @@ type GetStatusResponse = {
   body: CategoryOrStatusBody[];
 };
 
+type GetUserResponse = {
+  key: ProcedureResponse.GetUserResult;
+  body: {
+    id: string;
+    email: string;
+    enabled: boolean;
+    role: Role;
+  };
+};
 type GetCategoriesResponse = {
   key: ProcedureResponse.CategoriesResult;
   body: CategoryOrStatusBody;
@@ -185,6 +207,7 @@ type GetConnectionResponse = {
 
 export enum ProcedureResponse {
   None = "None",
+  GetUserResult = "user",
   CreatedCategory = "CreatedCategory",
   CreatedProject = "CreatedProject",
   CreatedStatus = "CreatedStatus",
@@ -234,6 +257,9 @@ export namespace Procedure {
       }
       case Procedure.EnableAccount: {
         return ProcedureResponse.EnabledAccount;
+      }
+      case Procedure.GetUser: {
+        return ProcedureResponse.GetUserResult;
       }
       default: {
         return ProcedureResponse.None;
