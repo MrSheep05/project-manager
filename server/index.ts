@@ -1,30 +1,33 @@
-import mysql from "mysql2/promise";
 import "dotenv/config";
-import { Procedure } from "./queries/types";
-import { runProcedure } from "./queries/queries";
-const adminUserId = "1d3cfe9f-b53a-11ee-9810-3cecef7ae862";
-const normalUserId = "00b1343e-b120-11ee-9810-3cecef7ae862";
-const statusId = "7036d8cd-af20-11ee-99f6-3cecef7a";
-const test = async () => {
-  try {
-    const connection = await mysql.createConnection({
-      password: process.env.MYSQL_PASSWORD,
-      host: process.env.MYSQL_URL,
-      user: process.env.MYSQL_USERNAME,
-    });
-    const res = await runProcedure(connection, {
-      type: Procedure.AddStatus,
-      payload: {
-        uid: adminUserId,
-        name: "Test",
-        color: parseInt("9ff26e", 16),
-      },
-    });
-    console.log(res);
-  } catch (e) {
-    console.log(process.env.MYSQL_URL);
-    console.log(e);
-  }
-};
+import express from "express";
+import bodyParser from "body-parser";
+import { WebSocketServer } from "ws";
+import { clearConsole, println } from "./src/log";
+import { Severity } from "./src/log/types";
+import { authorizeUpgrade } from "./src/express/authorize";
+import { googleOAuth, googleToken } from "./src/express/google";
 
-test();
+const SERVER_PORT = process.env.SERVER_PORT ?? "3000";
+clearConsole();
+
+export const app = express();
+export const webSocket = new WebSocketServer({ noServer: true });
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+const server = app.listen(SERVER_PORT, () => {
+  println({ severity: Severity.Info }, "Listening at port", SERVER_PORT);
+});
+
+server.on("upgrade", authorizeUpgrade);
+
+app.get("/auth/google", googleOAuth);
+
+app.post("/auth/tokens", googleToken);
+
+app.get("/oauth2callback", (req, res) => {
+  const { code } = req.query;
+  println({}, code);
+  res.write(code);
+  res.end();
+});

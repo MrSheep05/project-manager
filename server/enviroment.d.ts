@@ -5,6 +5,7 @@ declare global {
       MYSQL_USERNAME: string;
       MYSQL_PASSWORD: string;
       MYSQL_DATABASE: string;
+      SERVER_PORT: string;
     }
   }
 }

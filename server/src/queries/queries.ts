@@ -1,3 +1,4 @@
+import { getConnection } from "./mysql";
 import {
   DataResponse,
   Procedure,
@@ -5,9 +6,9 @@ import {
   QueryResponse,
   StoredProcedure,
 } from "./types";
-import mysql from "mysql2/promise";
 
 const findOutput = (data, key: ProcedureResponse) => {
+  if (!data) return;
   if (key in data) {
     return data[key];
   }
@@ -24,25 +25,24 @@ const findOutput = (data, key: ProcedureResponse) => {
 };
 
 export const runProcedure = async (
-  connection: mysql.Connection,
   action: StoredProcedure
 ): Promise<QueryResponse> => {
   switch (action.type) {
     case Procedure.AddCategory: {
-      const { uid, name, color } = action.payload;
-      return await createCall(connection, action.type, [uid, name, color], 3);
+      const { connectionId, name, color } = action.payload;
+      return await createCall(action.type, [connectionId, name, color], 3);
     }
     case Procedure.AddConnection: {
       const { uid, connectionId } = action.payload;
-      return await createCall(connection, action.type, [uid, connectionId], 2);
+      return await createCall(action.type, [uid, connectionId], 2);
     }
     case Procedure.AddProject: {
-      const { uid, content, title, statusId, categoriesIds } = action.payload;
+      const { connectionId, content, title, statusId, categoriesIds } =
+        action.payload;
       return await createCall(
-        connection,
         action.type,
         [
-          uid,
+          connectionId,
           statusId,
           joinVaraibles(categoriesIds, categoriesIds.length),
           title,
@@ -52,52 +52,61 @@ export const runProcedure = async (
       );
     }
     case Procedure.AddStatus: {
-      const { uid, name, color } = action.payload;
+      const { connectionId, name, color } = action.payload;
 
-      return await createCall(connection, action.type, [name, color, uid], 3);
+      return await createCall(action.type, [name, color, connectionId], 3);
     }
     case Procedure.GetStatus: {
-      const { uid } = action.payload;
-      return await createCall(connection, action.type, [uid], 1);
+      const { connectionId } = action.payload;
+      return await createCall(action.type, [connectionId], 1);
     }
     case Procedure.GetCategories: {
-      const { uid } = action.payload;
-      return await createCall(connection, action.type, [uid], 1);
+      const { connectionId } = action.payload;
+      return await createCall(action.type, [connectionId], 1);
     }
     case Procedure.GetConnection: {
       const { uid, role } = action.payload;
-      return await createCall(connection, action.type, [uid, role], 2);
+      return await createCall(action.type, [uid, role], 2);
     }
     case Procedure.RemoveCategory: {
-      const { uid, categoryId } = action.payload;
-      return await createCall(connection, action.type, [uid, categoryId], 2);
+      const { connectionId, categoryId } = action.payload;
+      return await createCall(action.type, [connectionId, categoryId], 2);
     }
     case Procedure.RemoveConnection: {
       const { connectionId } = action.payload;
-      return await createCall(connection, action.type, [connectionId], 1);
+      return await createCall(action.type, [connectionId], 1);
     }
     case Procedure.RemoveStatus: {
+      const { connectionId, statusId } = action.payload;
+      return await createCall(action.type, [connectionId, statusId], 2);
     }
     case Procedure.CreateUser: {
+      const { connectionId, email } = action.payload;
+      return await createCall(action.type, [connectionId, email], 2);
     }
-    case Procedure.DisableAccount: {
+    case Procedure.DisableAccount || Procedure.DisableAccount: {
+      const { connectionId, uid } = action.payload;
+      return await createCall(action.type, [connectionId, uid], 2);
     }
-    case Procedure.EnableAccount: {
+
+    case Procedure.GetUser: {
+      const { uid } = action.payload;
+      return await createCall(action.type, [uid], 1);
     }
     default: {
-      return;
+      return { key: 0, body: "NONE" };
     }
   }
 };
 
 const createCall = async (
-  connection: mysql.Connection,
   procedureName: Procedure,
   variables: any[],
   args: number
 ): Promise<QueryResponse> => {
   if (args === 0) return;
   try {
+    const connection = await getConnection();
     const response = await connection.query(
       `CALL ${process.env.MYSQL_DATABASE}.${procedureName}(${Array.from(
         { length: args },
@@ -105,11 +114,14 @@ const createCall = async (
       ).join(",")})`,
       variables
     );
+    await connection.end();
     const responseType = Procedure.getResponse(procedureName);
+
     const responseData =
       responseType !== ProcedureResponse.None
         ? findOutput(response, responseType)
         : undefined;
+
     if (
       responseData &&
       responseType !== ProcedureResponse.None &&
@@ -121,13 +133,14 @@ const createCall = async (
       };
       return translated;
     }
-    return;
+    return { key: ProcedureResponse.None, body: response };
   } catch (e) {
-    return {
+    console.log({
       code: e.errno ?? 0,
       message: e.sqlMessage ?? "unexpected",
       state: e.sqlState ?? "0",
-    };
+    });
+    return { key: ProcedureResponse.None, body: "" };
   }
 };
 
