@@ -1,5 +1,3 @@
-import { Result } from "../types/index.type";
-
 export enum Role {
   Admin = "admin",
   User = "user",
@@ -37,7 +35,9 @@ export enum Procedure {
   RemoveStatus = "RemoveStatus",
   GetUser = "GetUser",
 }
-export type QueryResponse = DataResponse | undefined;
+export type QueryResponse =
+  | DataResponse
+  | { key: ProcedureResponse.None; body: any };
 export type ResponseError = { message: string; state: string; code: number };
 export type DataResponse =
   | StatusResponse
@@ -180,15 +180,15 @@ type GetStatusResponse = {
   key: ProcedureResponse.StatusResult;
   body: CategoryOrStatusBody[];
 };
-
+export type User = {
+  id: string;
+  email: string;
+  enabled: boolean;
+  role: Role;
+};
 type GetUserResponse = {
   key: ProcedureResponse.GetUserResult;
-  body: {
-    id: string;
-    email: string;
-    enabled: boolean;
-    role: Role;
-  };
+  body: User;
 };
 type GetCategoriesResponse = {
   key: ProcedureResponse.CategoriesResult;
@@ -206,7 +206,7 @@ type GetConnectionResponse = {
 };
 
 export enum ProcedureResponse {
-  None = "None",
+  None = 0,
   GetUserResult = "user",
   CreatedCategory = "CreatedCategory",
   CreatedProject = "CreatedProject",

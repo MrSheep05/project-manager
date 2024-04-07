@@ -1,4 +1,3 @@
-import { Err, Ok, Result, Results } from "../types/index.type";
 import { getConnection } from "./mysql";
 import {
   DataResponse,
@@ -95,7 +94,7 @@ export const runProcedure = async (
       return await createCall(action.type, [uid], 1);
     }
     default: {
-      return;
+      return { key: 0, body: "NONE" };
     }
   }
 };
@@ -107,12 +106,7 @@ const createCall = async (
 ): Promise<QueryResponse> => {
   if (args === 0) return;
   try {
-    const connectionR = await getConnection();
-    if (connectionR.result == Results.Error) {
-      console.log(connectionR.payload);
-      return;
-    }
-    const { payload: connection } = connectionR;
+    const connection = await getConnection();
     const response = await connection.query(
       `CALL ${process.env.MYSQL_DATABASE}.${procedureName}(${Array.from(
         { length: args },
@@ -139,13 +133,14 @@ const createCall = async (
       };
       return translated;
     }
-    return;
+    return { key: ProcedureResponse.None, body: response };
   } catch (e) {
     console.log({
       code: e.errno ?? 0,
       message: e.sqlMessage ?? "unexpected",
       state: e.sqlState ?? "0",
     });
+    return { key: ProcedureResponse.None, body: "" };
   }
 };
 

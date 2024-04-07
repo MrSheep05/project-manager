@@ -1,49 +1,33 @@
 import "dotenv/config";
-import { OAuth2Client } from "google-auth-library";
-import { google } from "googleapis";
-import keys from "./client.keys.json";
 import express from "express";
+import bodyParser from "body-parser";
 import { WebSocketServer } from "ws";
-import crypto from "crypto";
-import { onConnect } from "./src/websocket/connect";
-const app = express();
-const webSocket = new WebSocketServer({ port: 443 });
+import { clearConsole, println } from "./src/log";
+import { Severity } from "./src/log/types";
+import { authorizeUpgrade } from "./src/express/authorize";
+import { googleOAuth, googleToken } from "./src/express/google";
 
-webSocket.on("connection", onConnect);
+const SERVER_PORT = process.env.SERVER_PORT ?? "3000";
+clearConsole();
 
-app.get("/auth/google", (_, res) => {
-  try {
-    const client = new OAuth2Client(
-      keys.web.client_id,
-      keys.web.client_secret,
-      "http://localhost:3000/oauth2callback"
-    );
-    const redirectURL = client.generateAuthUrl({
-      access_type: "offline",
-      scope: "https://www.googleapis.com/auth/userinfo.email openid",
-      redirect_uri: "http://localhost:3000/oauth2callback",
-    });
-    console.log(redirectURL);
-    res.redirect(redirectURL);
-  } catch (e) {
-    console.log(e);
-  }
+export const app = express();
+export const webSocket = new WebSocketServer({ noServer: true });
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+const server = app.listen(SERVER_PORT, () => {
+  println({ severity: Severity.Info }, "Listening at port", SERVER_PORT);
 });
 
-app.get("/oauth2callback", async (req, res) => {
-  const client = new OAuth2Client(
-    keys.web.client_id,
-    keys.web.client_secret,
-    "http://localhost:3000/oauth2callback"
-  );
+server.on("upgrade", authorizeUpgrade);
+
+app.get("/auth/google", googleOAuth);
+
+app.post("/auth/tokens", googleToken);
+
+app.get("/oauth2callback", (req, res) => {
   const { code } = req.query;
-  try {
-    const response = await client.getToken(code as string);
-
-    res.redirect(`/?token=${response.tokens.access_token}`);
-  } catch (e) {
-    console.log(e);
-    res.redirect("/login");
-  }
+  println({}, code);
+  res.write(code);
+  res.end();
 });
-app.listen(3000);
