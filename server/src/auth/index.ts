@@ -2,6 +2,8 @@ import { google } from "googleapis";
 import { OAuth2Client } from "googleapis-common";
 import { GetClientFn, GetTokensFn, GetUserInfoFn } from "./types";
 import keys from "../../client.keys.json";
+import { Severity } from "../log/types";
+import { println } from "../log";
 
 export const getUserInfo: GetUserInfoFn = async (client) => {
   try {
@@ -11,14 +13,12 @@ export const getUserInfo: GetUserInfoFn = async (client) => {
         if (err) {
           reject(err);
         }
-        console.log(res);
-
         const { picture, id, name } = res.data;
         resolve({ picture, id, name });
       });
     });
   } catch (err) {
-    console.log(err);
+    println({ severity: Severity.Error }, err);
   }
 };
 

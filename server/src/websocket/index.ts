@@ -1,1 +1,1 @@
-const websocketConnect = (uid: string, conectionId: string) => {};
+export { onConnect } from "./connect";
