@@ -1,7 +1,9 @@
+import { webSocket } from "../..";
 import { println } from "../log";
 import { Severity } from "../log/types";
 import { addConnection, removeConnection } from "./database";
-import { OnConnectFn } from "./types";
+import { onMessage } from "./message";
+import { OnConnectFn, WebSocketClient } from "./types";
 import crypto from "crypto";
 
 export const onConnect: OnConnectFn = async (ws, request, ...args) => {
@@ -9,7 +11,9 @@ export const onConnect: OnConnectFn = async (ws, request, ...args) => {
   ws.connectionId = connectionId;
   if (!args[0]?.uid) return ws.close();
   const { uid } = args[0];
-
+  webSocket.clients.forEach((e) =>
+    console.log("CONNECTIONID", (e as unknown as WebSocketClient).connectionId)
+  );
   try {
     await addConnection({ connectionId, uid });
   } catch (err) {
@@ -33,4 +37,9 @@ export const onConnect: OnConnectFn = async (ws, request, ...args) => {
       println({ severity: Severity.Error }, err);
     }
   });
+
+  ws.addEventListener(
+    "message",
+    async (event) => await onMessage({ event, ws })
+  );
 };

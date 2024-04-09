@@ -1,4 +1,4 @@
-import { QueryResponse } from "../../queries/types";
+import { ProjectBody, QueryResponse } from "../../queries/types";
 
 export type AddConnectionFn = ({
   connectionId,
@@ -10,3 +10,17 @@ export type AddConnectionFn = ({
 export type RemoveConnectionFn = (
   connectionId: string
 ) => Promise<QueryResponse>;
+
+export type AddProjectFn = ({
+  categoriesIds,
+  title,
+  content,
+  statusId,
+  connectionId,
+}: {
+  statusId: string;
+  categoriesIds: string[];
+  title: string;
+  content: string;
+  connectionId: string;
+}) => Promise<ProjectBody>;

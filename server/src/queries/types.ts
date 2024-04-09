@@ -150,7 +150,7 @@ type GetUserProcedure = {
 };
 
 type CategoryOrStatusBody = { id: string; email: string; is_enabled: boolean };
-type ProjectBody = {
+export type ProjectBody = {
   project_id: string;
   user_id: string;
   status: CategoryOrStatusBody;
@@ -267,3 +267,11 @@ export namespace Procedure {
     }
   };
 }
+
+export type GetConnectionsFn = ({
+  uid,
+  role,
+}: {
+  uid?: string;
+  role?: Role;
+}) => Promise<{ user_id: string; connection_id: string }[]>;
