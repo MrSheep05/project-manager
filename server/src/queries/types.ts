@@ -149,7 +149,12 @@ type GetUserProcedure = {
   };
 };
 
-type CategoryOrStatusBody = { id: string; email: string; is_enabled: boolean };
+export type CategoryOrStatusBody = {
+  id: string;
+  name: string;
+  color: number;
+  visible: boolean;
+};
 export type ProjectBody = {
   project_id: string;
   user_id: string;
@@ -192,7 +197,7 @@ type GetUserResponse = {
 };
 type GetCategoriesResponse = {
   key: ProcedureResponse.CategoriesResult;
-  body: CategoryOrStatusBody;
+  body: CategoryOrStatusBody[];
 };
 
 type CreateProjectResponse = {

@@ -1,9 +1,8 @@
-import { postToConnections } from ".";
 import { println } from "../log";
 import { Severity } from "../log/types";
-import { getConnections } from "../queries";
-import { Role } from "../queries/types";
-import { addProject } from "./database";
+import { addProjectMessage } from "./messages/addProject";
+import { addStatusOrCategoryMessage } from "./messages/addStatusOrCategory";
+import { getCategoryOrStatusMessage } from "./messages/getCategoryAndStatus";
 import { Action, Mesages, OnMessageFn } from "./types";
 
 export const onMessage: OnMessageFn = async ({ event, ws }) => {
@@ -13,16 +12,18 @@ export const onMessage: OnMessageFn = async ({ event, ws }) => {
   try {
     switch (action) {
       case Action.AddProject: {
-        const connections = await getConnections({ role: Role.Admin });
-        const result = await addProject({ ...payload, connectionId });
-        const message = JSON.stringify(result);
-        postToConnections({
-          connections: [
-            ...connections.map(({ connection_id }) => connection_id),
-            connectionId,
-          ],
-          message,
+        await addProjectMessage({ connectionId, message: { action, payload } });
+        break;
+      }
+      case Action.AddStatus || Action.AddCategory: {
+        await addStatusOrCategoryMessage({
+          connectionId,
+          message: { action, payload },
         });
+        break;
+      }
+      case Action.GetCategoryAndStatus: {
+        await getCategoryOrStatusMessage({ connectionId, ws });
         break;
       }
       default: {

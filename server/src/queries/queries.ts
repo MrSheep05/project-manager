@@ -1,4 +1,4 @@
-import { getConnection } from "./mysql";
+import { getDatabaseConnection } from "./mysql";
 import {
   DataResponse,
   Procedure,
@@ -106,7 +106,7 @@ const createCall = async (
 ): Promise<QueryResponse> => {
   if (args === 0) return;
   try {
-    const connection = await getConnection();
+    const connection = await getDatabaseConnection();
     const response = await connection.query(
       `CALL ${process.env.MYSQL_DATABASE}.${procedureName}(${Array.from(
         { length: args },

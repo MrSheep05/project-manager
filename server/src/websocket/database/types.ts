@@ -1,4 +1,8 @@
-import { ProjectBody, QueryResponse } from "../../queries/types";
+import {
+  CategoryOrStatusBody,
+  ProjectBody,
+  QueryResponse,
+} from "../../queries/types";
 
 export type AddConnectionFn = ({
   connectionId,
@@ -24,3 +28,19 @@ export type AddProjectFn = ({
   content: string;
   connectionId: string;
 }) => Promise<ProjectBody>;
+
+export type AddCategoryStatusFn = ({
+  connectionId,
+  name,
+  color,
+}: {
+  connectionId: string;
+  name: string;
+  color: number;
+}) => Promise<CategoryOrStatusBody>;
+
+export type GetCategoryStatusFn = ({
+  connectionId,
+}: {
+  connectionId: string;
+}) => Promise<CategoryOrStatusBody[]>;
