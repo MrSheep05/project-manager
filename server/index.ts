@@ -6,6 +6,7 @@ import { clearConsole, println } from "./src/log";
 import { Severity } from "./src/log/types";
 import { authorizeUpgrade } from "./src/express/authorize";
 import { googleOAuth, googleToken } from "./src/express/google";
+import { onConnect } from "./src/websocket";
 
 const SERVER_PORT = process.env.SERVER_PORT ?? "3000";
 clearConsole();
@@ -24,6 +25,8 @@ server.on("upgrade", authorizeUpgrade);
 app.get("/auth/google", googleOAuth);
 
 app.post("/auth/tokens", googleToken);
+
+webSocket.on("connection", onConnect);
 
 app.get("/oauth2callback", (req, res) => {
   const { code } = req.query;

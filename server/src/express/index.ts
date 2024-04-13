@@ -8,7 +8,6 @@ export const getTokensFromURL: GetTokensFromURLFn = (req) => {
   const { accessToken, refreshToken } = Object.fromEntries(
     url.searchParams.entries()
   );
-  println({}, "ACCESSTOKEN", accessToken);
   if (refreshToken || accessToken) {
     return { accessToken, refreshToken };
   }

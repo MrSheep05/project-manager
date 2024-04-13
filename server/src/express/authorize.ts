@@ -40,8 +40,8 @@ export const authorizeUpgrade: AuthorizeUpgradeFn = async (
 
       if (enabled && email === userEmail) {
         const userData = await getUserInfo(client);
-        webSocket.handleUpgrade(request, socket, head, (ws, _req) => {
-          ws.emit("connect");
+        webSocket.handleUpgrade(request, socket, head, (ws, req) => {
+          webSocket.emit("connection", ws, req, { uid: hashed_sub });
           ws.send(
             JSON.stringify({
               action: "userData",
