@@ -11,9 +11,6 @@ export const onConnect: OnConnectFn = async (ws, request, ...args) => {
   ws.connectionId = connectionId;
   if (!args[0]?.uid) return ws.close();
   const { uid } = args[0];
-  webSocket.clients.forEach((e) =>
-    console.log("CONNECTIONID", (e as unknown as WebSocketClient).connectionId)
-  );
   try {
     await addConnection({ connectionId, uid });
   } catch (err) {

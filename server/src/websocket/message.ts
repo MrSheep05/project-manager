@@ -1,9 +1,15 @@
-import { println } from "../log";
 import { Severity } from "../log/types";
+import { println } from "../log";
 import { addProjectMessage } from "./messages/addProject";
-import { addStatusOrCategoryMessage } from "./messages/addStatusOrCategory";
-import { getCategoryOrStatusMessage } from "./messages/getCategoryAndStatus";
 import { Action, Mesages, OnMessageFn } from "./types";
+import {
+  addStatusOrCategoryMessage,
+  changeAccountStateMessage,
+  getProjectsMessage,
+  getStatusAndCategoryMessage,
+  getUsersMessage,
+  removeStatusOrCategoryMessage,
+} from "./messages";
 
 export const onMessage: OnMessageFn = async ({ event, ws }) => {
   const { action, payload } = JSON.parse(event.data) as Mesages;
@@ -22,8 +28,30 @@ export const onMessage: OnMessageFn = async ({ event, ws }) => {
         });
         break;
       }
-      case Action.GetCategoryAndStatus: {
-        await getCategoryOrStatusMessage({ connectionId, ws });
+      case Action.RemoveStatus || Action.RemoveCategory: {
+        await removeStatusOrCategoryMessage({
+          connectionId,
+          message: { action, payload },
+        });
+        break;
+      }
+      case Action.GetStatusAndCategory: {
+        await getStatusAndCategoryMessage({ connectionId, ws });
+        break;
+      }
+      case Action.ChangeAccountState: {
+        await changeAccountStateMessage({
+          connectionId,
+          message: { action, payload },
+        });
+        break;
+      }
+      case Action.GetUsers: {
+        await getUsersMessage({ ws, message: { action, payload } });
+        break;
+      }
+      case Action.GetProjects: {
+        await getProjectsMessage({ ws, message: { action, payload } });
         break;
       }
       default: {

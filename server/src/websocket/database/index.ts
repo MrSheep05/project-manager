@@ -4,8 +4,13 @@ import {
   AddCategoryStatusFn,
   AddConnectionFn,
   AddProjectFn,
+  EnableOrDisableAccountFn,
   GetCategoryStatusFn,
+  GetProjectsFn,
+  GetUsersFn,
+  RemoveCategory,
   RemoveConnectionFn,
+  RemoveStatus,
 } from "./types";
 
 export const addConnection: AddConnectionFn = async ({ connectionId, uid }) =>
@@ -53,4 +58,58 @@ export const getCategories: GetCategoryStatusFn = async (payload) => {
   if (result.key === ProcedureResponse.CategoriesResult) return result.body;
 
   throw Error("Unexpected result from GetCategory procedure");
+};
+
+export const removeCategory: RemoveCategory = async (payload) => {
+  const result = await runProcedure({
+    type: Procedure.RemoveCategory,
+    payload,
+  });
+  if (result.key === ProcedureResponse.RemovedCategory) return result.body;
+  throw Error("Unexpected result from RemoveCategory procedure");
+};
+
+export const removeStatus: RemoveStatus = async (payload) => {
+  const result = await runProcedure({
+    type: Procedure.RemoveStatus,
+    payload,
+  });
+  if (result.key === ProcedureResponse.RemovedStatus) return result.body;
+  throw Error("Unexpected result from RemoveCategory procedure");
+};
+
+export const disableAccount: EnableOrDisableAccountFn = async (payload) => {
+  const result = await runProcedure({
+    type: Procedure.DisableAccount,
+    payload,
+  });
+  if (result.key === ProcedureResponse.DisabledAccount) return result.body;
+  throw Error("Unexpected result from DisableAccount procedure");
+};
+
+export const enableAccount: EnableOrDisableAccountFn = async (payload) => {
+  const result = await runProcedure({
+    type: Procedure.EnableAccount,
+    payload,
+  });
+  if (result.key === ProcedureResponse.EnabledAccount) return result.body;
+  throw Error("Unexpected result from EnableAccount procedure");
+};
+
+export const getUsers: GetUsersFn = async (payload) => {
+  const result = await runProcedure({
+    type: Procedure.GetAllUsers,
+    payload,
+  });
+  if (result.key === ProcedureResponse.AllAccounts) return result.body;
+  throw Error("Unexpected result from GetAllUsers procedure");
+};
+
+export const getProjects: GetProjectsFn = async (payload) => {
+  const result = await runProcedure({
+    type: Procedure.GetProjects,
+    payload,
+  });
+  if (result.key === ProcedureResponse.AllProjects) return result.body;
+  throw Error("Unexpected result from GetProjects procedure");
 };

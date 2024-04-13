@@ -2,6 +2,7 @@ import {
   CategoryOrStatusBody,
   ProjectBody,
   QueryResponse,
+  UserBody,
 } from "../../queries/types";
 
 export type AddConnectionFn = ({
@@ -44,3 +45,32 @@ export type GetCategoryStatusFn = ({
 }: {
   connectionId: string;
 }) => Promise<CategoryOrStatusBody[]>;
+
+export type RemoveStatus = ({
+  connectionId,
+  statusId,
+}: {
+  connectionId: string;
+  statusId: string;
+}) => Promise<CategoryOrStatusBody>;
+
+export type RemoveCategory = ({
+  connectionId,
+  categoryId,
+}: {
+  connectionId: string;
+  categoryId: string;
+}) => Promise<CategoryOrStatusBody>;
+
+export type EnableOrDisableAccountFn = (payload: {
+  connectionId: string;
+  uid: string;
+}) => Promise<UserBody>;
+export type GetUsersFn = (payload: {
+  connectionId: string;
+  offsetUid?: string;
+}) => Promise<UserBody[]>;
+export type GetProjectsFn = (payload: {
+  connectionId: string;
+  offsetId?: string;
+}) => Promise<ProjectBody[]>;

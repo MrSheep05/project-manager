@@ -16,7 +16,9 @@ export type StoredProcedure =
   | RemoveCategoryProcedure
   | RemoveConnectionProcedure
   | RemoveStatusProcedure
-  | GetUserProcedure;
+  | GetUserProcedure
+  | GetAllUsersProcedure
+  | GetProjectsProcedure;
 
 export enum Procedure {
   AddCategory = "AddCategory",
@@ -34,6 +36,7 @@ export enum Procedure {
   RemoveConnection = "RemoveConnection",
   RemoveStatus = "RemoveStatus",
   GetUser = "GetUser",
+  GetAllUsers = "GetAllUsers",
 }
 export type QueryResponse =
   | DataResponse
@@ -47,8 +50,17 @@ export type DataResponse =
   | GetStatusResponse
   | CreateProjectResponse
   | GetConnectionResponse
-  | GetUserResponse;
+  | GetUserResponse
+  | AllUsersResponse
+  | GetProjectsResponse;
 
+type GetAllUsersProcedure = {
+  type: Procedure.GetAllUsers;
+  payload: {
+    connectionId: string;
+    offsetUid?: string;
+  };
+};
 type AddCategoryProcedure = {
   type: Procedure.AddCategory;
   payload: {
@@ -142,6 +154,10 @@ type RemoveStatusProcedure = {
   };
 };
 
+type GetProjectsProcedure = {
+  type: Procedure.GetProjects;
+  payload: { connectionId: string; offsetId?: string };
+};
 type GetUserProcedure = {
   type: Procedure.GetUser;
   payload: {
@@ -164,13 +180,18 @@ export type ProjectBody = {
   content: string;
   timestamp: number;
 };
-
+export type UserBody = {
+  id: string;
+  email: string;
+  role: Role;
+  is_enabled: boolean;
+};
 type UserResponse = {
   key:
     | ProcedureResponse.DisabledAccount
     | ProcedureResponse.EnabledAccount
     | ProcedureResponse.CreatedUser;
-  body: CategoryOrStatusBody;
+  body: UserBody;
 };
 
 type StatusResponse = {
@@ -191,6 +212,10 @@ export type User = {
   enabled: boolean;
   role: Role;
 };
+type AllUsersResponse = {
+  key: ProcedureResponse.AllAccounts;
+  body: UserBody[];
+};
 type GetUserResponse = {
   key: ProcedureResponse.GetUserResult;
   body: User;
@@ -210,6 +235,10 @@ type GetConnectionResponse = {
   body: { user_id: string; connection_id: string }[];
 };
 
+type GetProjectsResponse = {
+  key: ProcedureResponse.AllProjects;
+  body: ProjectBody[];
+};
 export enum ProcedureResponse {
   None = 0,
   GetUserResult = "user",
@@ -225,6 +254,8 @@ export enum ProcedureResponse {
   AllConnections = "AllConnections",
   RemovedCategory = "RemovedCategory",
   RemovedStatus = "RemovedStatus",
+  AllAccounts = "AllAccounts",
+  AllProjects = "AllProjects",
 }
 
 export namespace Procedure {
@@ -265,6 +296,12 @@ export namespace Procedure {
       }
       case Procedure.GetUser: {
         return ProcedureResponse.GetUserResult;
+      }
+      case Procedure.GetAllUsers: {
+        return ProcedureResponse.AllAccounts;
+      }
+      case Procedure.GetProjects: {
+        return ProcedureResponse.AllProjects;
       }
       default: {
         return ProcedureResponse.None;

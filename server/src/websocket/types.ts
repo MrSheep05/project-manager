@@ -24,7 +24,7 @@ export enum Action {
   AddCategory = "addCategory",
   RemoveStatus = "removeStatus",
   RemoveCategory = "removeCategory",
-  GetCategoryAndStatus = "getCategoryAndStatus",
+  GetStatusAndCategory = "getStatusAndCategory",
   GetProjects = "getProjects",
   ChangeAccountState = "changeAccountState",
   GetUsers = "getUsers",
@@ -33,7 +33,16 @@ export enum Action {
 export type Mesages =
   | AddProjectMessage
   | AddStatusOrCategoryMessage
-  | GetStatusAndCategoryMessage;
+  | GetStatusAndCategoryMessage
+  | RemoveStatusOrCategoryMessage
+  | ChangeAccountStateMessage
+  | GetUsersMessage
+  | GetProjectsMessage;
+
+export type GetProjectsMessage = {
+  action: Action.GetProjects;
+  payload: { offsetId?: string };
+};
 export type AddProjectMessage = {
   action: Action.AddProject;
   payload: {
@@ -42,6 +51,14 @@ export type AddProjectMessage = {
     title: string;
     content: string;
   };
+};
+export type ChangeAccountStateMessage = {
+  action: Action.ChangeAccountState;
+  payload: { state: boolean; uid: string };
+};
+export type GetUsersMessage = {
+  action: Action.GetUsers;
+  payload: { offsetUid?: string };
 };
 
 export type AddStatusOrCategoryMessage = {
@@ -53,8 +70,15 @@ export type AddStatusOrCategoryMessage = {
 };
 
 export type GetStatusAndCategoryMessage = {
-  action: Action.GetCategoryAndStatus;
+  action: Action.GetStatusAndCategory;
   payload: {
     connectionId: string;
+  };
+};
+
+export type RemoveStatusOrCategoryMessage = {
+  action: Action.RemoveStatus | Action.RemoveCategory;
+  payload: {
+    id: string;
   };
 };

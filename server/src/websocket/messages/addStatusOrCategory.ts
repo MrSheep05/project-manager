@@ -18,7 +18,7 @@ export const addStatusOrCategoryMessage: AddStatusOrCategoryMessageFn = async ({
       : await addCategory(procedureInput);
   const finalResult = categoryOrStatusMap([result]);
   const data = JSON.stringify({
-    message: Action.GetCategoryAndStatus,
+    message: Action.GetStatusAndCategory,
     payload: {
       ...(action === Action.AddStatus && { status: finalResult }),
       ...(action === Action.AddCategory && { categories: finalResult }),

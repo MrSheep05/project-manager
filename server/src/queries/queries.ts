@@ -93,6 +93,14 @@ export const runProcedure = async (
       const { uid } = action.payload;
       return await createCall(action.type, [uid], 1);
     }
+    case Procedure.GetAllUsers: {
+      const { offsetUid, connectionId } = action.payload;
+      return await createCall(action.type, [connectionId, offsetUid], 2);
+    }
+    case Procedure.GetProjects: {
+      const { offsetId, connectionId } = action.payload;
+      return await createCall(action.type, [connectionId, offsetId], 2);
+    }
     default: {
       return { key: 0, body: "NONE" };
     }
