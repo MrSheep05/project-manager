@@ -1,0 +1,16 @@
+{
+  "name": "project-manager",
+  "version": "1.0.0",
+  "description": "Project Manager",
+  "authors": [
+    "Filip Wachowski",
+    "Łukasz Kowalski"
+  ],
+  "contributors": [
+    {
+      "name": "Łukasz Kowalski",
+      "url": "https://github.com/KoVaL05"
+    }
+  ],
+  "license": "MIT"
+}
