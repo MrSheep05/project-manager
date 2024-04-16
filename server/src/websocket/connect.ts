@@ -1,9 +1,8 @@
-import { webSocket } from "../..";
 import { println } from "../log";
 import { Severity } from "../log/types";
 import { addConnection, removeConnection } from "./database";
 import { onMessage } from "./message";
-import { OnConnectFn, WebSocketClient } from "./types";
+import { OnConnectFn } from "./types";
 import crypto from "crypto";
 
 export const onConnect: OnConnectFn = async (ws, request, ...args) => {
