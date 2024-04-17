@@ -2,10 +2,19 @@ import { IncomingMessage } from "http";
 import * as stream from "node:stream";
 import { Request, Response } from "express";
 import { Send } from "express-serve-static-core";
+import { UserBody } from "../queries/types";
 export type Tokens = {
   accessToken?: string;
   refreshToken?: string;
 };
+
+export type InformDisabledAccount = (payload: {
+  request: IncomingMessage;
+  socket: stream.Duplex;
+  head: Buffer;
+  data: UserBody;
+}) => void;
+
 export type GetTokensFromURLFn = (req: IncomingMessage) => Tokens | undefined;
 export type GoogleOAuthFn = (req: Request, res: Response) => Promise<void>;
 

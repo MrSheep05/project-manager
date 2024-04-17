@@ -2,13 +2,31 @@ import { webSocket } from "../..";
 import { getTokensFromURL } from ".";
 import { getClient, getUserInfo } from "../auth";
 import crypto from "crypto";
-import { AuthorizeUpgradeFn } from "./types";
+import { AuthorizeUpgradeFn, InformDisabledAccount } from "./types";
 import { println } from "../log";
 import { Severity } from "../log/types";
-import { getUserProcedure } from "./database";
+import { getUserProcedure, registerUser } from "./database";
 
 const UNAUTHORIZED_MESSAGE = "HTTP 403: Unauthorized";
 const UNEXPECTED_MESSAGE = "HTTP 500: Unexpected";
+
+const informDisabledAccount: InformDisabledAccount = ({
+  request,
+  socket,
+  head,
+  data,
+}) => {
+  webSocket.handleUpgrade(request, socket, head, (ws, _req) => {
+    ws.send(
+      JSON.stringify({
+        action: "userData",
+        payload: data,
+      })
+    );
+    ws.close();
+  });
+  socket.end("Account created");
+};
 
 export const authorizeUpgrade: AuthorizeUpgradeFn = async (
   request,
@@ -36,8 +54,15 @@ export const authorizeUpgrade: AuthorizeUpgradeFn = async (
         .createHash("sha256")
         .update(sub)
         .digest("hex");
-      const { enabled, email: userEmail } = await getUserProcedure(hashed_sub);
+      const userData = await getUserProcedure(hashed_sub);
 
+      if (!userData) {
+        const data = await registerUser({ uid: hashed_sub, email });
+        informDisabledAccount({ request, socket, head, data });
+        return;
+      }
+
+      const { enabled, email: userEmail } = userData;
       if (enabled && email === userEmail) {
         const userData = await getUserInfo(client);
         webSocket.handleUpgrade(request, socket, head, (ws, req) => {
@@ -45,12 +70,12 @@ export const authorizeUpgrade: AuthorizeUpgradeFn = async (
           ws.send(
             JSON.stringify({
               action: "userData",
-              message: { ...userData, email },
+              payload: { ...userData, email },
             })
           );
         });
       } else {
-        socket.end("Account disabled");
+        informDisabledAccount({ request, socket, head, data: userData });
         return;
       }
     }
