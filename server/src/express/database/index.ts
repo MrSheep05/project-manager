@@ -1,3 +1,5 @@
+import { println } from "../../log";
+import { Severity } from "../../log/types";
 import { runProcedure } from "../../queries/queries";
 import {
   Procedure,
@@ -12,8 +14,16 @@ export const getUserProcedure: getUserProcedureFn = async (uid: string) => {
     payload: { uid },
   });
   if (response.key === ProcedureResponse.GetUserResult) {
+    console.log("HERE");
     return response.body;
+  } else if (
+    response.key === ProcedureResponse.None &&
+    !response.body[0][0][0] //Funny procedure response type
+  ) {
+    println({ severity: Severity.Info }, "No user exists of uid", uid);
+    return;
   }
+  throw Error("Unexpected result from GetUser procedure");
 };
 
 export const registerUser: RegisterUserFn = async (payload) => {
