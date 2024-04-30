@@ -81,8 +81,8 @@ export const runProcedure = async (
       return await createCall(action.type, [connectionId, statusId], 2);
     }
     case Procedure.CreateUser: {
-      const { connectionId, email } = action.payload;
-      return await createCall(action.type, [connectionId, email], 2);
+      const { uid, email } = action.payload;
+      return await createCall(action.type, [uid, email], 2);
     }
     case Procedure.DisableAccount || Procedure.DisableAccount: {
       const { connectionId, uid } = action.payload;

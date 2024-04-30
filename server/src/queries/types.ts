@@ -101,7 +101,7 @@ type AddStatusProcedure = {
 type CreateUserProcedure = {
   type: Procedure.CreateUser;
   payload: {
-    connectionId: string;
+    uid: string;
     email: string;
   };
 };
@@ -184,7 +184,7 @@ export type UserBody = {
   id: string;
   email: string;
   role: Role;
-  is_enabled: boolean;
+  enabled: boolean;
 };
 type UserResponse = {
   key:
