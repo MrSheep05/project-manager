@@ -1,4 +1,4 @@
-name: Rollback MYSQL
+name: Rollback MARIADB
 
 on:
   workflow_dispatch:
@@ -17,10 +17,10 @@ jobs:
       - uses: liquibase-github-actions/rollback-count@v4.25.1
         with:
           count: ${{ github.event.inputs.count }}
-          driver: com.mysql.cj.jdbc.Driver
-          classpath: mysql/lib/mysql-connector-j-8.0.33.jar
+          driver: org.mariadb.jdbc.Driver
+          classpath: mariadb/lib/mariadb-connector-3.3.3.jar
           changelogFile: "changelog.xml"
           url: ${{ secrets.MYSQL_URL }}
           username: ${{ secrets.MYSQL_USERNAME }}
           password: ${{ secrets.MYSQL_PASSWORD }}
-          searchPath: mysql
+          searchPath: mariadb
