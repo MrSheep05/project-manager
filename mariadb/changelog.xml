@@ -9,4 +9,6 @@
       http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">  
 
     <include file="./changesets/1-tables.sql"/>  
+    <include file="./changesets/2-foreign-keys.sql"/>  
+
 </databaseChangeLog> 
