@@ -10,5 +10,5 @@
 
     <include file="./changesets/1-tables.sql"/>  
     <include file="./changesets/2-foreign-keys.sql"/>  
-
+    <include file="./changesets/3-get-user-id-function.sql"/>
 </databaseChangeLog> 
