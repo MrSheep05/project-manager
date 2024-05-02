@@ -35,7 +35,7 @@ END//
 -- rollback DROP PROCEDURE `AddProject`;
 
 -- changeset liquibase:get_projects_procedure endDelimiter://
-CREATE DEFINER=`zset_uwachowski`@`localhost` PROCEDURE `GetProjects`(IN `in_connection_id` VARCHAR(256), IN `in_project_id` VARCHAR(36))
+CREATE PROCEDURE `GetProjects`(IN `in_connection_id` VARCHAR(256), IN `in_project_id` VARCHAR(36))
 BEGIN
 DECLARE in_uid VARCHAR(256);
 DECLARE in_offset BIGINT DEFAULT 0;
