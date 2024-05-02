@@ -1,12 +1,12 @@
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Blocks } from "react-loader-spinner";
 import "./login-page.css";
+import { post } from "../../utils/server-requests";
+import { Tokens } from "./types";
 
 const Login = () => {
-  const queryParameters = new URLSearchParams(window.location.search);
-  const code = queryParameters.get("code");
   const [loadingText, setLoadingText] = useState("Loading...");
 
   const theme = createTheme({
@@ -15,30 +15,36 @@ const Login = () => {
     },
   });
 
+  //TODO move out logic from UI
+  //TODO? create separate custom hook for login page
   useEffect(() => {
-    setLoadingText("Checking code...");
+    const queryParameters = new URLSearchParams(window.location.search);
+    const code = queryParameters.get("code");
+
+    const getTokens = async (code: String) => {
+      try {
+        const { accessToken, refreshToken } = await post<Tokens>({
+          body: { code },
+          path: "/auth/tokens",
+        });
+        if (accessToken && refreshToken) {
+          console.log("ACCESS", accessToken, "REFRESH", refreshToken);
+          setLoadingText("Redirecting to homepage...");
+          return;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      setLoadingText("Error occurred");
+    };
+
     if (code === null) {
       setLoadingText("Redirecting to google...");
       window.location.href = "http://localhost:8080/auth/google";
     } else {
-      fetch("http://localhost:8080/auth/tokens", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ code: code }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setLoadingText("Redirecting to homepage...");
-          console.log("Success:", data);
-        })
-        .catch((error) => {
-          setLoadingText("Error occurred");
-          console.error("Error", error);
-        });
+      getTokens(code);
     }
-  }, [code]);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
