@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import cors from "cors";
 import bodyParser from "body-parser";
 import { WebSocketServer } from "ws";
 import { clearConsole, println } from "./src/log";
@@ -15,6 +16,7 @@ export const app = express();
 export const webSocket = new WebSocketServer({ noServer: true });
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors());
 
 const server = app.listen(SERVER_PORT, () => {
   println({ severity: Severity.Info }, "Listening at port", SERVER_PORT);

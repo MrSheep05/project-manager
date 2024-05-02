@@ -12,5 +12,8 @@
       "url": "https://github.com/KoVaL05"
     }
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "react-router-dom": "^6.23.0"
+  }
 }
