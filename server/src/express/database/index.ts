@@ -14,7 +14,6 @@ export const getUserProcedure: getUserProcedureFn = async (uid: string) => {
     payload: { uid },
   });
   if (response.key === ProcedureResponse.GetUserResult) {
-    console.log("HERE");
     return response.body;
   } else if (
     response.key === ProcedureResponse.None &&
