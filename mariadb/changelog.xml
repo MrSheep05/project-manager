@@ -14,4 +14,5 @@
     <include file="./changesets/4-categories-procedures.sql"/>
     <include file="./changesets/5-status-procedures.sql"/>
     <include file="./changesets/6-projects-procedures.sql"/>
+    <include file="./changesets/7-users-procedures.sql"/>
 </databaseChangeLog> 
