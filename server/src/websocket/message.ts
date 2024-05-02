@@ -12,23 +12,37 @@ import {
 } from "./messages";
 
 export const onMessage: OnMessageFn = async ({ event, ws }) => {
-  const { action, payload } = JSON.parse(event.data) as Mesages;
-  const { connectionId } = ws;
-  if (!action || !payload) return;
   try {
+    const { action, payload } = JSON.parse(event.data) as Mesages;
+    const { connectionId } = ws;
+    if (!action || !payload) return;
     switch (action) {
       case Action.AddProject: {
         await addProjectMessage({ connectionId, message: { action, payload } });
         break;
       }
-      case Action.AddStatus || Action.AddCategory: {
+      case Action.AddStatus: {
         await addStatusOrCategoryMessage({
           connectionId,
           message: { action, payload },
         });
         break;
       }
-      case Action.RemoveStatus || Action.RemoveCategory: {
+      case Action.AddCategory: {
+        await addStatusOrCategoryMessage({
+          connectionId,
+          message: { action, payload },
+        });
+        break;
+      }
+      case Action.RemoveCategory: {
+        await removeStatusOrCategoryMessage({
+          connectionId,
+          message: { action, payload },
+        });
+        break;
+      }
+      case Action.RemoveStatus: {
         await removeStatusOrCategoryMessage({
           connectionId,
           message: { action, payload },
