@@ -12,7 +12,7 @@ CREATE TABLE user (
 
 -- changeset liquibase:create_project_table
 CREATE TABLE project (
-  `id` VARCHAR(36) UNIQUE PRIMARY KEY NOT NULL,
+  `id` VARCHAR(36) UNIQUE PRIMARY KEY NOT NULL DEFAULT UUID(),
   `user_id` VARCHAR(256) NOT NULL,
   `status_id` VARCHAR(36) NOT NULL,
   `title` TINYTEXT NOT NULL,
@@ -30,10 +30,10 @@ CREATE TABLE connections (
 
 -- changeset liquibase:create_category_table
 CREATE TABLE category (
-  `id` VARCHAR(36) UNIQUE PRIMARY KEY NOT NULL,
+  `id` VARCHAR(36) UNIQUE PRIMARY KEY NOT NULL DEFAULT UUID(),
   `name` TINYTEXT NOT NULL,
   `color` MEDIUMINT(8) UNSIGNED NOT NULL,
-  `visible` BOOLEAN NOT NULL
+  `visible` BOOLEAN NOT NULL DEFAULT 1
 );
 -- rollback DROP TABLE category;
 
@@ -46,9 +46,9 @@ CREATE TABLE project_category (
 
 -- changeset liquibase:status_table
 CREATE TABLE status (
-  `id` VARCHAR(36) UNIQUE PRIMARY KEY NOT NULL,
+  `id` VARCHAR(36) UNIQUE PRIMARY KEY NOT NULL DEFAULT UUID(),
   `name` TINYTEXT NOT NULL,
   `color` MEDIUMINT(8) UNSIGNED NOT NULL,
-  `visible` BOOLEAN NOT NULL
+  `visible` BOOLEAN NOT NULL DEFAULT 1
 );
 -- rollback DROP TABLE status;
