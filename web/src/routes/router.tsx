@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import Login from "../views/login/login-page";
+import { Routes } from "./types";
 
 const routerConfig = [
   {
-    path: "/oauth2callback",
+    path: Routes.Login,
     element: <Login />,
   },
   {

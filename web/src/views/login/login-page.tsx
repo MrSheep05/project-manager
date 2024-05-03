@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Blocks } from "react-loader-spinner";
 import "./login-page.css";
 import { post } from "../../utils/server-requests";
-import { Tokens } from "./types";
+import { Tokens } from "../../utils/types";
 
 const Login = () => {
   const [loadingText, setLoadingText] = useState("Loading...");
