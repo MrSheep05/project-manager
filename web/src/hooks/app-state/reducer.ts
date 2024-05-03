@@ -1,5 +1,5 @@
-import { State } from "./types";
+import { AppDispatch, State } from "./types";
 
-export const reducer = (state: State, action: any): State => {
+export const reducer = (state: State, action: AppDispatch): State => {
   return {};
 };

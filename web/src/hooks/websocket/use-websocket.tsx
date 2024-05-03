@@ -13,11 +13,12 @@ const WEBSOCKET_ADDRESS = "ws://localhost:3000";
 const websocketUrl = (tokens: Tokens): string =>
   `${WEBSOCKET_ADDRESS}?accessToken=${tokens.accessToken}&?refreshToken=${tokens.refreshToken}`;
 
-export const useWebsocket: UseWebsocketHook = () => {
+export const useWebsocket: UseWebsocketHook = (dispatch) => {
   const [ws, setWebsocket] = useState<WebSocket>();
   const [isAvailable, setIsAvailable] = useState(false);
   const {
     state: { tokens },
+    dispatch: saveUser,
   } = useContext(AppState);
   const navigate = useNavigate();
 
@@ -47,7 +48,7 @@ export const useWebsocket: UseWebsocketHook = () => {
     });
   }, [ws, tokens]);
 
-  return { websocket: isAvailable ? ws : undefined, send };
+  return { isAvailable, send };
 };
 
 const prepareListener: PrepareListenerFn = (ws, eventName, fn) => {
