@@ -13,6 +13,6 @@ export const removeStatusOrCategoryMessage: RemoveStatusOrCategoryMessageFn =
         : await removeCategory({ connectionId, categoryId: id });
     postToConnections({
       everyone: true,
-      message: JSON.stringify({ action, payload: result }),
+      message: JSON.stringify({ message: action, payload: result }),
     });
   };

@@ -9,7 +9,7 @@ export const getStatusAndCategoryMessage: GetStatusAndCategoryMessageFn =
     const statusResult = await getStatus({ connectionId });
 
     const data = JSON.stringify({
-      action: Action.GetStatusAndCategory,
+      message: Action.GetStatusAndCategory,
       payload: {
         status: categoryOrStatusMap(statusResult),
         categories: categoryOrStatusMap(categoriesResult),

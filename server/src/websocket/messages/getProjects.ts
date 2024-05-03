@@ -11,5 +11,5 @@ export const getProjectsMessage: GetProjectsMessageFn = async ({
     payload: { offsetId },
   } = message;
   const result = await getProjects({ connectionId, offsetId });
-  ws.send(JSON.stringify({ action, payload: result }));
+  ws.send(JSON.stringify({ message: action, payload: result }));
 };

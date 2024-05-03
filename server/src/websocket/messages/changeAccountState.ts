@@ -21,6 +21,6 @@ export const changeAccountStateMessage: ChangeAccountStateMessageFn = async ({
     : await disableAccount({ connectionId, uid });
   postToConnections({
     connections,
-    message: JSON.stringify({ action, payload: result }),
+    message: JSON.stringify({ message: action, payload: result }),
   });
 };

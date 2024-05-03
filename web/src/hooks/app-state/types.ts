@@ -1,4 +1,4 @@
-import { Tokens } from "../../utils/types";
+import { Tokens, UserInfo } from "../../utils/types";
 
 export type AppStateContext = {
   state: State;
@@ -9,13 +9,18 @@ export enum AppAction {
   SaveUser,
   SaveTokens,
 }
-export type AppDispatch = SaveTokensD;
+export type AppDispatch = SaveTokensD | SaveUserD;
 
 export type State = {
   tokens?: Tokens;
 };
 
 type SaveTokensD = {
-  type: SaveTokensD;
+  type: AppAction.SaveTokens;
   payload: Tokens;
+};
+
+type SaveUserD = {
+  type: AppAction.SaveUser;
+  payload: UserInfo;
 };

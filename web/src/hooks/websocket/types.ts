@@ -1,9 +1,13 @@
 import { NavigateFunction } from "react-router-dom";
-import { Tokens } from "../../utils/types";
+import {
+  CategoryOrStatusBody,
+  ProjectBody,
+  Tokens,
+  UserBody,
+} from "../../utils/types";
+import { MessageObject } from "./on-message.types";
 
-export type UseWebsocketHook = (
-  dispatch: React.Dispatch<WebsocketDispatch>
-) => {
+export type UseWebsocketHook = (dispatch: React.Dispatch<MessageObject>) => {
   isAvailable: boolean;
   send: SendMessageFn;
 };
@@ -25,15 +29,14 @@ export type CreateWebsocketFn = (
   navigate: NavigateFunction
 ) => WebSocket | undefined;
 
-export type DataState = {};
+export type DataState = {
+  isAdmin: boolean;
+  categories: CategoryOrStatusBody[];
+  status: CategoryOrStatusBody[];
+  users: UserBody[];
+  projects: ProjectBody[];
+};
 
 export enum WebsocketAction {
   GetStatusAndCategories,
 }
-
-export type WebsocketDispatch = GetStatusAndCategoriesD;
-
-type GetStatusAndCategoriesD = {
-  type: WebsocketAction.GetStatusAndCategories;
-  payload: {};
-};
