@@ -30,9 +30,9 @@ app.post("/auth/tokens", googleToken);
 
 webSocket.on("connection", onConnect);
 
-// app.get("/oauth2callback", (req, res) => {
-//   const { code } = req.query;
-//   println({}, code);
-//   res.write(code);
-//   res.end();
-// });
+app.get("/oauth2callback", (req, res) => {
+  const { code } = req.query;
+  println({}, code);
+  res.write(code);
+  res.end();
+});

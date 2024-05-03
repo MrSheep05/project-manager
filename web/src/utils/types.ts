@@ -37,9 +37,9 @@ export enum Role {
 }
 
 export type UserInfo = {
-  picture: string;
-  id: string;
-  name: string;
+  picture?: string;
+  user_id: string;
+  name?: string;
   email: string;
   role: Role;
 };
