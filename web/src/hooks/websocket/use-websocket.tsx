@@ -1,23 +1,19 @@
 import { useContext, useEffect, useState } from "react";
-import {
-  CreateWebsocketFn,
-  PrepareListenerFn,
-  UseWebsocketHook,
-} from "./types";
+import { PrepareListenerFn, UseWebsocketHook } from "./types";
 import { AppState } from "../app-state";
 import { useNavigate } from "react-router-dom";
-import { Routes } from "../../routes/types";
 import { Tokens } from "../../utils/types";
 import { onMessage } from "./on-message";
 import { Message } from "./on-message.types";
 import { AppAction } from "../app-state/types";
+import { AppRoutes } from "../../routes/types";
 
-const WEBSOCKET_ADDRESS = "ws://localhost:3000";
+const WEBSOCKET_ADDRESS = "ws://localhost:8080";
 const websocketUrl = (tokens: Tokens): string =>
-  `${WEBSOCKET_ADDRESS}?accessToken=${tokens.accessToken}&?refreshToken=${tokens.refreshToken}`;
+  `${WEBSOCKET_ADDRESS}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`;
 
 export const useWebsocket: UseWebsocketHook = (dispatch) => {
-  const [ws, setWebsocket] = useState<WebSocket>();
+  const [websocket, setWebsocket] = useState<WebSocket>();
   const [isAvailable, setIsAvailable] = useState(false);
   const {
     state: { tokens },
@@ -26,32 +22,43 @@ export const useWebsocket: UseWebsocketHook = (dispatch) => {
   const navigate = useNavigate();
 
   const send = () => {
-    if (!isAvailable || !ws) return;
-    ws.send(JSON.stringify({}));
+    if (!isAvailable || !websocket) return;
+    websocket.send(JSON.stringify({}));
   };
 
   useEffect(() => {
-    if (!ws) {
-      setWebsocket(createWebsocket(tokens, navigate));
+    if (!websocket && tokens) {
+      console.log("CREATE");
+      const ws = new WebSocket(websocketUrl(tokens));
+      console.log(ws.url);
+      setWebsocket(ws);
     }
-  }, [ws, tokens]);
+  }, [websocket, tokens]);
 
   useEffect(() => {
-    if (!ws) return;
-    prepareListener(ws, "close", () => {
-      setIsAvailable(false);
-      setWebsocket(createWebsocket(tokens, navigate));
-    });
-
-    prepareListener(ws, "error", () => ws.close());
-
-    prepareListener(ws, "open", () => {
+    if (!websocket) return;
+    console.log("PREPARE");
+    prepareListener(websocket, "open", () => {
+      console.log("OPEN");
       setIsAvailable(true);
       // TODO fn on open
     });
 
-    prepareListener(ws, "message", ({ data }: MessageEvent<string>) => {
+    prepareListener(websocket, "close", () => {
+      console.log("CLOSE");
+      setIsAvailable(false);
+      if (!tokens) return navigate(AppRoutes.Login);
+      setWebsocket(new WebSocket(websocketUrl(tokens)));
+    });
+
+    prepareListener(websocket, "error", () => {
+      console.log("ERROR");
+      websocket.close();
+    });
+
+    prepareListener(websocket, "message", ({ data }: MessageEvent<string>) => {
       const message = onMessage(data);
+      console.log("MESSAGE");
       if (message?.message === Message.UserInfo) {
         saveUser({ type: AppAction.SaveUser, payload: message.payload });
         dispatch(message);
@@ -59,26 +66,17 @@ export const useWebsocket: UseWebsocketHook = (dispatch) => {
         dispatch(message);
       }
     });
-  }, [ws, tokens]);
+  }, [websocket, tokens]);
 
   return { isAvailable, send };
 };
 
-const prepareListener: PrepareListenerFn = (ws, eventName, fn) => {
-  if (!ws) return () => {};
+const prepareListener: PrepareListenerFn = (websocket, eventName, fn) => {
+  if (!websocket) return () => {};
 
-  ws.addEventListener(eventName, fn);
+  websocket.addEventListener(eventName, fn);
 
   return () => {
-    ws.removeEventListener(eventName, fn);
+    websocket.removeEventListener(eventName, fn);
   };
-};
-
-const createWebsocket: CreateWebsocketFn = (tokens, navigate) => {
-  if (!tokens?.accessToken || !tokens.refreshToken) {
-    navigate(Routes.Login);
-    return;
-  }
-
-  return new WebSocket(websocketUrl(tokens));
 };

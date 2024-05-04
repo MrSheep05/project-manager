@@ -1,4 +1,5 @@
-export enum Routes {
+export enum AppRoutes {
   Login = "/oauth2callback",
-  Home = "/home",
+  Home = "/home/",
+  Project = "/home/projects",
 }

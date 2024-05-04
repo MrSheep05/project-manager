@@ -1,11 +1,10 @@
-import { useReducer } from "react";
+import { createContext, useReducer } from "react";
 import { ComponentWrapper } from "../../utils/types";
 import { useWebsocket } from "./use-websocket";
-import { createContext } from "vm";
 import { reducer } from "./reducer";
 import { DataState, WebsocketStateContext } from "./types";
 
-const WebsocketState = createContext({} as WebsocketStateContext);
+export const WebsocketState = createContext({} as WebsocketStateContext);
 
 const initialData: DataState = {
   categories: [],
@@ -20,7 +19,7 @@ export const WebsocketStateComponent: ComponentWrapper = ({ children }) => {
   const { isAvailable, send } = useWebsocket(dispatch);
   return (
     <WebsocketState.Provider value={{ send, isAvailable }}>
-      {{ children }}
+      {children}
     </WebsocketState.Provider>
   );
 };

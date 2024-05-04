@@ -1,4 +1,4 @@
-import { Tokens, UserInfo } from "../../utils/types";
+import { Role, Tokens, UserInfo } from "../../utils/types";
 
 export type AppStateContext = {
   state: State;
@@ -13,6 +13,8 @@ export type AppDispatch = SaveTokensD | SaveUserD;
 
 export type State = {
   tokens?: Tokens;
+  user?: UserInfo;
+  role: Role;
 };
 
 type SaveTokensD = {
