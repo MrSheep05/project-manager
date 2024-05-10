@@ -1,15 +1,14 @@
-import "./App.css";
-import "./routes/router";
-import { ThemeProvider } from "@emotion/react";
-import { experimental_extendTheme } from "@mui/material";
 import { RouterProvider } from "react-router-dom";
 import { AppStateComponent } from "./hooks/app-state";
+import { ThemeProvider } from "@mui/material";
 import router from "./routes/router";
+import theme from "./theme";
+import "./App.css";
 
 const App = () => {
   return (
     <AppStateComponent>
-      <ThemeProvider theme={experimental_extendTheme}>
+      <ThemeProvider theme={theme}>
         <RouterProvider router={router} />
       </ThemeProvider>
     </AppStateComponent>

@@ -1,25 +1,17 @@
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
 import { useContext, useEffect, useState } from "react";
-import { Blocks } from "react-loader-spinner";
-import "./index.css";
+import { AppState } from "../../hooks/app-state";
+import { useNavigate } from "react-router-dom";
+import Loading from "../../components/loading";
+import { StyledContainer } from "./styled";
 import { post } from "../../utils/server-requests";
 import { Tokens } from "../../utils/types";
-import { AppState } from "../../hooks/app-state";
 import { AppAction } from "../../hooks/app-state/types";
-import { useNavigate } from "react-router-dom";
 import { AppRoutes } from "../../routes/types";
 
 const Login = () => {
   const [loadingText, setLoadingText] = useState("Loading...");
   const { dispatch } = useContext(AppState);
   const navigate = useNavigate();
-
-  const theme = createTheme({
-    palette: {
-      mode: "dark",
-    },
-  });
 
   //TODO move out logic from UI
   //TODO? create separate custom hook for login page
@@ -64,21 +56,9 @@ const Login = () => {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <div className="container">
-        <div className="text">{loadingText}</div>
-        <Blocks
-          height="80"
-          width="80"
-          color="#4fa94d"
-          ariaLabel="blocks-loading"
-          wrapperStyle={{}}
-          wrapperClass="blocks-wrapper"
-          visible={true}
-        />
-      </div>
-    </ThemeProvider>
+    <StyledContainer>
+      <Loading message={loadingText}></Loading>
+    </StyledContainer>
   );
 };
 

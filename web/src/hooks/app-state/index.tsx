@@ -12,12 +12,7 @@ const initialState: State = {
 };
 
 export const AppStateComponent: ComponentWrapper = ({ children }) => {
-  const [state, dispatchFn] = useReducer(reducer, initialState);
-
-  const dispatch = (action: AppDispatch) => {
-    dispatchFn(action);
-    // if (action.type === AppAction.SaveTokens) navigate(AppRoutes.Home);
-  };
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
     <AppState.Provider value={{ state, dispatch }}>
