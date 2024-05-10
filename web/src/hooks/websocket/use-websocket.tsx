@@ -57,9 +57,10 @@ export const useWebsocket: UseWebsocketHook = (dispatch) => {
     });
 
     prepareListener(websocket, "message", ({ data }: MessageEvent<string>) => {
+      console.log(data);
       const message = onMessage(data);
       console.log("MESSAGE");
-      if (message?.message === Message.UserInfo) {
+      if (message?.message === Message.UserData) {
         saveUser({ type: AppAction.SaveUser, payload: message.payload });
         dispatch(message);
       } else if (message) {

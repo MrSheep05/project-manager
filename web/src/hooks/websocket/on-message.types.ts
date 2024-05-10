@@ -24,7 +24,7 @@ export enum Message {
   GetProjects = "getProjects",
   ChangeAccountState = "changeAccountState",
   GetUsers = "getUsers",
-  UserInfo = "userInfo",
+  UserData = "userData",
 }
 
 type AddProjectMessage = {
@@ -61,6 +61,6 @@ type RemoveStatusOrCategoryMessage = {
 };
 
 type UserInfoMessage = {
-  message: Message.UserInfo;
+  message: Message.UserData;
   payload: UserInfo;
 };

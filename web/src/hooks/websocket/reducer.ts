@@ -52,7 +52,7 @@ export const reducer = (state: DataState, action: MessageObject): DataState => {
           : state.status.filter((status) => status.id !== payload.id),
       };
     }
-    case Message.UserInfo: {
+    case Message.UserData: {
       return { ...state, isAdmin: payload.role === Role.Admin };
     }
     default: {

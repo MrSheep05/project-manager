@@ -24,6 +24,7 @@ const Home = () => {
       navigate(AppRoutes.Login);
     }
   }, [tokens]);
+
   return (
     <WebsocketStateComponent>
       <StyledRow>

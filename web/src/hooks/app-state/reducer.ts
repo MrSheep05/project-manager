@@ -8,6 +8,7 @@ export const reducer = (state: State, action: AppDispatch): State => {
       return { ...state, tokens: payload };
     }
     case AppAction.SaveUser: {
+      console.log("HERE", payload);
       return { ...state, role: payload.role, user: payload };
     }
   }
