@@ -7,5 +7,5 @@ export const StyledContainer = styled(Box)(({ theme }) => ({
   justifyContent: "center",
   minWidth: "100vw",
   minHeight: "100vh",
-  backgroundColor: theme.palette.primary.main,
+  backgroundColor: theme.palette.primary[theme.palette.mode],
 }));
