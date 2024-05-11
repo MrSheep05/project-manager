@@ -3,6 +3,7 @@ import * as stream from "node:stream";
 import { Request, Response } from "express";
 import { Send } from "express-serve-static-core";
 import { UserBody } from "../queries/types";
+import { UserInfo } from "../auth/types";
 export type Tokens = {
   accessToken?: string;
   refreshToken?: string;
@@ -12,7 +13,7 @@ export type InformDisabledAccount = (payload: {
   request: IncomingMessage;
   socket: stream.Duplex;
   head: Buffer;
-  data: UserBody;
+  data: UserInfo;
 }) => void;
 
 export type GetTokensFromURLFn = (req: IncomingMessage) => Tokens | undefined;

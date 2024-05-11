@@ -9,10 +9,11 @@ export const getUserInfo: GetUserInfoFn = async (client) => {
   try {
     const oauth2 = google.oauth2("v2");
     return new Promise((resolve, reject) => {
-      oauth2.userinfo.v2.me.get({ auth: client }, (err, res) => {
+      oauth2.userinfo.get({ auth: client }, (err, res) => {
         if (err) {
           reject(err);
         }
+        println({}, res);
         const { picture, id, name } = res.data;
         resolve({ picture, id, name });
       });

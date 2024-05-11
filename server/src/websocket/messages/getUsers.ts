@@ -8,5 +8,5 @@ export const getUsersMessage: GetUsersMessageFn = async ({ message, ws }) => {
   } = message;
   const { connectionId } = ws;
   const result = await getUsers({ connectionId, offsetUid });
-  ws.send(JSON.stringify({ action, payload: result }));
+  ws.send(JSON.stringify({ message: action, payload: result }));
 };
