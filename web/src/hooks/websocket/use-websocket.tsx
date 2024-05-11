@@ -12,7 +12,7 @@ const WEBSOCKET_ADDRESS = "ws://localhost:8080";
 const websocketUrl = (tokens: Tokens): string =>
   `${WEBSOCKET_ADDRESS}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`;
 
-export const useWebsocket: UseWebsocketHook = (dispatch) => {
+export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
   const [websocket, setWebsocket] = useState<WebSocket>();
   const [isAvailable, setIsAvailable] = useState(false);
   const {
@@ -28,7 +28,6 @@ export const useWebsocket: UseWebsocketHook = (dispatch) => {
 
   useEffect(() => {
     if (!websocket && tokens) {
-      console.log("CREATE");
       const ws = new WebSocket(websocketUrl(tokens));
       console.log(ws.url);
       setWebsocket(ws);
@@ -39,28 +38,27 @@ export const useWebsocket: UseWebsocketHook = (dispatch) => {
     if (!websocket) return;
     console.log("PREPARE");
     prepareListener(websocket, "open", () => {
-      console.log("OPEN");
       setIsAvailable(true);
       // TODO fn on open
     });
 
     prepareListener(websocket, "close", () => {
-      console.log("CLOSE");
       setIsAvailable(false);
       if (!tokens) return navigate(AppRoutes.Login);
-      setWebsocket(new WebSocket(websocketUrl(tokens)));
+      if (state.isAccountEnabled)
+        setWebsocket(new WebSocket(websocketUrl(tokens)));
     });
 
     prepareListener(websocket, "error", () => {
-      console.log("ERROR");
       websocket.close();
     });
 
     prepareListener(websocket, "message", ({ data }: MessageEvent<string>) => {
       console.log(data);
       const message = onMessage(data);
-      console.log("MESSAGE");
+      console.log(message?.message);
       if (message?.message === Message.UserData) {
+        console.log("HERE");
         saveUser({ type: AppAction.SaveUser, payload: message.payload });
         dispatch(message);
       } else if (message) {

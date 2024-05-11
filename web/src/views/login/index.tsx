@@ -7,9 +7,10 @@ import { post } from "../../utils/server-requests";
 import { Tokens } from "../../utils/types";
 import { AppAction } from "../../hooks/app-state/types";
 import { AppRoutes } from "../../routes/types";
+import { LoadingText } from "./types";
 
 const Login = () => {
-  const [loadingText, setLoadingText] = useState("Loading...");
+  const [loadingText, setLoadingText] = useState(LoadingText.Loading);
   const { dispatch } = useContext(AppState);
   const navigate = useNavigate();
 
@@ -27,7 +28,7 @@ const Login = () => {
         });
         if (accessToken && refreshToken) {
           console.log("ACCESS", accessToken, "REFRESH", refreshToken);
-          setLoadingText("Redirecting to homepage...");
+          setLoadingText(LoadingText.Home);
           await new Promise((resolve) => setTimeout(resolve, 500));
           dispatch({
             type: AppAction.SaveTokens,
@@ -41,11 +42,11 @@ const Login = () => {
       } catch (err) {
         console.log(err);
       }
-      setLoadingText("Error occurred");
+      setLoadingText(LoadingText.Error);
     };
 
     if (code === null) {
-      setLoadingText("Redirecting to google...");
+      setLoadingText(LoadingText.Google);
       setTimeout(
         () => (window.location.href = "http://localhost:8080/auth/google"),
         500

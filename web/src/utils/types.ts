@@ -42,4 +42,5 @@ export type UserInfo = {
   name?: string;
   email: string;
   role: Role;
+  enabled: boolean;
 };

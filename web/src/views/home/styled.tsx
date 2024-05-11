@@ -1,4 +1,4 @@
-import { Avatar, Box, styled } from "@mui/material";
+import { Avatar, Box, Typography, styled } from "@mui/material";
 
 export const StyledRow = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -42,16 +42,28 @@ export const StyledHeader = styled(Box)(({ theme }) => ({
   top: 0,
   right: 0,
   margin: "3vmin",
-  height: "10vmin",
+  padding: "1vmin",
+  minHeight: "10vmin",
   borderRadius: "2vmin",
-  width: "28vmin",
+  minWidth: "28vmin",
   boxShadow: `inset 0 0 0 1000px #00000033`,
   backgroundColor: theme.palette.primary[theme.palette.mode],
 }));
 
 export const StyledAvatar = styled(Avatar)(({ theme }) => ({
-  width: "7vmin",
-  height: "7vmin",
+  minWidth: "7vmin",
+  minHeight: "7vmin",
+  display: "flex",
+  flex: 1,
   boxShadow: "0px 0px 3px 1px #00000066",
   backgroundColor: theme.palette.secondary[theme.palette.mode],
 }));
+
+export const StyledColumn = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  flex: 6,
+});
+export const StyledTypography = styled(Typography)({});

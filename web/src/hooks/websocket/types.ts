@@ -7,7 +7,10 @@ import {
 } from "../../utils/types";
 import { MessageObject } from "./on-message.types";
 
-export type UseWebsocketHook = (dispatch: React.Dispatch<MessageObject>) => {
+export type UseWebsocketHook = (
+  state: DataState,
+  dispatch: React.Dispatch<MessageObject>
+) => {
   isAvailable: boolean;
   send: SendMessageFn;
 };
@@ -35,6 +38,7 @@ export type DataState = {
   status: CategoryOrStatusBody[];
   users: UserBody[];
   projects: ProjectBody[];
+  isAccountEnabled: boolean;
 };
 
 export enum WebsocketAction {

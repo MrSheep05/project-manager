@@ -53,7 +53,11 @@ export const reducer = (state: DataState, action: MessageObject): DataState => {
       };
     }
     case Message.UserData: {
-      return { ...state, isAdmin: payload.role === Role.Admin };
+      return {
+        ...state,
+        isAdmin: payload.role === Role.Admin,
+        isAccountEnabled: payload.enabled,
+      };
     }
     default: {
       return state;

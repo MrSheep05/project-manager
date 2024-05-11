@@ -19,7 +19,7 @@ const informDisabledAccount: InformDisabledAccount = ({
   webSocket.handleUpgrade(request, socket, head, (ws, _req) => {
     ws.send(
       JSON.stringify({
-        action: "userData",
+        message: "userData",
         payload: data,
       })
     );
@@ -55,10 +55,16 @@ export const authorizeUpgrade: AuthorizeUpgradeFn = async (
         .update(sub)
         .digest("hex");
       const userData = await getUserProcedure(hashed_sub);
+      const { picture, name } = await getUserInfo(client);
 
       if (!userData) {
         const data = await registerUser({ uid: hashed_sub, email });
-        informDisabledAccount({ request, socket, head, data });
+        informDisabledAccount({
+          request,
+          socket,
+          head,
+          data: { ...data, picture, name },
+        });
         return;
       }
 
@@ -75,7 +81,12 @@ export const authorizeUpgrade: AuthorizeUpgradeFn = async (
           );
         });
       } else {
-        informDisabledAccount({ request, socket, head, data: userData });
+        informDisabledAccount({
+          request,
+          socket,
+          head,
+          data: { ...userData, picture, name },
+        });
         return;
       }
     }

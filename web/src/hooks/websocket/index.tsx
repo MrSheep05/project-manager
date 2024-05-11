@@ -12,11 +12,12 @@ const initialData: DataState = {
   users: [],
   projects: [],
   isAdmin: false,
+  isAccountEnabled: false,
 };
 
 export const WebsocketStateComponent: ComponentWrapper = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialData);
-  const { isAvailable, send } = useWebsocket(dispatch);
+  const { isAvailable, send } = useWebsocket(state, dispatch);
   return (
     <WebsocketState.Provider value={{ send, isAvailable }}>
       {children}
