@@ -15,6 +15,7 @@ export const onMessage: OnMessageFn = async ({ event, ws }) => {
   try {
     const { action, payload } = JSON.parse(event.data) as Mesages;
     const { connectionId } = ws;
+    println({}, action, connectionId, event.data);
     if (!action || !payload) return;
     switch (action) {
       case Action.AddProject: {

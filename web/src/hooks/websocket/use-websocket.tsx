@@ -1,5 +1,10 @@
-import { useContext, useEffect, useState } from "react";
-import { PrepareListenerFn, UseWebsocketHook } from "./types";
+import { useCallback, useContext, useEffect, useState } from "react";
+import {
+  PrepareListenerFn,
+  SendAction,
+  SendFn,
+  UseWebsocketHook,
+} from "./types";
 import { AppState } from "../app-state";
 import { useNavigate } from "react-router-dom";
 import { Tokens } from "../../utils/types";
@@ -15,31 +20,43 @@ const websocketUrl = (tokens: Tokens): string =>
 export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
   const [websocket, setWebsocket] = useState<WebSocket>();
   const [isAvailable, setIsAvailable] = useState(false);
+
+  const send = useCallback<SendFn>(
+    (message) => {
+      if (!isAvailable || !websocket) return;
+      websocket.send(JSON.stringify(message));
+    },
+    [isAvailable, websocket]
+  );
+
   const {
     state: { tokens },
     dispatch: saveUser,
   } = useContext(AppState);
   const navigate = useNavigate();
 
-  const send = () => {
-    if (!isAvailable || !websocket) return;
-    websocket.send(JSON.stringify({}));
-  };
-
   useEffect(() => {
     if (!websocket && tokens) {
       const ws = new WebSocket(websocketUrl(tokens));
-      console.log(ws.url);
       setWebsocket(ws);
     }
   }, [websocket, tokens]);
 
   useEffect(() => {
     if (!websocket) return;
-    console.log("PREPARE");
-    prepareListener(websocket, "open", () => {
+    prepareListener(websocket, "open", async () => {
       setIsAvailable(true);
-      // TODO fn on open
+      setTimeout(() => {
+        websocket.send(
+          JSON.stringify({
+            action: SendAction.GetStatusAndCategory,
+            payload: {},
+          })
+        );
+        websocket.send(
+          JSON.stringify({ action: SendAction.GetProjects, payload: {} })
+        );
+      }, 500);
     });
 
     prepareListener(websocket, "close", () => {
@@ -54,11 +71,9 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
     });
 
     prepareListener(websocket, "message", ({ data }: MessageEvent<string>) => {
-      console.log(data);
       const message = onMessage(data);
-      console.log(message?.message);
+      console.log(data);
       if (message?.message === Message.UserData) {
-        console.log("HERE");
         saveUser({ type: AppAction.SaveUser, payload: message.payload });
         dispatch(message);
       } else if (message) {
@@ -74,7 +89,6 @@ const prepareListener: PrepareListenerFn = (websocket, eventName, fn) => {
   if (!websocket) return () => {};
 
   websocket.addEventListener(eventName, fn);
-
   return () => {
     websocket.removeEventListener(eventName, fn);
   };

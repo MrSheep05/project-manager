@@ -19,7 +19,7 @@ export const WebsocketStateComponent: ComponentWrapper = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialData);
   const { isAvailable, send } = useWebsocket(state, dispatch);
   return (
-    <WebsocketState.Provider value={{ send, isAvailable }}>
+    <WebsocketState.Provider value={{ send, isAvailable, state }}>
       {children}
     </WebsocketState.Provider>
   );

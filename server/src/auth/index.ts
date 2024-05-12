@@ -13,7 +13,6 @@ export const getUserInfo: GetUserInfoFn = async (client) => {
         if (err) {
           reject(err);
         }
-        println({}, res);
         const { picture, id, name } = res.data;
         resolve({ picture, id, name });
       });

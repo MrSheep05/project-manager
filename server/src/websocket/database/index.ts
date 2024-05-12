@@ -1,3 +1,4 @@
+import { println } from "../../log";
 import { runProcedure } from "../../queries/queries";
 import { Procedure, ProcedureResponse } from "../../queries/types";
 import {
@@ -110,6 +111,13 @@ export const getProjects: GetProjectsFn = async (payload) => {
     type: Procedure.GetProjects,
     payload,
   });
-  if (result.key === ProcedureResponse.AllProjects) return result.body;
+  if (result.key === ProcedureResponse.AllProjects) {
+    return result.body;
+  } else if (
+    result.key === ProcedureResponse.None &&
+    !result.body[0][0] //Funny procedure response type
+  ) {
+    return [];
+  }
   throw Error("Unexpected result from GetProjects procedure");
 };
