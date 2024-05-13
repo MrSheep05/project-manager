@@ -16,6 +16,7 @@ export const googleOAuth: GoogleOAuthFn = async (_request, response) => {
 export const googleToken: GoogleTokenFn = async (req, res) => {
   try {
     if (!req.body.code) return res.status(400).end();
+    println({}, req.body.code, "CODE");
     const tokens = await getTokens(req.body.code);
     return res.status(200).json(tokens).end();
   } catch (error) {
