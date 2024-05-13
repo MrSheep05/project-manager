@@ -41,7 +41,7 @@ const config = (server: Server) => {
         (c) => (c as WebSocket).connectionId
       );
       connections
-        .filter(({ connection_id }) => current.includes(connection_id))
+        .filter(({ connection_id }) => !current.includes(connection_id))
         .forEach(async ({ connection_id }) => {
           await removeConnection(connection_id);
         });
