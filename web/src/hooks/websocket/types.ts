@@ -15,6 +15,10 @@ export type UseWebsocketHook = (
   send: SendFn;
 };
 
+export interface WebSocketExt extends WebSocket {
+  pingTimeout?: NodeJS.Timeout;
+}
+
 export type SendFn = (message: Mesages) => void;
 
 export type WebsocketStateContext = {

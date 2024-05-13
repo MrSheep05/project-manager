@@ -3,6 +3,7 @@ import { ComponentWrapper } from "../../utils/types";
 import { useWebsocket } from "./use-websocket";
 import { reducer } from "./reducer";
 import { DataState, WebsocketStateContext } from "./types";
+import { setTimeout } from "timers/promises";
 
 export const WebsocketState = createContext({} as WebsocketStateContext);
 
