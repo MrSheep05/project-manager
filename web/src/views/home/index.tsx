@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { AppState } from "../../hooks/app-state";
 import { AppRoutes } from "../../routes/types";
-import { WebsocketStateComponent } from "../../hooks/websocket";
+import { WebsocketState, WebsocketStateComponent } from "../../hooks/websocket";
 import { StyledText } from "../../components/loading/styled";
 import {
   StyledAvatar,
@@ -13,11 +13,15 @@ import {
   StyledSidebar,
 } from "./styled";
 import PermissionBracet from "../../components/permission-bracet";
+import Loading from "../../components/loading";
+import { Button } from "@mui/material";
+import ReconnectWidget from "./widgets/reconnect";
 
 const Home = () => {
   const {
     state: { tokens, user },
   } = useContext(AppState);
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!tokens) {
@@ -40,7 +44,10 @@ const Home = () => {
             </StyledColumn>
             <StyledAvatar src={user?.picture} />
           </StyledHeader>
-          <Outlet />
+
+          <ReconnectWidget user={user}>
+            <Outlet />
+          </ReconnectWidget>
         </StyledContent>
       </StyledRow>
     </WebsocketStateComponent>

@@ -27,8 +27,16 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
 
   const send = useCallback<SendFn>(
     (message) => {
-      if (!isAvailable || !websocket) return;
-      websocket.send(JSON.stringify(message));
+      if (!websocket) return;
+      if (message === "reconnect" && tokens) {
+        setIsAvailable(true);
+        setTimeout(
+          () => setWebsocket(new WebSocket(websocketUrl(tokens))),
+          500
+        );
+      } else if (!isAvailable) {
+        websocket.send(JSON.stringify(message));
+      }
     },
     [isAvailable, websocket]
   );
