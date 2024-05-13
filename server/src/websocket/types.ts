@@ -1,21 +1,28 @@
 import { IncomingMessage } from "http";
+import { WebSocket, MessageEvent, RawData } from "ws";
 
-export interface WebSocketClient extends WebSocket {
-  connectionId: string;
-}
+export type PostToConnectionsFn = ({
+  connections,
+  message,
+  everyone,
+}: {
+  connections?: string[];
+  message: string;
+  everyone?: boolean;
+}) => Promise<void>;
 
 export type OnConnectFn = (
-  socket: WebSocketClient,
+  socket: WebSocket,
   request: IncomingMessage,
   ...args: [{ uid: string }, ...any[]]
 ) => Promise<void>;
 
 export type OnMessageFn = ({
-  event,
+  data,
   ws,
 }: {
-  event: MessageEvent<any>;
-  ws: WebSocketClient;
+  data: RawData;
+  ws: WebSocket;
 }) => Promise<void>;
 
 export enum Action {

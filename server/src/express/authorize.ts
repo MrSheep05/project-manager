@@ -1,4 +1,3 @@
-import { webSocket } from "../..";
 import { getTokensFromURL } from ".";
 import { getClient, getUserInfo } from "../auth";
 import crypto from "crypto";
@@ -6,6 +5,7 @@ import { AuthorizeUpgradeFn, InformDisabledAccount } from "./types";
 import { println } from "../log";
 import { Severity } from "../log/types";
 import { getUserProcedure, registerUser } from "./database";
+import { webSocket } from "../configs/websocket";
 
 const UNAUTHORIZED_MESSAGE = "HTTP 403: Unauthorized";
 const UNEXPECTED_MESSAGE = "HTTP 500: Unexpected";
@@ -23,7 +23,7 @@ const informDisabledAccount: InformDisabledAccount = ({
         payload: data,
       })
     );
-    ws.close();
+    ws.terminate();
   });
   socket.end("Account created");
 };

@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { AppState } from "../../hooks/app-state";
 import { AppRoutes } from "../../routes/types";
 import { WebsocketStateComponent } from "../../hooks/websocket";
-import { StyledContainer, StyledText } from "../../components/loading/styled";
+import { StyledText } from "../../components/loading/styled";
 import {
   StyledAvatar,
   StyledColumn,

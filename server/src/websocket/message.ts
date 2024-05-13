@@ -11,10 +11,11 @@ import {
   removeStatusOrCategoryMessage,
 } from "./messages";
 
-export const onMessage: OnMessageFn = async ({ event, ws }) => {
+export const onMessage: OnMessageFn = async ({ data, ws }) => {
   try {
-    const { action, payload } = JSON.parse(event.data) as Mesages;
+    const { action, payload } = JSON.parse(data.toString()) as Mesages;
     const { connectionId } = ws;
+    println({}, action, connectionId, data);
     if (!action || !payload) return;
     switch (action) {
       case Action.AddProject: {

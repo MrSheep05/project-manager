@@ -12,14 +12,20 @@ export type UseWebsocketHook = (
   dispatch: React.Dispatch<MessageObject>
 ) => {
   isAvailable: boolean;
-  send: SendMessageFn;
+  send: SendFn;
 };
+
+export interface WebSocketExt extends WebSocket {
+  pingTimeout?: NodeJS.Timeout;
+}
+
+export type SendFn = (message: Mesages) => void;
 
 export type WebsocketStateContext = {
   isAvailable: boolean;
-  send: () => void;
+  send: SendFn;
+  state: DataState;
 };
-export type SendMessageFn = () => void;
 
 export type PrepareListenerFn = (
   ws: WebSocket | undefined,
@@ -44,3 +50,66 @@ export type DataState = {
 export enum WebsocketAction {
   GetStatusAndCategories,
 }
+
+export enum SendAction {
+  AddProject = "addProject",
+  AddStatus = "addStatus",
+  AddCategory = "addCategory",
+  RemoveStatus = "removeStatus",
+  RemoveCategory = "removeCategory",
+  GetStatusAndCategory = "getStatusAndCategory",
+  GetProjects = "getProjects",
+  ChangeAccountState = "changeAccountState",
+  GetUsers = "getUsers",
+}
+
+export type Mesages =
+  | AddProjectMessage
+  | AddStatusOrCategoryMessage
+  | GetStatusAndCategoryMessage
+  | RemoveStatusOrCategoryMessage
+  | ChangeAccountStateMessage
+  | GetUsersMessage
+  | GetProjectsMessage;
+
+export type GetProjectsMessage = {
+  action: SendAction.GetProjects;
+  payload: { offsetId?: string };
+};
+export type AddProjectMessage = {
+  action: SendAction.AddProject;
+  payload: {
+    statusId: string;
+    categoriesIds: string[];
+    title: string;
+    content: string;
+  };
+};
+export type ChangeAccountStateMessage = {
+  action: SendAction.ChangeAccountState;
+  payload: { state: boolean; uid: string };
+};
+export type GetUsersMessage = {
+  action: SendAction.GetUsers;
+  payload: { offsetUid?: string };
+};
+
+export type AddStatusOrCategoryMessage = {
+  action: SendAction.AddStatus | SendAction.AddCategory;
+  payload: {
+    color: string;
+    name: string;
+  };
+};
+
+export type GetStatusAndCategoryMessage = {
+  action: SendAction.GetStatusAndCategory;
+  payload: {};
+};
+
+export type RemoveStatusOrCategoryMessage = {
+  action: SendAction.RemoveStatus | SendAction.RemoveCategory;
+  payload: {
+    id: string;
+  };
+};

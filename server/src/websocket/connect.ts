@@ -1,3 +1,4 @@
+import { HEARTBEAT_VALUE } from "../configs/websocket";
 import { println } from "../log";
 import { Severity } from "../log/types";
 import { addConnection, removeConnection } from "./database";
@@ -8,6 +9,7 @@ import crypto from "crypto";
 export const onConnect: OnConnectFn = async (ws, request, ...args) => {
   const connectionId = crypto.randomUUID();
   ws.connectionId = connectionId;
+  ws.isAlive = true;
   if (!args[0]?.uid) return ws.close();
   const { uid } = args[0];
   try {
@@ -34,8 +36,11 @@ export const onConnect: OnConnectFn = async (ws, request, ...args) => {
     }
   });
 
-  ws.addEventListener(
-    "message",
-    async (event) => await onMessage({ event, ws })
-  );
+  ws.on("message", async (data, isBinary) => {
+    if (isBinary && data[0] === HEARTBEAT_VALUE) {
+      ws.isAlive = true;
+    } else {
+      await onMessage({ data, ws });
+    }
+  });
 };

@@ -1,7 +1,7 @@
 import { postToConnections } from "..";
 import { getConnections } from "../../queries";
-import { runProcedure } from "../../queries/queries";
-import { Procedure, ProcedureResponse, Role } from "../../queries/types";
+
+import { Role } from "../../queries/types";
 import { disableAccount, enableAccount } from "../database";
 import { ChangeAccountStateMessageFn } from "./types";
 

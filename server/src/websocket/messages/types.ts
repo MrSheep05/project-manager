@@ -5,8 +5,8 @@ import {
   GetProjectsMessage,
   GetUsersMessage,
   RemoveStatusOrCategoryMessage,
-  WebSocketClient,
 } from "../types";
+import { WebSocket } from "ws";
 
 export type AddProjectMessageFn = ({
   connectionId,
@@ -27,7 +27,7 @@ export type GetStatusAndCategoryMessageFn = ({
   ws,
 }: {
   connectionId: string;
-  ws: WebSocketClient;
+  ws: WebSocket;
 }) => Promise<void>;
 export type RemoveStatusOrCategoryMessageFn = ({
   connectionId,
@@ -44,10 +44,10 @@ export type ChangeAccountStateMessageFn = ({
   message: ChangeAccountStateMessage;
 }) => Promise<void>;
 export type GetUsersMessageFn = (payload: {
-  ws: WebSocketClient;
+  ws: WebSocket;
   message: GetUsersMessage;
 }) => Promise<void>;
 export type GetProjectsMessageFn = (payload: {
-  ws: WebSocketClient;
+  ws: WebSocket;
   message: GetProjectsMessage;
 }) => Promise<void>;
