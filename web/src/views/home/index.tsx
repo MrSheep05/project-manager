@@ -13,8 +13,6 @@ import {
   StyledSidebar,
 } from "./styled";
 import PermissionBracet from "../../components/permission-bracet";
-import Loading from "../../components/loading";
-import { Button } from "@mui/material";
 import ReconnectWidget from "./widgets/reconnect";
 
 const Home = () => {

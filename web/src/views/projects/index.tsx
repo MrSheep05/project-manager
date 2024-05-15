@@ -15,7 +15,7 @@ const Projects = () => {
             action: SendAction.ChangeAccountState,
             payload: {
               uid: "91e2e455f5b913e0343c99d227e734de71df9e422cfc7c104ce5d1f320212534",
-              state: true,
+              state: false,
             },
           })
         }
