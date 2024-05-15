@@ -34,7 +34,7 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
           () => setWebsocket(new WebSocket(websocketUrl(tokens))),
           500
         );
-      } else if (!isAvailable) {
+      } else if (isAvailable) {
         websocket.send(JSON.stringify(message));
       }
     },
@@ -74,6 +74,7 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
     prepareListener(websocket, "open", async () => {
       setIsAvailable(true);
       setTimeout(() => {
+        if (!isAvailable) return;
         websocket.send(
           JSON.stringify({
             action: SendAction.GetStatusAndCategory,
@@ -91,8 +92,10 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
       clearTimeout(websocket.pingTimeout);
       setIsAvailable(false);
       if (!tokens) return navigate(AppRoutes.Login);
-      if (state.isAccountEnabled)
+      if (state.isAccountEnabled) {
+        console.log("TRY OPEN");
         setWebsocket(new WebSocket(websocketUrl(tokens)));
+      }
     });
 
     prepareListener(websocket, "error", () => {
