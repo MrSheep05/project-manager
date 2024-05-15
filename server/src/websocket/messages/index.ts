@@ -10,7 +10,7 @@ export const categoryOrStatusMap = (
   data: CategoryOrStatusBody[]
 ): ParsedCategoryOrStatus[] =>
   data.map((x) => {
-    return { ...x, color: x.color.toString(16) };
+    return { ...x, color: `#${x.color.toString(16)}` };
   });
 
 type ParsedCategoryOrStatus = {

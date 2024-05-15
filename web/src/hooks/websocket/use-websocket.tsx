@@ -74,7 +74,6 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
     prepareListener(websocket, "open", async () => {
       setIsAvailable(true);
       setTimeout(() => {
-        if (!isAvailable) return;
         websocket.send(
           JSON.stringify({
             action: SendAction.GetStatusAndCategory,
