@@ -27,8 +27,16 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
 
   const send = useCallback<SendFn>(
     (message) => {
-      if (!isAvailable || !websocket) return;
-      websocket.send(JSON.stringify(message));
+      if (!websocket) return;
+      if (message === "reconnect" && tokens) {
+        setIsAvailable(true);
+        setTimeout(
+          () => setWebsocket(new WebSocket(websocketUrl(tokens))),
+          500
+        );
+      } else if (isAvailable) {
+        websocket.send(JSON.stringify(message));
+      }
     },
     [isAvailable, websocket]
   );
@@ -66,6 +74,7 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
     prepareListener(websocket, "open", async () => {
       setIsAvailable(true);
       setTimeout(() => {
+        if (!isAvailable) return;
         websocket.send(
           JSON.stringify({
             action: SendAction.GetStatusAndCategory,
@@ -83,8 +92,10 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
       clearTimeout(websocket.pingTimeout);
       setIsAvailable(false);
       if (!tokens) return navigate(AppRoutes.Login);
-      if (state.isAccountEnabled)
+      if (state.isAccountEnabled) {
+        console.log("TRY OPEN");
         setWebsocket(new WebSocket(websocketUrl(tokens)));
+      }
     });
 
     prepareListener(websocket, "error", () => {

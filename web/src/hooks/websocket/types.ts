@@ -70,7 +70,8 @@ export type Mesages =
   | RemoveStatusOrCategoryMessage
   | ChangeAccountStateMessage
   | GetUsersMessage
-  | GetProjectsMessage;
+  | GetProjectsMessage
+  | "reconnect";
 
 export type GetProjectsMessage = {
   action: SendAction.GetProjects;

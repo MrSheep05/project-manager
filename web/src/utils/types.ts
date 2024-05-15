@@ -2,10 +2,11 @@ export type Tokens = {
   refreshToken: String;
   accessToken: string;
 };
-
-export type ComponentWrapper = (data: {
+export type WidgetProps = {
   children: JSX.Element | JSX.Element[];
-}) => JSX.Element;
+};
+
+export type ComponentWrapper = (data: WidgetProps) => JSX.Element;
 
 export type CategoryOrStatusBody = {
   id: string;

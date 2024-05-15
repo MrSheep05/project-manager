@@ -93,6 +93,7 @@ export const enableAccount: EnableOrDisableAccountFn = async (payload) => {
     type: Procedure.EnableAccount,
     payload,
   });
+  console.log(result);
   if (result.key === ProcedureResponse.EnabledAccount) return result.body;
   throw Error("Unexpected result from EnableAccount procedure");
 };

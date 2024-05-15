@@ -101,6 +101,14 @@ export const runProcedure = async (
       const { offsetId, connectionId } = action.payload;
       return await createCall(action.type, [connectionId, offsetId], 2);
     }
+    case Procedure.DisableAccount: {
+      const { uid, connectionId } = action.payload;
+      return await createCall(action.type, [connectionId, uid], 2);
+    }
+    case Procedure.EnableAccount: {
+      const { uid, connectionId } = action.payload;
+      return await createCall(action.type, [connectionId, uid], 2);
+    }
     default: {
       return { key: 0, body: "NONE" };
     }

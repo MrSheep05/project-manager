@@ -13,7 +13,7 @@ export const changeAccountStateMessage: ChangeAccountStateMessageFn = async ({
     action,
     payload: { state, uid },
   } = message;
-  const connections = (await getConnections({ role: Role.Admin })).map(
+  const connections = (await getConnections({ role: Role.Admin, uid })).map(
     ({ connection_id }) => connection_id
   );
   const result = state
