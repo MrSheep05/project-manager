@@ -10,6 +10,7 @@ import {
   getUsersMessage,
   removeStatusOrCategoryMessage,
 } from "./messages";
+import { webSocket } from "../configs/websocket";
 
 export const onMessage: OnMessageFn = async ({ data, ws }) => {
   try {

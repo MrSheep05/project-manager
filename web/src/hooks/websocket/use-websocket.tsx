@@ -117,7 +117,7 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
         dispatch(message);
       }
     });
-  }, [websocket, tokens]);
+  }, [websocket, tokens, state.isAccountEnabled]);
 
   return { isAvailable, send };
 };
