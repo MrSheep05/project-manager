@@ -4,6 +4,7 @@ import {
   ProjectBody,
   Tokens,
   UserBody,
+  UserInfo,
 } from "../../utils/types";
 import { MessageObject } from "./on-message.types";
 
@@ -40,6 +41,7 @@ export type CreateWebsocketFn = (
 
 export type DataState = {
   isAdmin: boolean;
+  uid?: string;
   categories: CategoryOrStatusBody[];
   status: CategoryOrStatusBody[];
   users: UserBody[];

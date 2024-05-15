@@ -93,7 +93,6 @@ export const enableAccount: EnableOrDisableAccountFn = async (payload) => {
     type: Procedure.EnableAccount,
     payload,
   });
-  console.log(result);
   if (result.key === ProcedureResponse.EnabledAccount) return result.body;
   throw Error("Unexpected result from EnableAccount procedure");
 };
@@ -112,10 +111,12 @@ export const getProjects: GetProjectsFn = async (payload) => {
     type: Procedure.GetProjects,
     payload,
   });
-  console.log("PROJECTS", result.body[0]);
   if (result.key === ProcedureResponse.AllProjects) {
     return result.body;
-  } else if (result.key === ProcedureResponse.None && !result.body[0][0]) {
+  } else if (
+    result.key === ProcedureResponse.None &&
+    result.body[0][0].length === 0
+  ) {
     return [];
   }
   throw Error("Unexpected result from GetProjects procedure");

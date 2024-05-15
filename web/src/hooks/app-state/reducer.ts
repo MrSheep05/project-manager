@@ -11,5 +11,12 @@ export const reducer = (state: State, action: AppDispatch): State => {
       console.log("SAVEUSER", payload);
       return { ...state, role: payload.role, user: payload };
     }
+    case AppAction.ChangeAccountState: {
+      console.log("USER CHANGE STATE");
+      return {
+        ...state,
+        ...(state.user && { user: { ...state.user, enabled: payload.state } }),
+      };
+    }
   }
 };
