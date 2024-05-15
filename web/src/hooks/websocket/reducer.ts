@@ -12,6 +12,7 @@ export const reducer = (state: DataState, action: MessageObject): DataState => {
       return { ...state, projects: [...state.projects, ...payload] };
     }
     case Message.GetStatusAndCategory: {
+      console.log(payload);
       return {
         ...state,
         categories: [...(payload.categories ?? []), ...state.categories],
