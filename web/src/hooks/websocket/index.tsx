@@ -1,10 +1,11 @@
-import { createContext, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 import { ComponentWrapper } from "../../utils/types";
 import { useWebsocket } from "./use-websocket";
 import { reducer } from "./reducer";
 import { DataState, SendAction, SendFn, WebsocketStateContext } from "./types";
 import { setTimeout } from "timers/promises";
 import { Message } from "./on-message.types";
+import { AppState } from "../app-state";
 
 export const WebsocketState = createContext({} as WebsocketStateContext);
 

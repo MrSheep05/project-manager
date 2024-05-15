@@ -110,10 +110,22 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
       }
       const message = onMessage(data);
       console.log(data);
-      if (message?.message === Message.UserData) {
-        saveUser({ type: AppAction.SaveUser, payload: message.payload });
-        dispatch(message);
-      } else if (message) {
+      if (message) {
+        switch (message.message) {
+          case Message.UserData: {
+            saveUser({ type: AppAction.SaveUser, payload: message.payload });
+            break;
+          }
+          case Message.ChangeAccountState: {
+            if (state.uid === message.payload.id)
+              saveUser({
+                type: AppAction.ChangeAccountState,
+                payload: { state: message.payload.enabled },
+              });
+            websocket.close();
+            break;
+          }
+        }
         dispatch(message);
       }
     });

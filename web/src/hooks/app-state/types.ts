@@ -8,8 +8,9 @@ export type AppStateContext = {
 export enum AppAction {
   SaveUser,
   SaveTokens,
+  ChangeAccountState,
 }
-export type AppDispatch = SaveTokensD | SaveUserD;
+export type AppDispatch = SaveTokensD | SaveUserD | ChangeAccountStateD;
 
 export type State = {
   tokens?: Tokens;
@@ -20,6 +21,11 @@ export type State = {
 type SaveTokensD = {
   type: AppAction.SaveTokens;
   payload: Tokens;
+};
+
+type ChangeAccountStateD = {
+  type: AppAction.ChangeAccountState;
+  payload: { state: boolean };
 };
 
 type SaveUserD = {

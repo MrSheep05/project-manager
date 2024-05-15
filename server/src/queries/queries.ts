@@ -151,11 +151,6 @@ const createCall = async (
     }
     return { key: ProcedureResponse.None, body: response };
   } catch (e) {
-    console.log({
-      code: e.errno ?? 0,
-      message: e.sqlMessage ?? "unexpected",
-      state: e.sqlState ?? "0",
-    });
     return { key: ProcedureResponse.None, body: "" };
   }
 };

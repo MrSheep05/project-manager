@@ -11,7 +11,7 @@ export type ComponentWrapper = (data: WidgetProps) => JSX.Element;
 export type CategoryOrStatusBody = {
   id: string;
   name: string;
-  color: number;
+  color: string;
   visible: boolean;
 };
 
