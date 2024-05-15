@@ -16,6 +16,7 @@ export const changeAccountStateMessage: ChangeAccountStateMessageFn = async ({
   const connections = (await getConnections({ role: Role.Admin, uid })).map(
     ({ connection_id }) => connection_id
   );
+  console.log(connections);
   const result = state
     ? await enableAccount({ connectionId, uid })
     : await disableAccount({ connectionId, uid });
