@@ -1,7 +1,7 @@
 --liquibase formatted sql
 
 -- changeset liquibase:initial_status_data
-INSERT INTO `status`(`name`, `color`) VALUES ('Zrobione',3908732), ('Do zrobienia',7962259), ('W trakcie',7974909);
+INSERT INTO `status`(`name`, `color`) VALUES ('Zrobione',3908732), ('Do zrobienia',7962259), ('W trakcie',7974909), ('Problem',8388608);
 -- rollback DELETE FROM `status` WHERE name IN ('Zrobione','Do zrobienia','W trakcie');
 
 -- changeset liquibase:initial_category_data
