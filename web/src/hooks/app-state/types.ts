@@ -20,7 +20,7 @@ export type State = {
 
 type SaveTokensD = {
   type: AppAction.SaveTokens;
-  payload: Tokens;
+  payload?: Tokens;
 };
 
 type ChangeAccountStateD = {
