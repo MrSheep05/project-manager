@@ -16,6 +16,7 @@ import theme from "../../theme";
 
 const Projects = () => {
   const { isAvailable, send, state } = useContext(WebsocketState);
+
   useEffect(() => console.log(state), [state]);
   const navigate = useNavigate();
   return (
