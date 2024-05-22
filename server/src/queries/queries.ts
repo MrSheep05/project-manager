@@ -138,6 +138,7 @@ const createCall = async (
       ).join(",")})`,
       variables
     );
+    println({}, "RESPONSE", response[0][0], response[1]);
     await connection.end();
     const responseType = Procedure.getResponse(procedureName);
 
