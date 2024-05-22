@@ -111,13 +111,9 @@ export const getProjects: GetProjectsFn = async (payload) => {
     type: Procedure.GetProjects,
     payload,
   });
+  println({}, result);
   if (result.key === ProcedureResponse.AllProjects) {
     return result.body;
-  } else if (
-    result.key === ProcedureResponse.None &&
-    result.body[0][0].length === 0
-  ) {
-    return [];
   }
   throw Error("Unexpected result from GetProjects procedure");
 };

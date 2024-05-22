@@ -1,3 +1,4 @@
+import { println } from "../log";
 import { getDatabaseConnection } from "./mysql";
 import {
   DataResponse,
@@ -7,6 +8,13 @@ import {
   StoredProcedure,
 } from "./types";
 
+const mayBeEmptyProcedures = [
+  ProcedureResponse.AllAccounts,
+  ProcedureResponse.AllConnections,
+  ProcedureResponse.CategoriesResult,
+  ProcedureResponse.StatusResult,
+  ProcedureResponse.AllProjects,
+];
 const findOutput = (data, key: ProcedureResponse) => {
   if (!data) return;
   if (key in data) {
@@ -130,6 +138,7 @@ const createCall = async (
       ).join(",")})`,
       variables
     );
+    println({}, "RESPONSE", response[0][0], response[1]);
     await connection.end();
     const responseType = Procedure.getResponse(procedureName);
 
@@ -138,11 +147,15 @@ const createCall = async (
         ? findOutput(response, responseType)
         : undefined;
 
-    if (
-      responseData &&
-      responseType !== ProcedureResponse.None &&
-      responseType !== ProcedureResponse.ProjectResult
-    ) {
+    if (mayBeEmptyProcedures.includes(responseType) && !responseData) {
+      const translated = {
+        key: responseType,
+        body: [],
+      };
+      return translated as DataResponse;
+    }
+
+    if (responseData && responseType !== ProcedureResponse.None) {
       const translated: DataResponse = {
         key: responseType,
         body: JSON.parse(responseData),
