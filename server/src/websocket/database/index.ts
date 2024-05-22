@@ -1,4 +1,3 @@
-import { println } from "../../log";
 import { runProcedure } from "../../queries/queries";
 import { Procedure, ProcedureResponse } from "../../queries/types";
 import {
