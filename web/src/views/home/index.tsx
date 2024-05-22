@@ -14,6 +14,7 @@ import {
 } from "./styled";
 import PermissionBracet from "../../components/permission-bracet";
 import ReconnectWidget from "./widgets/reconnect";
+import AddProject from "./widgets/addProject";
 
 const Home = () => {
   const {
@@ -33,6 +34,7 @@ const Home = () => {
     <WebsocketStateComponent>
       <StyledRow>
         <StyledSidebar>Home</StyledSidebar>
+        <AddProject></AddProject>
         <StyledContent>
           <StyledHeader>
             <StyledColumn>
