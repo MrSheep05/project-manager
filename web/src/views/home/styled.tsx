@@ -11,6 +11,16 @@ export const StyledRow = styled(Box)(({ theme }) => ({
   gap: "1vmin",
 }));
 
+export const StyledAddProject = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: "1vmin",
+  width: "20vw",
+  height: "100vh",
+  justifyContent: "flex-start",
+  alignItems: "stretch"
+}));
+
 export const StyledSidebar = styled(Box)(({ theme }) => ({
   margin: "2vmin",
   display: "flex",

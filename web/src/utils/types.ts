@@ -16,6 +16,7 @@ export type CategoryOrStatusBody = {
 };
 
 export type ProjectBody = {
+  id: string;
   project_id: string;
   user_id: string;
   status: CategoryOrStatusBody;

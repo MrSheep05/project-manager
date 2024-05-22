@@ -1,4 +1,4 @@
-import { Role } from "../../utils/types";
+import { CategoryOrStatusBody, ProjectBody, Role } from "../../utils/types";
 import { Message, MessageObject } from "./on-message.types";
 import { DataState } from "./types";
 
@@ -9,14 +9,28 @@ export const reducer = (state: DataState, action: MessageObject): DataState => {
       return { ...state, projects: [payload, ...state.projects] };
     }
     case Message.GetProjects: {
-      return { ...state, projects: [...state.projects, ...payload] };
+      const projects = payload.reduce((all, project) => {
+        const i = all.findIndex(({ id }) => id === project.id);
+        i > -1 ? (all[i] = project) : all.concat(project);
+        return all;
+      }, state.projects as ProjectBody[]);
+      return { ...state, projects };
     }
     case Message.GetStatusAndCategory: {
-      console.log(payload);
+      const categories = state.categories.reduce((all, category) => {
+        const exists = all.find(({ id }) => id === category.id);
+        if (!exists) all.concat(category);
+        return all;
+      }, (payload.categories ?? []) as CategoryOrStatusBody[]);
+      const status = state.status.reduce((all, state) => {
+        const exists = all.find(({ id }) => id === state.id);
+        if (!exists) all.concat(state);
+        return all;
+      }, (payload.status ?? []) as CategoryOrStatusBody[]);
       return {
         ...state,
-        categories: [...(payload.categories ?? []), ...state.categories],
-        status: [...(payload.status ?? []), ...state.status],
+        categories,
+        status,
       };
     }
     case Message.GetUsers: {
@@ -37,20 +51,22 @@ export const reducer = (state: DataState, action: MessageObject): DataState => {
       return {
         ...state,
         categories: state.isAdmin
-          ? state.categories.map((category) =>
+          ? [...state.categories].map((category) =>
               category.id === payload.id ? payload : category
             )
-          : state.categories.filter((category) => category.id !== payload.id),
+          : [...state.categories].filter(
+              (category) => category.id !== payload.id
+            ),
       };
     }
     case Message.RemoveStatus: {
       return {
         ...state,
         status: state.isAdmin
-          ? state.status.map((status) =>
+          ? [...state.status].map((status) =>
               status.id === payload.id ? payload : status
             )
-          : state.status.filter((status) => status.id !== payload.id),
+          : [...state.status].filter((status) => status.id !== payload.id),
       };
     }
     case Message.UserData: {
