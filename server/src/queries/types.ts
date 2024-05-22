@@ -251,7 +251,6 @@ export enum ProcedureResponse {
   EnabledAccount = "EnabledAccount",
   CategoriesResult = "CategoriesResult",
   StatusResult = "StatusResult",
-  ProjectResult = "ProjectResult",
   AllConnections = "AllConnections",
   RemovedCategory = "RemovedCategory",
   RemovedStatus = "RemovedStatus",
