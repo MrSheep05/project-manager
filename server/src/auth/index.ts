@@ -5,6 +5,9 @@ import keys from "../../client.keys.json";
 import { Severity } from "../log/types";
 import { println } from "../log";
 
+const redirect_uri = keys.web.redirect_uris.find(
+  (uri) => uri === process.env.REDIRECT_URI ?? keys.web.redirect_uris[0]
+);
 export const getUserInfo: GetUserInfoFn = async (client) => {
   try {
     const oauth2 = google.oauth2("v2");
@@ -23,11 +26,7 @@ export const getUserInfo: GetUserInfoFn = async (client) => {
 };
 
 export const getClient: GetClientFn = () =>
-  new OAuth2Client(
-    keys.web.client_id,
-    keys.web.client_secret,
-    "http://localhost:3000/oauth2callback"
-  );
+  new OAuth2Client(keys.web.client_id, keys.web.client_secret, redirect_uri);
 
 export const getTokens: GetTokensFn = async (code) => {
   const client = getClient();

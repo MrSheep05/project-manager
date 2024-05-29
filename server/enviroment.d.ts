@@ -6,6 +6,7 @@ declare global {
       MYSQL_PASSWORD: string;
       MYSQL_DATABASE: string;
       SERVER_PORT: string;
+      REDIRECT_URI: string;
     }
   }
 }

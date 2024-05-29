@@ -28,9 +28,9 @@ WHILE i < length DO
     INSERT INTO project_category (project_id,category_id) VALUES (@project_id,(SELECT id FROM category WHERE INSTR(in_categories_id,id) AND visible = TRUE LIMIT i, 1));
     SET i = i + 1;                             
 END WHILE;
-SELECT JSON_OBJECT('project_id',p.id,'user_id',p.user_id,"status",JSON_OBJECT('id',s.id,'name',s.name,'color',s.color),"categories",JSON_ARRAYAGG(JSON_OBJECT('id',c.id,'name',c.name,'color',c.color)),'title',p.title,'content',p.content,'timestamp',p.timestamp) CreatedProject
+SELECT JSON_OBJECT('project_id',p.id,'user_id',u.id,"user_email",u.email,"status",JSON_OBJECT('id',s.id,'name',s.name,'color',s.color),"categories",JSON_ARRAYAGG(JSON_OBJECT('id',c.id,'name',c.name,'color',c.color)),'title',p.title,'content',p.content,'timestamp',p.timestamp) CreatedProject
 FROM project p LEFT JOIN project_category pc ON pc.project_id = p.id LEFT JOIN category c ON c.id = pc.category_id
-LEFT JOIN status s ON s.id = p.status_id WHERE p.id = @project_id;
+LEFT JOIN status s ON s.id = p.status_id LEFT JOIN user u ON u.id = p.user_id WHERE p.id = @project_id;
 END//
 -- rollback DROP PROCEDURE `AddProject`;
 
@@ -73,7 +73,9 @@ JSON_ARRAY(JSON_OBJECT(
     "id",
     p.id,
     "user_id",
-    p.user_id,
+    u.id,
+    "user_email",
+    u.email,
     "title",
     p.title,
     "content",
@@ -111,6 +113,8 @@ LEFT JOIN project_category pc ON
 LEFT JOIN category c ON
     pc.category_id = c.id
 LEFT JOIN status s ON
-    p.status_id = s.id WHERE CASE WHEN in_role = 'user' THEN p.user_id = in_uid ELSE 1=1 END GROUP BY p.id ORDER BY p.timestamp DESC;
+    p.status_id = s.id 
+LEFT JOIN user u ON u.id = p.user_id
+WHERE CASE WHEN in_role = 'user' THEN p.user_id = in_uid ELSE 1=1 END GROUP BY p.id ORDER BY p.timestamp DESC;
 END//
 -- rollback DROP PROCEDURE `GetProjects`;
