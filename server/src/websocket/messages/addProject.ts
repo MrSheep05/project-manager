@@ -11,7 +11,10 @@ export const addProjectMessage: AddProjectMessageFn = async ({
   const { payload, action } = message;
   const connections = await getConnections({ role: Role.Admin });
   const result = await addProject({ ...payload, connectionId });
-  const data = JSON.stringify({ message: action, payload: result });
+  const data = JSON.stringify({
+    message: action,
+    payload: result,
+  });
   postToConnections({
     connections: [
       ...connections.map(({ connection_id }) => connection_id),

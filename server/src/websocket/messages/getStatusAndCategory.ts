@@ -1,4 +1,3 @@
-import { categoryOrStatusMap } from ".";
 import { getCategories, getStatus } from "../database";
 import { Action } from "../types";
 import { GetStatusAndCategoryMessageFn } from "./types";
@@ -11,8 +10,8 @@ export const getStatusAndCategoryMessage: GetStatusAndCategoryMessageFn =
     const data = JSON.stringify({
       message: Action.GetStatusAndCategory,
       payload: {
-        status: categoryOrStatusMap(statusResult),
-        categories: categoryOrStatusMap(categoriesResult),
+        status: statusResult,
+        categories: categoriesResult,
       },
     });
     ws.send(data);

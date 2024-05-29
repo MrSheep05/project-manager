@@ -1,4 +1,3 @@
-import { categoryOrStatusMap } from ".";
 import { postToConnections } from "..";
 import { addCategory, addStatus } from "../database";
 import { Action } from "../types";
@@ -16,12 +15,11 @@ export const addStatusOrCategoryMessage: AddStatusOrCategoryMessageFn = async ({
     action === Action.AddStatus
       ? await addStatus(procedureInput)
       : await addCategory(procedureInput);
-  const finalResult = categoryOrStatusMap([result]);
   const data = JSON.stringify({
     message: Action.GetStatusAndCategory,
     payload: {
-      ...(action === Action.AddStatus && { status: finalResult }),
-      ...(action === Action.AddCategory && { categories: finalResult }),
+      ...(action === Action.AddStatus && { status: result }),
+      ...(action === Action.AddCategory && { categories: result }),
     },
   });
   postToConnections({ everyone: true, message: data });

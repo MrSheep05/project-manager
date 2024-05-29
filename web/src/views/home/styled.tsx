@@ -17,8 +17,8 @@ export const StyledAddProject = styled(Box)(({ theme }) => ({
   gap: "1vmin",
   width: "20vw",
   height: "100vh",
-  justifyContent: "flex-start",
-  alignItems: "stretch"
+  justifyContent: "center",
+  alignItems: "stretch",
 }));
 
 export const StyledSidebar = styled(Box)(({ theme }) => ({

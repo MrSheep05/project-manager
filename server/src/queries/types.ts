@@ -168,7 +168,7 @@ type GetUserProcedure = {
 export type CategoryOrStatusBody = {
   id: string;
   name: string;
-  color: number;
+  color: string;
   visible: boolean;
 };
 export type ProjectBody = {
