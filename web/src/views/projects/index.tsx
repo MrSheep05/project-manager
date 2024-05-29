@@ -13,7 +13,7 @@ const Projects = () => {
   const navigate = useNavigate();
   return (
     <StyledContainer>
-      <StyledList>
+      <StyledList key={state.uid}>
         {state.projects.map((project) => (
           <Project project={project} key={project.id} />
         ))}
