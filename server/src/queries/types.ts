@@ -175,6 +175,7 @@ export type ProjectBody = {
   id: string;
   project_id: string;
   user_id: string;
+  user_email: string;
   status: CategoryOrStatusBody;
   categories: CategoryOrStatusBody[];
   title: string;
