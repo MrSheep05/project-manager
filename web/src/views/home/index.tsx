@@ -34,7 +34,6 @@ const Home = () => {
     <WebsocketStateComponent>
       <StyledRow>
         <StyledSidebar>Home</StyledSidebar>
-        <AddProject></AddProject>
         <StyledContent>
           <StyledHeader>
             <StyledColumn>

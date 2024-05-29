@@ -9,22 +9,26 @@ export const reducer = (state: DataState, action: MessageObject): DataState => {
       return { ...state, projects: [payload, ...state.projects] };
     }
     case Message.GetProjects: {
+      console.log("ADDING PROJECTS", payload);
       const projects = payload.reduce((all, project) => {
         const i = all.findIndex(({ id }) => id === project.id);
-        i > -1 ? (all[i] = project) : all.concat(project);
+        i > -1 ? (all[i] = project) : all.push(project);
+        console.log("ALL", all);
         return all;
       }, state.projects as ProjectBody[]);
+      console.log(projects);
+
       return { ...state, projects };
     }
     case Message.GetStatusAndCategory: {
       const categories = state.categories.reduce((all, category) => {
         const exists = all.find(({ id }) => id === category.id);
-        if (!exists) all.concat(category);
+        if (!exists) all.push(category);
         return all;
       }, (payload.categories ?? []) as CategoryOrStatusBody[]);
       const status = state.status.reduce((all, state) => {
         const exists = all.find(({ id }) => id === state.id);
-        if (!exists) all.concat(state);
+        if (!exists) all.push(state);
         return all;
       }, (payload.status ?? []) as CategoryOrStatusBody[]);
       return {

@@ -32,8 +32,9 @@ CREATE TABLE connections (
 CREATE TABLE category (
   `id` VARCHAR(36) UNIQUE PRIMARY KEY NOT NULL DEFAULT UUID(),
   `name` TINYTEXT NOT NULL,
-  `color` MEDIUMINT(8) UNSIGNED NOT NULL,
-  `visible` BOOLEAN NOT NULL DEFAULT 1
+  `color` VARCHAR(7) NOT NULL,
+  `visible` BOOLEAN NOT NULL DEFAULT 1,
+  CHECK (color REGEXP '^#([A-Fa-f0-9]{6})$')
 );
 -- rollback DROP TABLE category;
 
@@ -48,7 +49,8 @@ CREATE TABLE project_category (
 CREATE TABLE status (
   `id` VARCHAR(36) UNIQUE PRIMARY KEY NOT NULL DEFAULT UUID(),
   `name` TINYTEXT NOT NULL,
-  `color` MEDIUMINT(8) UNSIGNED NOT NULL,
+  `color` VARCHAR(7) NOT NULL,
   `visible` BOOLEAN NOT NULL DEFAULT 1
+  CHECK (color REGEXP '^#([A-Fa-f0-9]{6})$')
 );
 -- rollback DROP TABLE status;

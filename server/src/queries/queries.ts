@@ -1,4 +1,5 @@
 import { println } from "../log";
+import { Severity } from "../log/types";
 import { getDatabaseConnection } from "./mysql";
 import {
   DataResponse,
@@ -164,6 +165,7 @@ const createCall = async (
     }
     return { key: ProcedureResponse.None, body: response };
   } catch (e) {
+    println({ severity: Severity.Error }, "SOME ERROR", e);
     return { key: ProcedureResponse.None, body: "" };
   }
 };
