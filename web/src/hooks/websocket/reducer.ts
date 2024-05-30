@@ -9,7 +9,6 @@ export const reducer = (state: DataState, action: MessageObject): DataState => {
       return { ...state, projects: [payload, ...state.projects] };
     }
     case Message.GetProjects: {
-      console.log("ADDING PROJECTS", payload);
       const projects = payload.reduce((all, project) => {
         const i = all.findIndex(({ id }) => id === project.id);
         i > -1 ? (all[i] = project) : all.push(project);
@@ -18,7 +17,7 @@ export const reducer = (state: DataState, action: MessageObject): DataState => {
       }, state.projects as ProjectBody[]);
       console.log(projects);
 
-      return { ...state, projects };
+      return { ...state, projects, reachedAllProjects: payload.length !== 20 };
     }
     case Message.GetStatusAndCategory: {
       const categories = state.categories.reduce((all, category) => {

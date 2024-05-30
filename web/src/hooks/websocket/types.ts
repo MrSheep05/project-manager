@@ -47,6 +47,7 @@ export type DataState = {
   users: UserBody[];
   projects: ProjectBody[];
   isAccountEnabled: boolean;
+  reachedAllProjects: boolean;
 };
 
 export enum WebsocketAction {
