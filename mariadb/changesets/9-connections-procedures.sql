@@ -22,7 +22,7 @@ IF in_uid IS NOT NULL AND NOT in_uid = ""  AND in_user_role IS NOT NULL AND NOT 
 	SELECT c.user_id 'user_id',c.connection_id 'connection_id' FROM connections c 
 	JOIN user u ON u.id = c.user_id WHERE u.role = in_user_role OR u.id = in_uid;
 ELSE
-	SELECT c.user_id 'user_id',c.connection_id 'connection_id' AllConnections FROM connections c 
+	SELECT c.user_id 'user_id',c.connection_id 'connection_id' FROM connections c 
 	JOIN user u ON u.id = c.user_id WHERE 
 	(CASE WHEN in_uid IS NOT NULL THEN u.id = in_uid ELSE 1=1 END) AND 
 	(CASE WHEN in_user_role IS NOT NULL THEN u.role = in_user_role ELSE 1=1 END);
