@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import {
   PrepareListenerFn,
   SendAction,
@@ -25,6 +25,8 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
   const [websocket, setWebsocket] = useState<WebSocketExt>();
   const [isAvailable, setIsAvailable] = useState(false);
   const [isAccountEnabled, setIsAccountEnabled] = useState(false);
+  const isEnabledRef = useRef(isAccountEnabled);
+
   const send = useCallback<SendFn>(
     (message) => {
       if (!websocket) return;
@@ -63,17 +65,15 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (state.isAccountEnabled === isAccountEnabled) return;
-    setIsAccountEnabled(state.isAccountEnabled);
-    if (!state.isAccountEnabled) websocket?.close();
-  }, [state, isAccountEnabled]);
-
-  useEffect(() => {
     if (!websocket && tokens) {
       const ws = new WebSocket(websocketUrl(tokens));
       setWebsocket(ws);
     }
   }, [websocket, tokens]);
+
+  useEffect(() => {
+    isEnabledRef.current = isAccountEnabled;
+  }, [isAccountEnabled]);
 
   useEffect(() => {
     if (!websocket) return;
@@ -97,7 +97,7 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
       clearTimeout(websocket.pingTimeout);
       setIsAvailable(false);
       if (!tokens) return navigate(AppRoutes.Login);
-      if (isAccountEnabled) {
+      if (isEnabledRef.current) {
         console.log("TRY OPEN");
         setWebsocket(new WebSocket(websocketUrl(tokens)));
       }
@@ -118,6 +118,7 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
       if (message) {
         switch (message.message) {
           case Message.UserData: {
+            setIsAccountEnabled(message.payload.enabled);
             saveUser({ type: AppAction.SaveUser, payload: message.payload });
             break;
           }
@@ -127,6 +128,7 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
                 type: AppAction.ChangeAccountState,
                 payload: { state: message.payload.enabled },
               });
+            setIsAccountEnabled(message.payload.enabled);
             websocket.close();
             break;
           }
@@ -134,7 +136,7 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
         dispatch(message);
       }
     });
-  }, [websocket, tokens, isAccountEnabled]);
+  }, [websocket, tokens]);
 
   return { isAvailable, send };
 };
