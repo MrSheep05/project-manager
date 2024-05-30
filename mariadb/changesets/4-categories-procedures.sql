@@ -50,7 +50,7 @@ END IF;
     THEN
     	SET in_role = 'admin';
     END IF;
-SELECT id, name, color, visible FROM category WHERE (WHEN CASE in_role = "user" THEN visible = TRUE ELSE 1=1 END);
+SELECT id, name, color, visible FROM category WHERE (CASE WHEN in_role = "user" THEN visible = TRUE ELSE 1=1 END);
 END//
 -- rollback DROP PROCEDURE `GetCategories`;
 
