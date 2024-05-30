@@ -1,3 +1,4 @@
+import { QueryResult } from "mysql2";
 import { println } from "../log";
 import { Severity } from "../log/types";
 import { getDatabaseConnection } from "./mysql";
@@ -108,6 +109,15 @@ export const runProcedure = async (
   }
 };
 
+const getData = (result: any): string | undefined => {
+  if (Array.isArray(result)) {
+    return result.length < 2
+      ? JSON.stringify(result)
+      : result.length === 0
+      ? undefined
+      : getData(result[0]);
+  }
+};
 const createCall = async (
   procedureName: Procedure,
   variables: any[],
@@ -116,34 +126,31 @@ const createCall = async (
   if (args === 0) return;
   try {
     const connection = await getDatabaseConnection();
-    const response = await connection.query(
-      `CALL ${process.env.MYSQL_DATABASE}.${procedureName}(${Array.from(
-        { length: args },
-        () => "?"
-      ).join(",")})`,
-      variables
+    const response = getData(
+      await connection.query(
+        `CALL ${process.env.MYSQL_DATABASE}.${procedureName}(${Array.from(
+          { length: args },
+          () => "?"
+        ).join(",")})`,
+        variables
+      )
     );
-    println({}, "RESPONSE", response[0][0], response[1]);
     await connection.end();
     const responseType = Procedure.getResponse(procedureName);
+    println({}, response);
 
-    const responseData = JSON.stringify(
-      typeof response[Symbol.iterator] === "function" ? response[0] : response
-    );
-
-    if (mayBeEmptyProcedures.includes(responseType) && !responseData) {
+    if (mayBeEmptyProcedures.includes(responseType)) {
       const translated = {
         key: responseType,
-        body: [],
+        body: response ? JSON.parse(response) : [],
       };
       return translated as DataResponse;
     }
-    println({}, "RESPONSEDATA", responseData);
 
-    if (responseData && responseType !== ProcedureResponse.None) {
+    if (responseType !== ProcedureResponse.None && response) {
       const translated: DataResponse = {
         key: responseType,
-        body: JSON.parse(responseData),
+        body: JSON.parse(response)[0],
       };
       return translated;
     }
