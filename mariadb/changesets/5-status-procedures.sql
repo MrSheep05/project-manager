@@ -1,7 +1,7 @@
 --liquibase formatted sql
 
 -- changeset liquibase:add_status_procedure endDelimiter://
-CREATE PROCEDURE `AddStatus`(IN `in_name` TINYTEXT, IN `in_color` VARCHAR(7), IN `in_connection_id` VARCHAR(256))
+CREATE PROCEDURE `AddStatus`(IN `in_name` TINYTEXT CHARACTER SET utf8mb4, IN `in_color` VARCHAR(7), IN `in_connection_id` VARCHAR(256))
 BEGIN
 DECLARE in_admin_id VARCHAR(256);
 SET in_admin_id = getUserId(in_connection_id);

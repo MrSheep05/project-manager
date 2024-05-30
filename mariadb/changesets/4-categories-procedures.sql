@@ -1,7 +1,7 @@
 --liquibase formatted sql
 
 -- changeset liquibase:add_category_procedure endDelimiter://
-CREATE PROCEDURE `AddCategory`(IN `in_connection_id` VARCHAR(256), IN `in_name` TINYTEXT, IN `in_color` VARCHAR(7))
+CREATE PROCEDURE `AddCategory`(IN `in_connection_id` VARCHAR(256), IN `in_name` TINYTEXT CHARACTER SET utf8mb4, IN `in_color` VARCHAR(7))
 BEGIN
 IF in_name IS NULL or in_name = ""
 THEN

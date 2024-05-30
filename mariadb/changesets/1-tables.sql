@@ -15,8 +15,8 @@ CREATE TABLE project (
   `id` VARCHAR(36) UNIQUE PRIMARY KEY NOT NULL DEFAULT UUID(),
   `user_id` VARCHAR(256) NOT NULL,
   `status_id` VARCHAR(36) NOT NULL,
-  `title` TINYTEXT NOT NULL,
-  `content` LONGTEXT NOT NULL,
+  `title` TINYTEXT CHARACTER SET utf8mb4 NOT NULL,
+  `content` LONGTEXT CHARACTER SET utf8mb4 NOT NULL,
   `timestamp` BIGINT(20) NOT NULL DEFAULT ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000,0)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 -- rollback DROP TABLE project;
@@ -31,7 +31,7 @@ CREATE TABLE connections (
 -- changeset liquibase:create_category_table
 CREATE TABLE category (
   `id` VARCHAR(36) UNIQUE PRIMARY KEY NOT NULL DEFAULT UUID(),
-  `name` TINYTEXT NOT NULL,
+  `name` TINYTEXT CHARACTER SET utf8mb4 NOT NULL,
   `color` VARCHAR(7) NOT NULL,
   `visible` BOOLEAN NOT NULL DEFAULT 1,
   CHECK (color REGEXP '^#([A-Fa-f0-9]{6})$')
@@ -48,7 +48,7 @@ CREATE TABLE project_category (
 -- changeset liquibase:status_table
 CREATE TABLE status (
   `id` VARCHAR(36) UNIQUE PRIMARY KEY NOT NULL DEFAULT UUID(),
-  `name` TINYTEXT NOT NULL,
+  `name` TINYTEXT CHARACTER SET utf8mb4 NOT NULL,
   `color` VARCHAR(7) NOT NULL,
   `visible` BOOLEAN NOT NULL DEFAULT 1
   CHECK (color REGEXP '^#([A-Fa-f0-9]{6})$')
