@@ -6,6 +6,12 @@ export const reducer = (state: DataState, action: MessageObject): DataState => {
   const { message, payload } = action;
   switch (message) {
     case Message.AddProject: {
+      const i = state.projects.findIndex(({ id }) => id === payload.id);
+      if (i > -1) {
+        const projects = state.projects;
+        projects[i] = payload;
+        return { ...state, projects };
+      }
       return { ...state, projects: [payload, ...state.projects] };
     }
     case Message.GetProjects: {
