@@ -111,11 +111,13 @@ export const runProcedure = async (
 
 const getData = (result: any): string | undefined => {
   if (Array.isArray(result)) {
-    return result.length < 2
+    return result.length > 1 && !Array.isArray(result[0])
       ? JSON.stringify(result)
       : result.length === 0
       ? undefined
-      : getData(result[0]);
+      : Array.isArray(result[0])
+      ? getData(result[0])
+      : JSON.stringify(result[0]);
   }
 };
 const createCall = async (
@@ -137,12 +139,12 @@ const createCall = async (
     );
     await connection.end();
     const responseType = Procedure.getResponse(procedureName);
-    println({}, response);
 
     if (mayBeEmptyProcedures.includes(responseType)) {
+      const list = response ? JSON.parse(response) : [];
       const translated = {
         key: responseType,
-        body: response ? JSON.parse(response) : [],
+        body: Array.isArray(list) ? list : [list],
       };
       return translated as DataResponse;
     }
@@ -150,7 +152,7 @@ const createCall = async (
     if (responseType !== ProcedureResponse.None && response) {
       const translated: DataResponse = {
         key: responseType,
-        body: JSON.parse(response)[0],
+        body: JSON.parse(response),
       };
       return translated;
     }
