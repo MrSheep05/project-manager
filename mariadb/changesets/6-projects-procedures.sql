@@ -69,7 +69,7 @@ THEN
     FROM selected_project_row;
 END IF;
 SELECT
-JSON_ARRAY(JSON_OBJECT(
+JSON_ARRAYAGG(JSON_OBJECT(
     "id",
     p.id,
     "user_id",
