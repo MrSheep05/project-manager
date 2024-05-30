@@ -65,6 +65,7 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
   useEffect(() => {
     if (state.isAccountEnabled === isAccountEnabled) return;
     setIsAccountEnabled(state.isAccountEnabled);
+    if (!state.isAccountEnabled) websocket?.close();
   }, [state, isAccountEnabled]);
 
   useEffect(() => {
@@ -96,9 +97,7 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
       clearTimeout(websocket.pingTimeout);
       setIsAvailable(false);
       if (!tokens) return navigate(AppRoutes.Login);
-      console.log(state.isAccountEnabled, "ISACCOUNT ENABLED");
-
-      if (state.isAccountEnabled) {
+      if (isAccountEnabled) {
         console.log("TRY OPEN");
         setWebsocket(new WebSocket(websocketUrl(tokens)));
       }
@@ -135,7 +134,7 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
         dispatch(message);
       }
     });
-  }, [websocket, tokens, isAccountEnabled]);
+  }, [websocket, tokens]);
 
   return { isAvailable, send };
 };

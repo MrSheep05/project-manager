@@ -19,10 +19,10 @@ END//
 CREATE PROCEDURE `GetConnection`(IN `in_uid` VARCHAR(256), IN `in_user_role` ENUM('user','admin'))
 BEGIN
 IF in_uid IS NOT NULL AND NOT in_uid = ""  AND in_user_role IS NOT NULL AND NOT in_user_role = "" THEN
-	SELECT JSON_ARRAYAGG(JSON_OBJECT("user_id",c.user_id,"connection_id",c.connection_id)) AllConnections FROM connections c 
+	SELECT c.user_id 'user_id',c.connection_id 'connection_id' FROM connections c 
 	JOIN user u ON u.id = c.user_id WHERE u.role = in_user_role OR u.id = in_uid;
 ELSE
-	SELECT JSON_ARRAYAGG(JSON_OBJECT("user_id",c.user_id,"connection_id",c.connection_id)) AllConnections FROM connections c 
+	SELECT c.user_id 'user_id',c.connection_id 'connection_id' AllConnections FROM connections c 
 	JOIN user u ON u.id = c.user_id WHERE 
 	(CASE WHEN in_uid IS NOT NULL THEN u.id = in_uid ELSE 1=1 END) AND 
 	(CASE WHEN in_user_role IS NOT NULL THEN u.role = in_user_role ELSE 1=1 END);
