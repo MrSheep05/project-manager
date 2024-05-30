@@ -53,7 +53,6 @@ IF EXISTS (SELECT * FROM user WHERE in_uid = id AND enabled = TRUE AND role = 'a
     	SET in_role = 'admin';
     END IF;
 SELECT id, name, color, visible FROM status WHERE (CASE WHEN in_role = "user" THEN visible = TRUE ELSE 1=1 END);
-FROM user u WHERE id = in_uid;
 END//
 -- rollback DROP PROCEDURE `GetStatus`;
 
