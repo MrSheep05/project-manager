@@ -18,7 +18,7 @@ CREATE TABLE project (
   `title` TINYTEXT NOT NULL,
   `content` LONGTEXT NOT NULL,
   `timestamp` BIGINT(20) NOT NULL DEFAULT ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000,0)
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 -- rollback DROP TABLE project;
 
 -- changeset liquibase:create_connections_table

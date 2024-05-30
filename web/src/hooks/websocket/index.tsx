@@ -16,6 +16,7 @@ const initialData: DataState = {
   projects: [],
   isAdmin: false,
   isAccountEnabled: false,
+  reachedAllProjects: false,
 };
 
 export const WebsocketStateComponent: ComponentWrapper = ({ children }) => {
