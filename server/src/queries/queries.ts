@@ -19,6 +19,7 @@ const mayBeEmptyProcedures = [
 const findOutput = (data, key: ProcedureResponse) => {
   if (!data) return;
   if (key in data) {
+    println({}, data);
     return data[key];
   }
 
@@ -155,6 +156,7 @@ const createCall = async (
       };
       return translated as DataResponse;
     }
+    println({}, "RESPONSEDATA", responseData);
 
     if (responseData && responseType !== ProcedureResponse.None) {
       const translated: DataResponse = {

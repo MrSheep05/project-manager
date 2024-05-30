@@ -46,7 +46,7 @@ THEN
         INTO in_offset
         FROM selected_user_row;
     END IF;
-    SELECT JSON_OBJECT('id',id,'email',email,'role',role,'is_enabled',enabled) AllAccounts FROM user ORDER BY timestamp DESC LIMIT in_offset,20;
+    SELECT JSON_ARRAY(JSON_OBJECT('id',id,'email',email,'role',role,'is_enabled',enabled)) AllAccounts FROM user ORDER BY timestamp DESC LIMIT in_offset,20;
 ELSE
 	SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'Id provided does not have sufficient permissions', MYSQL_ERRNO = 1002;
 END IF;

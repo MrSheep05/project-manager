@@ -69,7 +69,7 @@ THEN
     FROM selected_project_row;
 END IF;
 SELECT
-JSON_ARRAY(JSON_OBJECT(
+JSON_ARRAYAGG(JSON_OBJECT(
     "id",
     p.id,
     "user_id",
@@ -115,6 +115,6 @@ LEFT JOIN category c ON
 LEFT JOIN status s ON
     p.status_id = s.id 
 LEFT JOIN user u ON u.id = p.user_id
-WHERE CASE WHEN in_role = 'user' THEN p.user_id = in_uid ELSE 1=1 END GROUP BY p.id ORDER BY p.timestamp DESC;
+WHERE CASE WHEN in_role = 'user' THEN p.user_id = in_uid ELSE 1=1 END GROUP BY p.id ORDER BY p.timestamp DESC LIMIT in_offset,20;
 END//
 -- rollback DROP PROCEDURE `GetProjects`;

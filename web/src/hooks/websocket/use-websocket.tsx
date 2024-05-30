@@ -63,8 +63,8 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (state.isAccountEnabled !== isAccountEnabled)
-      setIsAccountEnabled(state.isAccountEnabled);
+    if (state.isAccountEnabled === isAccountEnabled) return;
+    setIsAccountEnabled(state.isAccountEnabled);
   }, [state, isAccountEnabled]);
 
   useEffect(() => {
