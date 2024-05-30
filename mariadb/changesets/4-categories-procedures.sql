@@ -22,11 +22,11 @@ END IF;
 IF EXISTS (SELECT * FROM category WHERE name = in_name AND visible = FALSE)
 THEN
 	UPDATE category SET visible = TRUE, color = in_color WHERE name = in_name AND visible = FALSE;
-    SELECT JSON_OBJECT('id',id,'name',name,'color',color,'visible',visible) CreatedCategory FROM category WHERE name = in_name AND visible = TRUE;
+    SELECT id, name, color, visible FROM category WHERE name = in_name AND visible = TRUE;
 ELSE
 	SET @id = UUID();
 	INSERT INTO category (id,name,color) VALUES (@id,in_name,in_color);
-	SELECT JSON_OBJECT('id',id,'name',name,'color',color,'visible',visible) CreatedCategory FROM category WHERE id = @id;
+	SELECT id, name, color, visible FROM category WHERE id = @id;
 END IF;
 END//
 -- rollback DROP PROCEDURE `AddCategory`;
@@ -48,9 +48,9 @@ END IF;
 SELECT 
 (CASE
 WHEN u.role = 'admin' THEN 
-	(SELECT JSON_ARRAYAGG(JSON_OBJECT('id',id,'name',name,'color',color,'visible',visible)) AllCategories FROM category)
+	(SELECT id, name, color, visible FROM category)
 WHEN u.role = 'user' THEN
-	(SELECT JSON_ARRAYAGG(JSON_OBJECT('id',id,'name',name,'color',color)) AllCategories FROM category WHERE visible = TRUE)
+	(SELECT id, name, color, visible FROM category WHERE visible = TRUE)
 ELSE
  	(SELECT NULL)
 END) CategoriesResult
@@ -74,6 +74,6 @@ IF NOT EXISTS (SELECT * FROM user WHERE id = getUserId(in_connection_id) AND rol
     SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'Id provided does not have sufficient permissions', MYSQL_ERRNO = 1002;
 END IF;
 UPDATE category SET visible = FALSE WHERE id = in_category_id;
-SELECT JSON_OBJECT('id',id,'name',name,'color',color,'visible',visible) RemovedCategory FROM category WHERE id = in_category_id;
+SELECT id, name, color, visible FROM category WHERE id = in_category_id;
 END//
 -- rollback DROP PROCEDURE `RemoveCategory`;

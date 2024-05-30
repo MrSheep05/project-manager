@@ -16,7 +16,7 @@ THEN
 	SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'User of this email already exists', MYSQL_ERRNO = 1002;
 END IF; 
 INSERT INTO user (id,email) VALUES (in_uid,in_email);
-SELECT JSON_OBJECT('id',id,'email',email,'role', role,'enabled',enabled) CreatedUser FROM user WHERE id = in_uid;
+SELECT id, role, email, enabled FROM user WHERE id = in_uid;
 END//
 -- rollback DROP PROCEDURE `CreateUser`;
 
@@ -46,7 +46,7 @@ THEN
         INTO in_offset
         FROM selected_user_row;
     END IF;
-    SELECT JSON_ARRAY(JSON_OBJECT('id',id,'email',email,'role',role,'is_enabled',enabled)) AllAccounts FROM user ORDER BY timestamp DESC LIMIT in_offset,20;
+    SELECT id, email, role,enabled 'is_enabled' FROM user ORDER BY timestamp DESC LIMIT in_offset,20;
 ELSE
 	SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'Id provided does not have sufficient permissions', MYSQL_ERRNO = 1002;
 END IF;
@@ -59,6 +59,6 @@ BEGIN
 IF in_uid IS NULL OR in_uid = "" THEN
         SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'User id is null or empty', MYSQL_ERRNO = 1001;
 END IF;
-SELECT JSON_OBJECT('user_id',id,'role',role,'email',email,'enabled',enabled) AS user FROM user WHERE id = in_uid;
+SELECT id, role, email, enabled FROM user WHERE id = in_uid;
 END//
 -- rollback DROP PROCEDURE `GetUser`;

@@ -16,23 +16,6 @@ const mayBeEmptyProcedures = [
   ProcedureResponse.StatusResult,
   ProcedureResponse.AllProjects,
 ];
-const findOutput = (data, key: ProcedureResponse) => {
-  if (!data) return;
-  if (key in data) {
-    println({}, data);
-    return data[key];
-  }
-
-  if (Array.isArray(data)) {
-    return data.reduce((output, item) => {
-      if (output) return output;
-
-      return findOutput(item, key);
-    }, null);
-  }
-
-  return null;
-};
 
 export const runProcedure = async (
   action: StoredProcedure
@@ -144,10 +127,9 @@ const createCall = async (
     await connection.end();
     const responseType = Procedure.getResponse(procedureName);
 
-    const responseData =
-      responseType !== ProcedureResponse.None
-        ? findOutput(response, responseType)
-        : undefined;
+    const responseData = JSON.stringify(
+      typeof response[Symbol.iterator] === "function" ? response[0] : response
+    );
 
     if (mayBeEmptyProcedures.includes(responseType) && !responseData) {
       const translated = {

@@ -16,7 +16,7 @@ END IF;
 IF EXISTS (SELECT * FROM user WHERE id = in_admin_id AND role = 'admin' AND enabled = TRUE)
 THEN
 	UPDATE user SET enabled = TRUE WHERE id = in_user_id AND role = 'user';
-    SELECT JSON_OBJECT('id',id,'email',email,'role',role,'enabled',enabled) EnabledAccount FROM user WHERE id = in_user_id;
+   SELECT id, email, role, enabled FROM user WHERE id = in_user_id;
 ELSE
 	SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'Id provided does not have sufficient permissions', MYSQL_ERRNO = 1002;
 END IF;
@@ -39,7 +39,7 @@ END IF;
 IF EXISTS (SELECT * FROM user WHERE id = in_admin_id AND role = 'admin' AND enabled = TRUE)
 THEN
 	UPDATE user SET enabled = FALSE WHERE id = in_user_id AND role = 'user';
-    SELECT JSON_OBJECT('id',id,'email',email,'role',role,'enabled',enabled) DisabledAccount FROM user WHERE id = in_user_id;
+    SELECT id, email, role, enabled FROM user WHERE id = in_user_id;
 ELSE
 	SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'Id provided does not have sufficient permissions', MYSQL_ERRNO = 1002;
 END IF;
