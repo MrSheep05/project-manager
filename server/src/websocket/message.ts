@@ -19,6 +19,8 @@ export const onMessage: OnMessageFn = async ({ data, ws }) => {
     if (!action || !payload) return;
     switch (action) {
       case Action.AddProject: {
+        println({ severity: Severity.Info }, "ADDPROJECT", payload);
+
         await addProjectMessage({ connectionId, message: { action, payload } });
         break;
       }
