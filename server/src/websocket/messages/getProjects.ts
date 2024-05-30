@@ -14,7 +14,7 @@ export const getProjectsMessage: GetProjectsMessageFn = async ({
   ws.send(
     JSON.stringify({
       message: action,
-      payload: result,
+      payload: Array.isArray(result) ? result : [result],
     })
   );
 };
