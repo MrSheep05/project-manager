@@ -12,19 +12,23 @@ const ReconnectWidget = ({ children, user }: ReconnectWidgetProps) => {
   }, [isAvailable]);
   return (
     <StyledContainer>
-      {!user ? (
-        <Loading message={"Getting user data..."} />
-      ) : user.enabled ? (
-        <>{children}</>
-      ) : !isAvailable ? (
-        <StyledContainer>
-          <Typography>Your account is disabled, try again</Typography>
-          <StyledButton onClick={() => send("reconnect")}>
-            Try again
-          </StyledButton>
-        </StyledContainer>
+      {isAvailable ? (
+        !user ? (
+          <Loading message={"Getting user data..."} />
+        ) : user?.enabled ?? false ? (
+          <>{children}</>
+        ) : !isAvailable ? (
+          <StyledContainer>
+            <Typography>Your account is disabled, try again</Typography>
+            <StyledButton onClick={() => send("reconnect")}>
+              Try again
+            </StyledButton>
+          </StyledContainer>
+        ) : (
+          <Loading message={"Reconnecting..."} />
+        )
       ) : (
-        <Loading message={"Reconnecting..."} />
+        <Loading message={"Connecting..."} />
       )}
     </StyledContainer>
   );

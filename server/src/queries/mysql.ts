@@ -5,5 +5,6 @@ export const getDatabaseConnection = async (): Promise<Connection> => {
     password: process.env.MYSQL_PASSWORD,
     host: process.env.MYSQL_URL,
     user: process.env.MYSQL_USERNAME,
+    charset: "utf8mb4",
   });
 };

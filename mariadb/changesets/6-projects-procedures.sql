@@ -1,7 +1,7 @@
 --liquibase formatted sql
 
 -- changeset liquibase:add_project_procedure endDelimiter://
-CREATE PROCEDURE `AddProject`(IN `in_connection_id` VARCHAR(256), IN `in_status_id` VARCHAR(36), IN `in_categories_id` TEXT, IN `in_title` TINYTEXT, IN `in_content` LONGTEXT)
+CREATE PROCEDURE `AddProject`(IN `in_connection_id` VARCHAR(256), IN `in_status_id` VARCHAR(36), IN `in_categories_id` TEXT, IN `in_title` TINYTEXT CHARACTER SET utf8mb4, IN `in_content` LONGTEXT CHARACTER SET utf8mb4)
 BEGIN   
 DECLARE in_user_id VARCHAR(256);
 DECLARE i INT DEFAULT 0;
