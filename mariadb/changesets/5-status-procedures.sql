@@ -24,11 +24,11 @@ END IF;
 IF EXISTS (SELECT * FROM status WHERE name = in_name AND visible = FALSE)
 THEN
 	UPDATE status SET visible = TRUE, color = in_color WHERE name = in_name AND visible = FALSE;
-    SELECT id, name, color, visible CreatedStatus FROM status WHERE name = in_name AND visible = TRUE;
+    SELECT id, name, color, visible FROM status WHERE name = in_name AND visible = TRUE;
 ELSE
 	SET @id = UUID();
 	INSERT INTO status (id,name,color) VALUES (@id,in_name,in_color);
-	SELECT id, name, color, visible CreatedStatus FROM status WHERE id = @id;
+	SELECT id, name, color, visible FROM status WHERE id = @id;
 END IF;
 END//
 -- rollback DROP PROCEDURE `AddStatus`;
@@ -55,7 +55,7 @@ WHEN u.role = 'user' THEN
 	(SELECT id, name, color AllStatuses FROM status WHERE visible = TRUE)
 ELSE
  	(SELECT NULL)
-END) StatusResult
+END)
 FROM user u WHERE id = in_uid;
 END//
 -- rollback DROP PROCEDURE `GetStatus`;

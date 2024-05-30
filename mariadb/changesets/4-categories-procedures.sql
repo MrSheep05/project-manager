@@ -53,7 +53,7 @@ WHEN u.role = 'user' THEN
 	(SELECT id, name, color, visible FROM category WHERE visible = TRUE)
 ELSE
  	(SELECT NULL)
-END) CategoriesResult
+END)
 FROM user u WHERE id = in_uid;
 END//
 -- rollback DROP PROCEDURE `GetCategories`;
