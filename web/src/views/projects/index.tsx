@@ -18,15 +18,14 @@ const DISLAY_COUNT = 10;
 const Projects = () => {
   const { isAvailable, send, state } = useContext(WebsocketState);
   const [offset, setOffset] = useState(0);
-  useEffect(() => console.log(state), [state]);
   useEffect(() => {
-    if (offset + DISLAY_COUNT >= state.projects.length) {
+    if (offset >= state.projects.length) {
       send({
         action: SendAction.GetProjects,
         payload: { offsetId: state.projects.slice(-1)[0]?.id },
       });
     }
-  }, [offset]);
+  }, [offset, state]);
   const navigate = useNavigate();
   return (
     <StyledContainer>
@@ -43,7 +42,7 @@ const Projects = () => {
             disabled={offset === 0}
             onClick={() => {
               if (offset === 0) return;
-              setOffset((x) => (x -= DISLAY_COUNT));
+              setOffset(offset - DISLAY_COUNT);
             }}
           >
             <StyledLeftArrow />
@@ -54,8 +53,12 @@ const Projects = () => {
               offset + DISLAY_COUNT >= state.projects.length
             }
             onClick={() => {
-              if (state.reachedAllProjects) return;
-              setOffset((x) => (x += DISLAY_COUNT));
+              if (
+                state.reachedAllProjects &&
+                offset + DISLAY_COUNT >= state.projects.length
+              )
+                return;
+              setOffset(offset + DISLAY_COUNT);
             }}
           >
             <StyledRightArrow />
