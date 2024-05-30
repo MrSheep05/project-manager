@@ -37,6 +37,7 @@ END//
 CREATE PROCEDURE `GetStatus`(IN `in_connection_id` VARCHAR(256))
 BEGIN
 DECLARE in_uid VARCHAR(256);
+DECLARE in_role ENUM('admin','user') DEFAULT 'user';
 SET in_uid = getUserId(in_connection_id);
 IF EXISTS (SELECT * FROM user WHERE in_uid = id)
 THEN
@@ -47,15 +48,11 @@ THEN
 ELSE 
 	SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'User does not exist', MYSQL_ERRNO = 1003;
 END IF;
-SELECT 
-(CASE
-WHEN u.role = 'admin' THEN 
-	(SELECT id, name, color, visible FROM status)
-WHEN u.role = 'user' THEN
-	(SELECT id, name, color AllStatuses FROM status WHERE visible = TRUE)
-ELSE
- 	(SELECT NULL)
-END)
+IF EXISTS (SELECT * FROM user WHERE in_uid = id AND enabled = TRUE AND role = 'admin')
+    THEN
+    	SET in_role = 'admin';
+    END IF;
+SELECT id, name, color, visible FROM status WHERE WHEN CASE in_role = "user" THEN visible = TRUE ELSE 1=1;
 FROM user u WHERE id = in_uid;
 END//
 -- rollback DROP PROCEDURE `GetStatus`;
