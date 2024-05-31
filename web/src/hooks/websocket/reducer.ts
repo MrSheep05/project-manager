@@ -81,7 +81,7 @@ export const reducer = (state: DataState, action: MessageObject): DataState => {
     case Message.UserData: {
       return {
         ...state,
-        uid: payload.user_id,
+        uid: payload.id,
         isAdmin: payload.role === Role.Admin,
         isAccountEnabled: payload.enabled,
       };
