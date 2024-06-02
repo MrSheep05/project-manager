@@ -7,7 +7,7 @@ export const StyledContainer = styled(Box)({
   justifyContent: "center",
   width: "100%",
   height: "100%",
-  maxWidth: "80vw",
+  maxWidth: "79vw",
 });
 
 export const StyledList = styled(Box)(({ theme }) => ({
@@ -25,20 +25,20 @@ export const StyledRow = styled(Box)({
   paddingTop: "2vmin",
 });
 
-export const StyledRowList = styled(Box)({
-  display: "flex",
-  flexDirection: "row",
-  overflow: "auto",
-  gap: "2vmin",
-  flex: 1,
-  height: "100%",
-  maxHeight: "62vh",
-  paddingBottom: "2vmin",
-});
-
 export const StyledColumn = styled(Box)({
   display: "flex",
   flexDirection: "column",
   gap: "2vmin",
   height: "100%",
 });
+
+export const StyledLoadingProject = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  borderRadius: "2vmin",
+  width: "45vmin",
+  flex: 1,
+  backgroundColor: theme.palette.shadow[theme.palette.mode],
+  color: "black",
+  padding: "1vmin",
+}));

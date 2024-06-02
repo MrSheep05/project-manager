@@ -18,10 +18,8 @@ export const reducer = (state: DataState, action: MessageObject): DataState => {
       const projects = payload.reduce((all, project) => {
         const i = all.findIndex(({ id }) => id === project.id);
         i > -1 ? (all[i] = project) : all.push(project);
-        console.log("ALL", all);
         return all;
       }, state.projects as ProjectBody[]);
-      console.log(projects);
 
       return { ...state, projects, reachedAllProjects: payload.length !== 20 };
     }
