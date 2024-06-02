@@ -2,17 +2,17 @@ import { useContext, useEffect, useState } from "react";
 import { WebsocketState } from "../../hooks/websocket";
 
 import { useNavigate } from "react-router-dom";
-import AddProject from "../home/widgets/addProject";
 import {
+  StyledColumn,
   StyledContainer,
-  StyledLeftArrow,
   StyledList,
-  StyledRightArrow,
   StyledRow,
+  StyledRowList,
 } from "./styled";
 import { Project } from "./widgets/project";
-import { IconButton } from "@mui/material";
+import { Box } from "@mui/material";
 import { SendAction } from "../../hooks/websocket/types";
+import { getWindow } from "../../utils";
 
 const DISLAY_COUNT = 10;
 const Projects = () => {
@@ -29,43 +29,55 @@ const Projects = () => {
   const navigate = useNavigate();
   return (
     <StyledContainer>
-      <StyledList key={state.uid}>
-        <StyledList style={{ overflow: "auto" }}>
-          {state.projects
-            .slice(offset, offset + DISLAY_COUNT)
-            .map((project) => (
-              <Project project={project} key={project.id} />
-            ))}
-        </StyledList>
-        <StyledRow>
+      {/* <StyledRow>
           <IconButton
-            disabled={offset === 0}
-            onClick={() => {
-              if (offset === 0) return;
-              setOffset(offset - DISLAY_COUNT);
-            }}
+          disabled={offset === 0}
+          onClick={() => {
+            if (offset === 0) return;
+            setOffset(offset - DISLAY_COUNT);
+          }}
           >
-            <StyledLeftArrow />
+          <StyledLeftArrow />
           </IconButton>
           <IconButton
-            disabled={
+          disabled={
+            state.reachedAllProjects &&
+            offset + DISLAY_COUNT >= state.projects.length
+          }
+          onClick={() => {
+            if (
               state.reachedAllProjects &&
               offset + DISLAY_COUNT >= state.projects.length
-            }
-            onClick={() => {
-              if (
-                state.reachedAllProjects &&
-                offset + DISLAY_COUNT >= state.projects.length
-              )
-                return;
-              setOffset(offset + DISLAY_COUNT);
-            }}
+            )
+            return;
+            setOffset(offset + DISLAY_COUNT);
+          }}
           >
-            <StyledRightArrow />
+          <StyledRightArrow />
           </IconButton>
+        </StyledRow> */}
+
+      <StyledContainer flex={1} border={"1px solid red"}></StyledContainer>
+      <StyledContainer flex={2}>
+        <StyledRow>
+          <StyledRowList flex={1}>
+            {getWindow(state.projects, 2).map(([first, second]) => (
+              <StyledColumn>
+                {first ? (
+                  <Project project={first} key={first.id} />
+                ) : (
+                  <Box flex={1}></Box>
+                )}
+                {second ? (
+                  <Project project={second} key={second.id} />
+                ) : (
+                  <Box flex={1}></Box>
+                )}
+              </StyledColumn>
+            ))}
+          </StyledRowList>
         </StyledRow>
-      </StyledList>
-      <AddProject />
+      </StyledContainer>
     </StyledContainer>
   );
 };

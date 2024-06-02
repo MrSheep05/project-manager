@@ -7,7 +7,6 @@ import {
   StyledTitle,
 } from "./styled";
 import { useContext } from "react";
-import { AppState } from "../../../hooks/app-state";
 import { WebsocketState } from "../../../hooks/websocket";
 
 //TODO Filip move to styled

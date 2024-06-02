@@ -1,25 +1,18 @@
 import { Box, styled } from "@mui/material";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 export const StyledContainer = styled(Box)({
   display: "flex",
-  flexDirection: "row",
-  gap: "1vmin",
+  flexDirection: "column",
   alignItems: "center",
+  justifyContent: "center",
   width: "100%",
-  justifyContent: "space-between",
+  height: "100%",
+  maxWidth: "80vw",
 });
 
 export const StyledList = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.primary[theme.palette.mode],
-  boxShadow: `inset 0 0 0 1000px #00000033`,
   display: "flex",
-  flexDirection: "column",
-  gap: "1vmin",
-  borderRadius: "1vmin",
-  height: "85vmin",
-  width: "50vmin",
+  flexDirection: "row",
 }));
 
 export const StyledRow = styled(Box)({
@@ -27,18 +20,25 @@ export const StyledRow = styled(Box)({
   flexDirection: "row",
   justifyContent: "right",
   alignItems: "center",
+  maxWidth: "76vw",
+  flex: 1,
+  paddingTop: "2vmin",
 });
 
-export const StyledRightArrow = styled(ChevronRightIcon)(({ theme }) => ({
-  color: theme.palette.secondary[theme.palette.mode],
-  borderRadius: "100%",
-  backgroundColor: theme.palette.primary[theme.palette.mode],
-  fontSize: "6vmin",
-}));
+export const StyledRowList = styled(Box)({
+  display: "flex",
+  flexDirection: "row",
+  overflow: "auto",
+  gap: "2vmin",
+  flex: 1,
+  height: "100%",
+  maxHeight: "62vh",
+  paddingBottom: "2vmin",
+});
 
-export const StyledLeftArrow = styled(ChevronLeftIcon)(({ theme }) => ({
-  color: theme.palette.secondary[theme.palette.mode],
-  borderRadius: "100%",
-  backgroundColor: theme.palette.primary[theme.palette.mode],
-  fontSize: "6vmin",
-}));
+export const StyledColumn = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  gap: "2vmin",
+  height: "100%",
+});

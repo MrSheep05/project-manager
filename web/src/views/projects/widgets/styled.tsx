@@ -3,11 +3,11 @@ import { Box, Typography, styled } from "@mui/material";
 export const StyledProjectContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
-  borderColor: theme.palette.secondary[theme.palette.mode],
   borderRadius: "2vmin",
   width: "45vmin",
-  height: "22vmin",
-  border: "2px solid",
+  flex: 1,
+  backgroundColor: theme.palette.shadow[theme.palette.mode],
+  color: "black",
   padding: "1vmin",
 }));
 
