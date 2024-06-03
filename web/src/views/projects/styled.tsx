@@ -32,13 +32,7 @@ export const StyledColumn = styled(Box)({
   height: "100%",
 });
 
-export const StyledLoadingProject = styled(Box)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  borderRadius: "2vmin",
-  width: "45vmin",
-  flex: 1,
-  backgroundColor: theme.palette.shadow[theme.palette.mode],
-  color: "black",
+export const StyledPlaceholder = styled(Box)({
   padding: "1vmin",
-}));
+  flex: 1,
+});

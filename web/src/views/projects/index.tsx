@@ -1,12 +1,34 @@
 import { useContext } from "react";
 import { WebsocketState } from "../../hooks/websocket";
-import { StyledColumn, StyledContainer, StyledRow } from "./styled";
+import {
+  StyledColumn,
+  StyledContainer,
+  StyledPlaceholder,
+  StyledRow,
+} from "./styled";
 import { Project } from "./widgets/project";
-import { Box } from "@mui/material";
 import { SendAction } from "../../hooks/websocket/types";
 import { getWindow } from "../../utils";
 import ScrollableView from "../../components/scrollable-view";
 import { StyledLoadingProject } from "./widgets/styled";
+import { ProjectBody } from "../../utils/types";
+
+const renderProjects = (list: ProjectBody[]): JSX.Element[] => {
+  return getWindow(list, 2).map(([first, second], i) => (
+    <StyledColumn key={i}>
+      {first ? (
+        <Project project={first} key={first.id} />
+      ) : (
+        <StyledPlaceholder />
+      )}
+      {second ? (
+        <Project project={second} key={second.id} />
+      ) : (
+        <StyledPlaceholder />
+      )}
+    </StyledColumn>
+  ));
+};
 
 const Projects = () => {
   const { send, state } = useContext(WebsocketState);
@@ -37,24 +59,11 @@ const Projects = () => {
                 </StyledColumn>
               }
             >
-              {getWindow(state.projects, 2).map(([first, second], i) => (
-                <StyledColumn key={i}>
-                  {first ? (
-                    <Project project={first} key={first.id} />
-                  ) : (
-                    <Box flex={1} padding={"1vmin"}></Box>
-                  )}
-                  {second ? (
-                    <Project project={second} key={second.id} />
-                  ) : (
-                    <Box flex={1} padding={"1vmin"}></Box>
-                  )}
-                </StyledColumn>
-              ))}
+              {renderProjects(state.projects)}
             </ScrollableView>
-          ) : (
+          ) : !state.reachedAllProjects ? (
             <StyledLoadingProject />
-          )}
+          ) : undefined}
         </StyledRow>
       </StyledContainer>
     </StyledContainer>

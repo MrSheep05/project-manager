@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { StyledColumnList, StyledIntersection, StyledRowList } from "./styled";
 
+const SCROLL_OFFSET = 5;
 interface ScrollableViewProps {
   onReachedEnd: () => void;
   reachedEnd: boolean;
@@ -20,7 +21,7 @@ const ScrollableView = ({
 }: ScrollableViewProps) => {
   const intersectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
-
+  const scrollable = useRef<HTMLDivElement | undefined>(null);
   const intersectionCallback = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const intersection = entries.find(
@@ -66,7 +67,14 @@ const ScrollableView = ({
           {isVisible && !reachedEnd ? loader : undefined}
         </StyledColumnList>
       ) : (
-        <StyledRowList style={style}>
+        <StyledRowList
+          ref={scrollable}
+          style={style}
+          onWheelCapture={({ deltaY }) => {
+            if (scrollable.current)
+              scrollable.current.scrollLeft += deltaY * SCROLL_OFFSET;
+          }}
+        >
           {children}
           <StyledIntersection ref={intersectionRef} />
           {isVisible && !reachedEnd ? loader : undefined}
