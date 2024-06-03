@@ -1,9 +1,18 @@
 import React, { useContext, useState } from "react";
 import { StyledAddProject } from "../styled";
 import { WebsocketState } from "../../../hooks/websocket";
-import { TextField, FormControl, InputLabel, MenuItem, Select, OutlinedInput, Button, Alert } from "@mui/material";
-import { Theme, useTheme } from '@mui/material/styles';
-import { SelectChangeEvent } from '@mui/material/Select';
+import {
+  TextField,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  OutlinedInput,
+  Button,
+  Alert,
+} from "@mui/material";
+import { Theme, useTheme } from "@mui/material/styles";
+import { SelectChangeEvent } from "@mui/material/Select";
 import { SendAction, SendFn } from "../../../hooks/websocket/types";
 
 const ITEM_HEIGHT = 48;
@@ -16,15 +25,21 @@ const MenuProps = {
   },
 };
 
-function addProjectButton(send: SendFn, statusId: string, categorieId: string[], title: string, content: string) {
+function addProjectButton(
+  send: SendFn,
+  statusId: string,
+  categorieId: string[],
+  title: string,
+  content: string
+) {
   send({
     action: SendAction.AddProject,
     payload: {
       statusId: statusId,
       categoriesIds: categorieId,
       title: title,
-      content: content
-    }
+      content: content,
+    },
   });
 }
 
@@ -35,44 +50,48 @@ function getStyles(name: string, categorieName: string[], theme: Theme) {
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };
-} 
+}
 
 const AddProject = () => {
   const { isAvailable, send, state } = useContext(WebsocketState);
-  const categories = state.categories
-  const statuses = state.status
+  const categories = state.categories;
+  const statuses = state.status;
   const theme = useTheme();
   const [categorieName, setCategorieName] = useState<string[]>([]);
-  const [statusName, setStatusName] = React.useState('');
-  const [title, setTitle] = React.useState('');
-  const [content, setCpntent] = React.useState('');
+  const [statusName, setStatusName] = React.useState("");
+  const [title, setTitle] = React.useState("");
+  const [content, setCpntent] = React.useState("");
 
-  const handleChangemultiple = (event: SelectChangeEvent<typeof categorieName>) => {
+  const handleChangemultiple = (
+    event: SelectChangeEvent<typeof categorieName>
+  ) => {
     const {
       target: { value },
     } = event;
-    setCategorieName(
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    setCategorieName(typeof value === "string" ? value.split(",") : value);
   };
 
   const handleChange = (event: SelectChangeEvent) => {
     setStatusName(event.target.value as string);
   };
 
-  const handleChangeTitle = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+  const handleChangeTitle = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     setTitle(event.target.value);
   };
 
-  const handleChangeContent = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+  const handleChangeContent = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     setCpntent(event.target.value);
   };
 
   return (
     <StyledAddProject>
-      <TextField 
-        label="Title" 
-        variant="standard" 
+      <TextField
+        label="Title"
+        variant="standard"
         color="info"
         value={title}
         onChange={handleChangeTitle}
@@ -89,7 +108,9 @@ const AddProject = () => {
         fullWidth
       />
       <FormControl fullWidth variant="outlined">
-        <InputLabel id="label-categories" color="info">Categories</InputLabel>
+        <InputLabel id="label-categories" color="info">
+          Categories
+        </InputLabel>
         <Select
           color="info"
           labelId="label-categories"
@@ -111,7 +132,9 @@ const AddProject = () => {
         </Select>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel id="select-label" color="info">Status</InputLabel>
+        <InputLabel id="select-label" color="info">
+          Status
+        </InputLabel>
         <Select
           labelId="select-label"
           value={statusName}
@@ -120,10 +143,7 @@ const AddProject = () => {
           color="info"
         >
           {statuses.map((status) => (
-            <MenuItem
-              key={status.name}
-              value={status.id}
-            >
+            <MenuItem key={status.name} value={status.id}>
               {status.name}
             </MenuItem>
           ))}
@@ -132,14 +152,22 @@ const AddProject = () => {
       {(!content || !title) && (
         <Alert severity="error">Wypełnij wszystkie pola</Alert>
       )}
-      <Button variant="outlined" color="info" fullWidth disabled={!title || !content} onClick={() => {
-        if (title === "" || content === "") {
-          return
-        }
-        addProjectButton(send, statusName, categorieName, title, content)
-      }}>Add Project</Button>
+      <Button
+        variant="outlined"
+        color="info"
+        fullWidth
+        disabled={!title || !content}
+        onClick={() => {
+          if (title === "" || content === "") {
+            return;
+          }
+          addProjectButton(send, statusName, categorieName, title, content);
+        }}
+      >
+        Add Project
+      </Button>
     </StyledAddProject>
   );
-}
+};
 
 export default AddProject;

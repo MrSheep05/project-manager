@@ -5,6 +5,7 @@ export const StyledContainer = styled(Box)({
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
+  color: "black",
 });
 
 export const StyledText = styled(Typography)({});

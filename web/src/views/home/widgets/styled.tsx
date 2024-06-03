@@ -4,7 +4,8 @@ export const StyledContainer = styled(Box)({
   display: "flex",
   flexDirection: "column",
   color: "white",
-  width: "80%",
+  width: "100%",
+  height: "100%",
   alignItems: "center",
   justifyContent: "center",
 });

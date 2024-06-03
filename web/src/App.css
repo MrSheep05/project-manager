@@ -3,8 +3,9 @@
   padding: 0;
 }
 
-body {
-  color: white;
+body,
+#root {
+  color: black !important;
   height: 100%;
   width: 100%;
   font-family: sans-serif;
@@ -12,21 +13,14 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: "#2f3640";
+  background-color: #f6f4f3;
 }
 
 body,
-html {
+html,
+.root {
   margin: 0;
   padding: 0;
   height: 100%;
   box-sizing: border-box;
-}
-
-#root {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
 }

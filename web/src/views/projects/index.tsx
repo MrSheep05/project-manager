@@ -1,42 +1,71 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { WebsocketState } from "../../hooks/websocket";
-
-import { useNavigate } from "react-router-dom";
-import AddProject from "../home/widgets/addProject";
 import {
+  StyledColumn,
   StyledContainer,
-  StyledLeftArrow,
-  StyledList,
-  StyledRightArrow,
+  StyledPlaceholder,
   StyledRow,
 } from "./styled";
 import { Project } from "./widgets/project";
-import { Button } from "@mui/material";
-import theme from "../../theme";
+import { SendAction } from "../../hooks/websocket/types";
+import { getWindow } from "../../utils";
+import ScrollableView from "../../components/scrollable-view";
+import { StyledLoadingProject } from "./widgets/styled";
+import { ProjectBody } from "../../utils/types";
+
+const renderProjects = (list: ProjectBody[]): JSX.Element[] => {
+  return getWindow(list, 2).map(([first, second], i) => (
+    <StyledColumn key={i}>
+      {first ? (
+        <Project project={first} key={first.id} />
+      ) : (
+        <StyledPlaceholder />
+      )}
+      {second ? (
+        <Project project={second} key={second.id} />
+      ) : (
+        <StyledPlaceholder />
+      )}
+    </StyledColumn>
+  ));
+};
 
 const Projects = () => {
-  const { isAvailable, send, state } = useContext(WebsocketState);
-
-  useEffect(() => console.log(state), [state]);
-  const navigate = useNavigate();
+  const { send, state } = useContext(WebsocketState);
   return (
     <StyledContainer>
-      <StyledList key={state.uid}>
-        <StyledList style={{ overflow: "auto" }}>
-          {state.projects.map((project) => (
-            <Project project={project} key={project.id} />
-          ))}
-        </StyledList>
+      <StyledContainer flex={1} border={"1px solid red"}></StyledContainer>
+      <StyledContainer flex={2}>
         <StyledRow>
-          <Button>
-            <StyledLeftArrow />
-          </Button>
-          <Button>
-            <StyledRightArrow />
-          </Button>
+          {state.projects.length > 0 ? (
+            <ScrollableView
+              reachedEnd={state.reachedAllProjects}
+              onReachedEnd={() => {
+                send({
+                  action: SendAction.GetProjects,
+                  payload: { offsetId: state.projects.slice(-1)[0]?.id },
+                });
+              }}
+              style={{
+                gap: "2vmin",
+                flex: 1,
+                maxHeight: "62vh",
+                paddingBottom: "2vmin",
+              }}
+              loader={
+                <StyledColumn>
+                  <StyledLoadingProject flex={1} />
+                  <StyledLoadingProject flex={1} />
+                </StyledColumn>
+              }
+            >
+              {renderProjects(state.projects)}
+            </ScrollableView>
+          ) : !state.reachedAllProjects ? (
+            <StyledLoadingProject />
+          ) : undefined}
         </StyledRow>
-      </StyledList>
-      <AddProject />
+      </StyledContainer>
     </StyledContainer>
   );
 };

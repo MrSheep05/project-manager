@@ -6,10 +6,12 @@ import {
   StyledRow,
   StyledTitle,
 } from "./styled";
+import { useContext } from "react";
+import { WebsocketState } from "../../../hooks/websocket";
 
 //TODO Filip move to styled
 export const Project = ({ project }: { project: ProjectBody }) => {
-  console.log(project.categories[0].color);
+  const { state } = useContext(WebsocketState);
   return (
     <StyledProjectContainer>
       <StyledRow key={project.id}>
@@ -35,6 +37,9 @@ export const Project = ({ project }: { project: ProjectBody }) => {
           </Typography>
         </StyledCategory>
       </StyledRow>
+      {project.user_id !== state.uid ? (
+        <Typography>{`Created by ${project.user_email}`}</Typography>
+      ) : null}
     </StyledProjectContainer>
   );
 };

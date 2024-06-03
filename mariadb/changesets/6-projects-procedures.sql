@@ -29,7 +29,7 @@ WHILE i < length DO
     SET i = i + 1;                             
 END WHILE;
 SELECT 
-p.id 'project_id',
+p.id 'id',
 u.id 'user_id',
 u.email 'user_email',
 JSON_OBJECT('id',s.id,'name',s.name,'color',s.color) 'status',

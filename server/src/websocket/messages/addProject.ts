@@ -1,4 +1,5 @@
 import { postToConnections } from "..";
+import { println } from "../../log";
 import { getConnections } from "../../queries";
 import { Role } from "../../queries/types";
 import { addProject } from "../database";
@@ -11,9 +12,14 @@ export const addProjectMessage: AddProjectMessageFn = async ({
   const { payload, action } = message;
   const connections = await getConnections({ role: Role.Admin });
   const result = await addProject({ ...payload, connectionId });
+  println({}, "ADD PROJECT", result);
   const data = JSON.stringify({
     message: action,
-    payload: result,
+    payload: {
+      ...result,
+      categories: JSON.parse(result.categories),
+      status: JSON.parse(result.status),
+    },
   });
   postToConnections({
     connections: [

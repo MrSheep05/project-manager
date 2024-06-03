@@ -41,7 +41,7 @@ export enum Role {
 
 export type UserInfo = {
   picture?: string;
-  user_id: string;
+  id: string;
   name?: string;
   email: string;
   role: Role;

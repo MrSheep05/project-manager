@@ -111,7 +111,6 @@ export const getProjects: GetProjectsFn = async (payload) => {
     type: Procedure.GetProjects,
     payload,
   });
-  println({}, result);
   if (result.key === ProcedureResponse.AllProjects) {
     return result.body;
   }

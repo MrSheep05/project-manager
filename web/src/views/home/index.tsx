@@ -2,19 +2,18 @@ import { useContext, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { AppState } from "../../hooks/app-state";
 import { AppRoutes } from "../../routes/types";
-import { WebsocketState, WebsocketStateComponent } from "../../hooks/websocket";
+import { WebsocketStateComponent } from "../../hooks/websocket";
 import { StyledText } from "../../components/loading/styled";
 import {
   StyledAvatar,
   StyledColumn,
   StyledContent,
-  StyledHeader,
   StyledRow,
   StyledSidebar,
 } from "./styled";
 import PermissionBracet from "../../components/permission-bracet";
 import ReconnectWidget from "./widgets/reconnect";
-import AddProject from "./widgets/addProject";
+import { Typography } from "@mui/material";
 
 const Home = () => {
   const {
@@ -23,27 +22,29 @@ const Home = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
-    if (!tokens) {
-      console.log("GO LOGIN", Date.now());
-
-      navigate(AppRoutes.Login);
-    }
+    if (!tokens) navigate(AppRoutes.Login);
   }, [tokens]);
 
   return (
     <WebsocketStateComponent>
-      <StyledRow>
-        <StyledSidebar>Home</StyledSidebar>
-        <StyledContent>
-          <StyledHeader>
-            <StyledColumn>
+      <StyledRow height={"100%"}>
+        <StyledSidebar>
+          <StyledRow flex={1}>
+            <StyledAvatar src={user?.picture} />
+            <StyledColumn alignItems={"start !important"}>
               <StyledText>{user?.name}</StyledText>
               <StyledText>{user?.email}</StyledText>
               <PermissionBracet role={user?.role}></PermissionBracet>
             </StyledColumn>
-            <StyledAvatar src={user?.picture} />
-          </StyledHeader>
-
+          </StyledRow>
+          <StyledColumn flex={5} width={"100%"}>
+            <Typography>Home</Typography>
+            <Typography>Projects</Typography>
+            <Typography>Accounts</Typography>
+            <Typography>Other</Typography>
+          </StyledColumn>
+        </StyledSidebar>
+        <StyledContent>
           <ReconnectWidget user={user}>
             <Outlet />
           </ReconnectWidget>

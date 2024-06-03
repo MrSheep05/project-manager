@@ -176,8 +176,8 @@ export type ProjectBody = {
   project_id: string;
   user_id: string;
   user_email: string;
-  status: CategoryOrStatusBody;
-  categories: CategoryOrStatusBody[];
+  status: string;
+  categories: string;
   title: string;
   content: string;
   timestamp: number;
