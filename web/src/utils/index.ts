@@ -1,3 +1,5 @@
+import { Tokens } from "./types";
+
 export const isBinary = (data: any) => {
   return (
     typeof data === "object" &&
@@ -14,4 +16,22 @@ export const getWindow = <T>(inputArray: T[], size: number): T[][] => {
     a += size;
   } while (a < inputArray.length);
   return acc;
+};
+
+export const saveTokens = (tokens?: Tokens) => {
+  tokens?.accessToken
+    ? localStorage.setItem("accessToken", tokens.accessToken)
+    : localStorage.removeItem("accessToken");
+
+  tokens?.refreshToken
+    ? localStorage.setItem("refreshToken", tokens.refreshToken)
+    : localStorage.removeItem("refreshToken");
+};
+
+export const getTokens = (): Tokens | undefined => {
+  const accessToken = localStorage.getItem("accessToken");
+  const refreshToken = localStorage.getItem("refreshToken");
+  return accessToken && refreshToken
+    ? { accessToken, refreshToken }
+    : undefined;
 };

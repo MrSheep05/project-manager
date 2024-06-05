@@ -14,15 +14,22 @@ import {
 import PermissionBracet from "../../components/permission-bracet";
 import ReconnectWidget from "./widgets/reconnect";
 import { Typography } from "@mui/material";
+import { getTokens } from "../../utils";
+import { AppAction } from "../../hooks/app-state/types";
 
 const Home = () => {
   const {
     state: { tokens, user },
+    dispatch,
   } = useContext(AppState);
 
   const navigate = useNavigate();
   useEffect(() => {
-    if (!tokens) navigate(AppRoutes.Login);
+    if (!tokens) {
+      const newTokens = getTokens();
+      if (!newTokens) return navigate(AppRoutes.Login);
+      dispatch({ type: AppAction.SaveTokens, payload: newTokens });
+    }
   }, [tokens]);
 
   return (

@@ -19,7 +19,6 @@ export const StyledRow = styled(Box)({
   display: "flex",
   flexDirection: "row",
   justifyContent: "right",
-  alignItems: "center",
   maxWidth: "76vw",
   flex: 1,
   paddingTop: "2vmin",
