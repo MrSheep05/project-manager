@@ -1,5 +1,15 @@
 import { Box, Button, styled } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
+import GroupIcon from "@mui/icons-material/Group";
+import AdsClickIcon from "@mui/icons-material/AdsClick";
+import CategoryIcon from "@mui/icons-material/Category";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+
+const iconsStyle = {
+  fontSize: "4vmin",
+  color: "black",
+  marginRight: "auto",
+};
 export const StyledColumn = styled(Box)({
   display: "flex",
   flexDirection: "column",
@@ -10,11 +20,15 @@ export const StyledColumn = styled(Box)({
   justifyContent: "center",
 });
 
-export const StyledLogoutIcon = styled(LogoutIcon)({
-  fontSize: "5vmin",
-  color: "black",
-  marginRight: "auto",
-});
+export const StyledLogoutIcon = styled(LogoutIcon)(iconsStyle);
+
+export const StyledAccountsIcon = styled(GroupIcon)(iconsStyle);
+
+export const StyledStatusIcon = styled(AdsClickIcon)(iconsStyle);
+
+export const StyledCategoriesIcon = styled(CategoryIcon)(iconsStyle);
+
+export const StyledProjectIcon = styled(ListAltIcon)(iconsStyle);
 
 export const StyledButton = styled(Button)({
   display: "flex",

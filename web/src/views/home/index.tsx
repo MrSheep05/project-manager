@@ -13,7 +13,6 @@ import {
 } from "./styled";
 import PermissionBracet from "../../components/permission-bracet";
 import ReconnectWidget from "./widgets/reconnect";
-import { Typography } from "@mui/material";
 import { getTokens } from "../../utils";
 import { AppAction } from "../../hooks/app-state/types";
 import NavigationSidebar from "../../components/navigator-sidebar";

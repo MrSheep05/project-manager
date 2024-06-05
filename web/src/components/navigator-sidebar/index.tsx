@@ -3,13 +3,25 @@ import { AppState } from "../../hooks/app-state";
 import { AppAction } from "../../hooks/app-state/types";
 import { Role } from "../../utils/types";
 import {
+  StyledAccountsIcon,
   StyledButton,
+  StyledCategoriesIcon,
   StyledColumn,
   StyledEnd,
   StyledLogoutIcon,
+  StyledProjectIcon,
+  StyledStatusIcon,
 } from "./styled";
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AppRoutes } from "../../routes/types";
+import RouteButton from "./widgets/route-button";
 
+const ADMIN_ROUTES: [AppRoutes, JSX.Element, string][] = [
+  [AppRoutes.Accounts, <StyledAccountsIcon />, "Użytkownicy"],
+  [AppRoutes.Categories, <StyledCategoriesIcon />, "Kategorie"],
+  [AppRoutes.Status, <StyledStatusIcon />, "Statusy"],
+];
 const NavigationSidebar = () => {
   const {
     dispatch,
@@ -20,15 +32,24 @@ const NavigationSidebar = () => {
     dispatch({ type: AppAction.SaveTokens });
   }, []);
 
+  const navigate = useNavigate();
   //TODO Admin routes
   return (
     <StyledColumn>
-      {(user?.role ?? Role.User) === Role.Admin ? undefined : undefined}
+      <RouteButton route={AppRoutes.Project} name="Projekty">
+        <StyledProjectIcon />
+      </RouteButton>
+      {(user?.role ?? Role.User) === Role.Admin
+        ? ADMIN_ROUTES.map(([route, icon, name]) => (
+            <RouteButton name={name} route={route}>
+              {icon}
+            </RouteButton>
+          ))
+        : undefined}
       <StyledEnd>
-        <StyledButton onClick={logout}>
+        <RouteButton name="Wyloguj" onClick={logout}>
           <StyledLogoutIcon />
-          <Typography width={"100%"}>Wyloguj</Typography>
-        </StyledButton>
+        </RouteButton>
       </StyledEnd>
     </StyledColumn>
   );
