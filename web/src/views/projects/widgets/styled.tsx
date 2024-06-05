@@ -19,6 +19,7 @@ export const StyledProjectContainer = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.shadow[theme.palette.mode],
   color: "black",
   padding: "1vmin",
+  boxShadow: "inset 0px 0px 10px 2px rgba(66, 68, 90, 1)",
 }));
 
 export const StyledRow = styled(Box)({

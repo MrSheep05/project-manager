@@ -7,4 +7,5 @@ export const StyledButton = styled(Button)({
   color: "black",
   backgroundColor: "transparent",
   width: "100%",
+  transition: "ease-in-out 1s",
 });

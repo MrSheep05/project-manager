@@ -71,7 +71,7 @@ const ScrollableView = ({
           ref={scrollable}
           style={style}
           onWheelCapture={({ deltaY }) => {
-            if (scrollable.current)
+            if (scrollable.current && scrollable.current.scrollTop === 0)
               scrollable.current.scrollLeft += deltaY * SCROLL_OFFSET;
           }}
         >
