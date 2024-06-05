@@ -13,16 +13,23 @@ import {
 } from "./styled";
 import PermissionBracet from "../../components/permission-bracet";
 import ReconnectWidget from "./widgets/reconnect";
-import { Typography } from "@mui/material";
+import { getTokens } from "../../utils";
+import { AppAction } from "../../hooks/app-state/types";
+import NavigationSidebar from "../../components/navigator-sidebar";
 
 const Home = () => {
   const {
     state: { tokens, user },
+    dispatch,
   } = useContext(AppState);
 
   const navigate = useNavigate();
   useEffect(() => {
-    if (!tokens) navigate(AppRoutes.Login);
+    if (!tokens) {
+      const newTokens = getTokens();
+      if (!newTokens) return navigate(AppRoutes.Login);
+      dispatch({ type: AppAction.SaveTokens, payload: newTokens });
+    }
   }, [tokens]);
 
   return (
@@ -37,12 +44,8 @@ const Home = () => {
               <PermissionBracet role={user?.role}></PermissionBracet>
             </StyledColumn>
           </StyledRow>
-          <StyledColumn flex={5} width={"100%"}>
-            <Typography>Home</Typography>
-            <Typography>Projects</Typography>
-            <Typography>Accounts</Typography>
-            <Typography>Other</Typography>
-          </StyledColumn>
+
+          <NavigationSidebar />
         </StyledSidebar>
         <StyledContent>
           <ReconnectWidget user={user}>

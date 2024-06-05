@@ -1,3 +1,4 @@
+import { saveTokens } from "../../utils";
 import { AppAction, AppDispatch, State } from "./types";
 
 export const reducer = (state: State, action: AppDispatch): State => {
@@ -5,6 +6,7 @@ export const reducer = (state: State, action: AppDispatch): State => {
 
   switch (type) {
     case AppAction.SaveTokens: {
+      saveTokens(payload);
       return { ...state, tokens: payload };
     }
     case AppAction.SaveUser: {

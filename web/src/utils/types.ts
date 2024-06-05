@@ -1,5 +1,5 @@
 export type Tokens = {
-  refreshToken: String;
+  refreshToken: string;
   accessToken: string;
 };
 export type WidgetProps = {

@@ -28,10 +28,10 @@ export type WebsocketStateContext = {
   state: DataState;
 };
 
-export type PrepareListenerFn = (
+export type PrepareListenerFn = <T extends keyof WebSocketEventMap>(
   ws: WebSocket | undefined,
-  eventName: keyof WebSocketEventMap,
-  fn: (...params: any[]) => void
+  eventName: T,
+  fn: (event: WebSocketEventMap[T]) => void
 ) => () => void;
 
 export type CreateWebsocketFn = (
@@ -49,6 +49,10 @@ export type DataState = {
   isAccountEnabled: boolean;
   reachedAllProjects: boolean;
 };
+export enum WebsocketError {
+  Unauthorized = 4001,
+  Unexpected = 4015,
+}
 
 export enum WebsocketAction {
   GetStatusAndCategories,

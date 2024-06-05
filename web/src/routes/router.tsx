@@ -4,6 +4,9 @@ import { AppRoutes } from "./types";
 import { RouteObject, createBrowserRouter } from "react-router-dom";
 import Projects from "../views/projects";
 import Redirect from "./redirect";
+import Categories from "../views/categories";
+import Status from "../views/status/status";
+import Users from "../views/users";
 
 const routerConfig: RouteObject[] = [
   {
@@ -15,6 +18,9 @@ const routerConfig: RouteObject[] = [
     element: <Home />,
     children: [
       { path: AppRoutes.Project, element: <Projects />, index: true },
+      { path: AppRoutes.Categories, element: <Categories /> },
+      { path: AppRoutes.Status, element: <Status /> },
+      { path: AppRoutes.Accounts, element: <Users /> },
       {
         path: `*`,
         element: <Redirect path={AppRoutes.Project} />,

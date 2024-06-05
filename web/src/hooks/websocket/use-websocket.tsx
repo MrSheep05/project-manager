@@ -5,6 +5,7 @@ import {
   SendFn,
   UseWebsocketHook,
   WebSocketExt,
+  WebsocketError,
 } from "./types";
 import { AppState } from "../app-state";
 import { useNavigate } from "react-router-dom";
@@ -92,10 +93,11 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
       }, 500);
     });
 
-    prepareListener(websocket, "close", () => {
-      console.log("close");
+    prepareListener(websocket, "close", (error) => {
       clearTimeout(websocket.pingTimeout);
       setIsAvailable(false);
+      if (Object.values(WebsocketError).includes(error.code))
+        return saveUser({ type: AppAction.SaveTokens });
       if (!tokens) return navigate(AppRoutes.Login);
       if (isEnabledRef.current) {
         console.log("TRY OPEN");
@@ -103,7 +105,9 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
       }
     });
 
-    prepareListener(websocket, "error", () => {
+    prepareListener(websocket, "error", (error) => {
+      console.log("error", error);
+
       websocket.close();
     });
 

@@ -36,7 +36,7 @@ const Projects = () => {
     <StyledContainer>
       <StyledContainer flex={1} border={"1px solid red"}></StyledContainer>
       <StyledContainer flex={2}>
-        <StyledRow>
+        <StyledRow alignItems={"flex-start"}>
           {state.projects.length > 0 ? (
             <ScrollableView
               reachedEnd={state.reachedAllProjects}
@@ -51,6 +51,7 @@ const Projects = () => {
                 flex: 1,
                 maxHeight: "62vh",
                 paddingBottom: "2vmin",
+                alignItems: "flex-start",
               }}
               loader={
                 <StyledColumn>
@@ -62,7 +63,10 @@ const Projects = () => {
               {renderProjects(state.projects)}
             </ScrollableView>
           ) : !state.reachedAllProjects ? (
-            <StyledLoadingProject />
+            <StyledColumn>
+              <StyledLoadingProject flex={1} />
+              <StyledLoadingProject flex={1} />
+            </StyledColumn>
           ) : undefined}
         </StyledRow>
       </StyledContainer>
