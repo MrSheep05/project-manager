@@ -30,6 +30,16 @@ export type AuthorizeUpgradeFn = (
   head: Buffer
 ) => Promise<any>;
 
+export enum WebsocketError {
+  Unauthorized = 4001,
+  Unexpected = 4015,
+}
+export type HandleErrorCodeFn = (
+  request: IncomingMessage,
+  socket: stream.Duplex,
+  head: Buffer,
+  code: WebsocketError
+) => void;
 export interface TypedRequestBody<T> extends Request {
   body: T;
 }

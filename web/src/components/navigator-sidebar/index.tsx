@@ -1,10 +1,16 @@
 import { useCallback, useContext } from "react";
 import { AppState } from "../../hooks/app-state";
 import { AppAction } from "../../hooks/app-state/types";
-import { StyledColumn } from "../../views/home/styled";
 import { Role } from "../../utils/types";
+import {
+  StyledButton,
+  StyledColumn,
+  StyledEnd,
+  StyledLogoutIcon,
+} from "./styled";
+import { Box, Typography } from "@mui/material";
 
-const NavigatorSidebar = () => {
+const NavigationSidebar = () => {
   const {
     dispatch,
     state: { user },
@@ -18,6 +24,14 @@ const NavigatorSidebar = () => {
   return (
     <StyledColumn>
       {(user?.role ?? Role.User) === Role.Admin ? undefined : undefined}
+      <StyledEnd>
+        <StyledButton onClick={logout}>
+          <StyledLogoutIcon />
+          <Typography width={"100%"}>Wyloguj</Typography>
+        </StyledButton>
+      </StyledEnd>
     </StyledColumn>
   );
 };
+
+export default NavigationSidebar;
