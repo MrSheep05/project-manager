@@ -1,4 +1,5 @@
 import { Tokens } from "./types";
+import { renderToStaticMarkup } from "react-dom/server";
 
 export const isBinary = (data: any) => {
   return (
@@ -34,4 +35,11 @@ export const getTokens = (): Tokens | undefined => {
   return accessToken && refreshToken
     ? { accessToken, refreshToken }
     : undefined;
+};
+
+export const convertSvg = (svg: React.ReactElement) => {
+  const markup = renderToStaticMarkup(svg);
+  const encoded = encodeURIComponent(markup);
+  const dataUri = `url('data:image/svg+xml;utf8,${encoded}')`;
+  return dataUri;
 };

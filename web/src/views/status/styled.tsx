@@ -35,3 +35,11 @@ export const StyledStatus = styled(Box)(({ color }) => ({
   borderRadius: "1.5vmin",
   border: `1px solid ${color}`,
 }));
+
+export const StyledColumnList = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  overflow: "auto",
+  width: "100%",
+  gap: "1vmin",
+});

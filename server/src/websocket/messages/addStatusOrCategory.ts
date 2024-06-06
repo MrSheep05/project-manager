@@ -1,4 +1,5 @@
 import { postToConnections } from "..";
+import { println } from "../../log";
 import { addCategory, addStatus } from "../database";
 import { Action } from "../types";
 import { AddStatusOrCategoryMessageFn } from "./types";
@@ -22,5 +23,6 @@ export const addStatusOrCategoryMessage: AddStatusOrCategoryMessageFn = async ({
       ...(action === Action.AddCategory && { categories: result }),
     },
   });
+  println({}, "CATEGORIES RESULT");
   postToConnections({ everyone: true, message: data });
 };

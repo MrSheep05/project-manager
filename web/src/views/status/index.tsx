@@ -1,17 +1,33 @@
 import { HexColorPicker } from "react-colorful";
 import useAdminRoute from "../../hooks/useAdminRoute";
-import { StyledCircle, StyledColumn, StyledRow, StyledStatus } from "./styled";
-import { useState } from "react";
+import {
+  StyledCircle,
+  StyledColumn,
+  StyledColumnList,
+  StyledRow,
+  StyledStatus,
+} from "./styled";
+import { useContext, useState } from "react";
 import { TextField, Typography } from "@mui/material";
+import { WebsocketState } from "../../hooks/websocket";
+import StatusWidget from "./widgets/status";
+import { CategoryOrStatusBody } from "../../utils/types";
 
 const Status = () => {
   useAdminRoute();
+  const { state } = useContext(WebsocketState);
   const [color, setColor] = useState("#aabbcc");
   const [name, setName] = useState("Status");
 
   return (
     <StyledRow>
-      <StyledColumn flex="2"></StyledColumn>
+      <StyledColumn flex="2">
+        <StyledColumnList>
+          {state.status.map((status) => (
+            <StatusWidget status={status} edit={(_) => {}} key={status.id} />
+          ))}
+        </StyledColumnList>
+      </StyledColumn>
       <StyledColumn>
         <StyledRow justifyContent={"space-around !important"}>
           <HexColorPicker color={color} onChange={setColor} />

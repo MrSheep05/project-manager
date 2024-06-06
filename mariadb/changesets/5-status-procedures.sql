@@ -23,8 +23,8 @@ IF NOT EXISTS (SELECT * FROM user WHERE id = in_admin_id AND role = 'admin' AND 
 END IF;
 IF EXISTS (SELECT * FROM status WHERE name = in_name AND visible = FALSE)
 THEN
-	UPDATE status SET visible = TRUE, color = in_color WHERE name = in_name AND visible = FALSE;
-    SELECT id, name, color, visible FROM status WHERE name = in_name AND visible = TRUE;
+	UPDATE status SET visible = TRUE, color = in_color WHERE name = in_name;
+    SELECT id, name, color, visible FROM status WHERE name = in_name;
 ELSE
 	SET @id = UUID();
 	INSERT INTO status (id,name,color) VALUES (@id,in_name,in_color);
