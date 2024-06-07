@@ -5,7 +5,7 @@ import { RouteObject, createBrowserRouter } from "react-router-dom";
 import Projects from "../views/projects";
 import Redirect from "./redirect";
 import Categories from "../views/categories";
-import Status from "../views/status/status";
+import Status from "../views/status";
 import Users from "../views/users";
 
 const routerConfig: RouteObject[] = [

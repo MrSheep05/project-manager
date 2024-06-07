@@ -21,8 +21,8 @@ IF NOT EXISTS (SELECT * FROM user WHERE id = getUserId(in_connection_id) AND rol
 END IF;
 IF EXISTS (SELECT * FROM category WHERE name = in_name AND visible = FALSE)
 THEN
-	UPDATE category SET visible = TRUE, color = in_color WHERE name = in_name AND visible = FALSE;
-    SELECT id, name, color, visible FROM category WHERE name = in_name AND visible = TRUE;
+	UPDATE category SET visible = TRUE, color = in_color WHERE name = in_name;
+    SELECT id, name, color, visible FROM category WHERE name = in_name;
 ELSE
 	SET @id = UUID();
 	INSERT INTO category (id,name,color) VALUES (@id,in_name,in_color);
