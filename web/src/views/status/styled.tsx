@@ -42,4 +42,5 @@ export const StyledColumnList = styled(Box)({
   overflow: "auto",
   width: "100%",
   gap: "1vmin",
+  alignItems: "center",
 });

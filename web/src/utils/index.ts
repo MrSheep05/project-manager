@@ -53,12 +53,11 @@ export const updateStatusOrCategory: UpdateStatusOrCategoryFn = ({
   payload,
 }) => {
   if (!payload) return current;
-  const value = Array.isArray(payload) ? payload : Array(payload);
-  if (current.length === 0) return value;
-  return current.reduce((all, element) => {
-    console.log(all);
-    const exists = all.find(({ id }) => id === element.id);
-    if (!exists) all.push(element);
+  const updated = Array.isArray(payload) ? payload : Array(payload);
+  if (current.length === 0) return updated;
+  return updated.reduce((all, element) => {
+    const i = all.findIndex(({ id }) => id === element.id);
+    i > -1 ? (all[i] = element) : all.push(element);
     return all;
-  }, value);
+  }, current);
 };
