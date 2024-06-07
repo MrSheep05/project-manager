@@ -1,4 +1,8 @@
-import { Tokens } from "./types";
+import {
+  CategoryOrStatusBody,
+  Tokens,
+  UpdateStatusOrCategoryFn,
+} from "./types";
 import { renderToStaticMarkup } from "react-dom/server";
 
 export const isBinary = (data: any) => {
@@ -42,4 +46,19 @@ export const convertSvg = (svg: React.ReactElement) => {
   const encoded = encodeURIComponent(markup);
   const dataUri = `url('data:image/svg+xml;utf8,${encoded}')`;
   return dataUri;
+};
+
+export const updateStatusOrCategory: UpdateStatusOrCategoryFn = ({
+  current,
+  payload,
+}) => {
+  if (!payload) return current;
+  const value = Array.isArray(payload) ? payload : Array(payload);
+  if (current.length === 0) return value;
+  return current.reduce((all, element) => {
+    console.log(all);
+    const exists = all.find(({ id }) => id === element.id);
+    if (!exists) all.push(element);
+    return all;
+  }, value);
 };

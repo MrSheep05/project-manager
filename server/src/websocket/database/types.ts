@@ -37,7 +37,7 @@ export type AddCategoryStatusFn = ({
 }: {
   connectionId: string;
   name: string;
-  color: number;
+  color: string;
 }) => Promise<CategoryOrStatusBody>;
 
 export type GetCategoryStatusFn = ({

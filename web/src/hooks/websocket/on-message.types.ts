@@ -35,8 +35,8 @@ type AddProjectMessage = {
 type GetStatusAndCategoryMessage = {
   message: Message.GetStatusAndCategory;
   payload: {
-    status?: CategoryOrStatusBody[];
-    categories?: CategoryOrStatusBody[];
+    status?: CategoryOrStatusBody[] | CategoryOrStatusBody;
+    categories?: CategoryOrStatusBody[] | CategoryOrStatusBody;
   };
 };
 

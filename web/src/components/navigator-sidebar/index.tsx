@@ -41,7 +41,7 @@ const NavigationSidebar = () => {
       </RouteButton>
       {(user?.role ?? Role.User) === Role.Admin
         ? ADMIN_ROUTES.map(([route, icon, name]) => (
-            <RouteButton name={name} route={route}>
+            <RouteButton name={name} route={route} key={route}>
               {icon}
             </RouteButton>
           ))
