@@ -40,7 +40,11 @@ const Status = () => {
               <StyledCircle bgcolor={color} />
               <Typography
                 color={color}
-                style={{ textShadow: "1px 1px black", fontSize: "2em" }}
+                style={{
+                  textShadow: "1px 1px black",
+                  fontSize: "2em",
+                  width: "15vmin",
+                }}
               >
                 {color}
               </Typography>
