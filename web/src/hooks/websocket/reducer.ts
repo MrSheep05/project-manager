@@ -1,3 +1,4 @@
+import { updateStatusOrCategory } from "../../utils";
 import { CategoryOrStatusBody, ProjectBody, Role } from "../../utils/types";
 import { Message, MessageObject } from "./on-message.types";
 import { DataState } from "./types";
@@ -24,16 +25,15 @@ export const reducer = (state: DataState, action: MessageObject): DataState => {
       return { ...state, projects, reachedAllProjects: payload.length !== 20 };
     }
     case Message.GetStatusAndCategory: {
-      const categories = state.categories.reduce((all, category) => {
-        const exists = all.find(({ id }) => id === category.id);
-        if (!exists) all.push(category);
-        return all;
-      }, (payload.categories ?? []) as CategoryOrStatusBody[]);
-      const status = state.status.reduce((all, state) => {
-        const exists = all.find(({ id }) => id === state.id);
-        if (!exists) all.push(state);
-        return all;
-      }, (payload.status ?? []) as CategoryOrStatusBody[]);
+      const categories = updateStatusOrCategory({
+        current: state.categories,
+        payload: payload.categories,
+      });
+      const status = updateStatusOrCategory({
+        current: state.status,
+        payload: payload.status,
+      });
+
       return {
         ...state,
         categories,

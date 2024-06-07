@@ -47,3 +47,11 @@ export type UserInfo = {
   role: Role;
   enabled: boolean;
 };
+
+export type UpdateStatusOrCategoryFn = ({
+  payload,
+  current,
+}: {
+  current: CategoryOrStatusBody[];
+  payload?: CategoryOrStatusBody[] | CategoryOrStatusBody;
+}) => CategoryOrStatusBody[];

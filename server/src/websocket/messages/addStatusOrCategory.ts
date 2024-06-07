@@ -10,8 +10,7 @@ export const addStatusOrCategoryMessage: AddStatusOrCategoryMessageFn = async ({
 }) => {
   const { payload, action } = message;
   const { color, name } = payload;
-  const decColor = parseInt(color.replace("#", ""), 16);
-  const procedureInput = { color: decColor, name, connectionId };
+  const procedureInput = { color, name, connectionId };
   const result =
     action === Action.AddStatus
       ? await addStatus(procedureInput)

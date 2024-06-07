@@ -37,7 +37,7 @@ const StatusWidget = ({ edit, status }: StatusWidgetProps) => {
       <StyledToRight>
         <StyledSwitch
           value={visible}
-          defaultChecked={visible}
+          checked={visible}
           onChange={(_) =>
             send(
               !visible

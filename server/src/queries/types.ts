@@ -66,7 +66,7 @@ type AddCategoryProcedure = {
   payload: {
     connectionId: string;
     name: string;
-    color: number;
+    color: string;
   };
 };
 
@@ -94,7 +94,7 @@ type AddStatusProcedure = {
   payload: {
     connectionId: string;
     name: string;
-    color: number;
+    color: string;
   };
 };
 
