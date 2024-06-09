@@ -7,7 +7,6 @@ import Redirect from "./redirect";
 import Categories from "../views/categories";
 import Status from "../views/status";
 import Users from "../views/users";
-import AddProject from "../views/home/widgets/addProject";
 
 const routerConfig: RouteObject[] = [
   {
