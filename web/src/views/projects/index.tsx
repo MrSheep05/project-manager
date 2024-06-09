@@ -44,6 +44,8 @@ const Projects = () => {
             <ScrollableView
               reachedEnd={state.reachedAllProjects}
               onReachedEnd={() => {
+                if (state.projects.length === 0 || state.reachedAllProjects)
+                  return;
                 send({
                   action: SendAction.GetProjects,
                   payload: { offsetId: state.projects.slice(-1)[0]?.id },
