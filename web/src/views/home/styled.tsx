@@ -2,12 +2,21 @@ import { Avatar, Box, Typography, styled } from "@mui/material";
 
 export const StyledAddProject = styled(Box)(({ theme }) => ({
   display: "flex",
+  gap: "1vmin",
+  alignItems: "stretch",
+  marginBottom: "1vmin",
+  width: "100%",
+}));
+
+export const StyledAddProjectColumn = styled(Box)(({ theme }) => ({
+  display: "flex",
   flexDirection: "column",
   gap: "1vmin",
-  width: "20vw",
-  height: "100vh",
-  justifyContent: "center",
   alignItems: "stretch",
+  justifyContent: "center",
+  width: "100%",
+  flexGrow: 1,
+  padding: "1vmin"
 }));
 
 export const StyledSidebar = styled(Box)(({ theme }) => ({

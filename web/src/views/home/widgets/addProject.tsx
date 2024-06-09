@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { StyledAddProject } from "../styled";
+import { StyledAddProject, StyledAddProjectColumn } from "../styled";
 import { WebsocketState } from "../../../hooks/websocket";
 import {
   TextField,
@@ -14,6 +14,7 @@ import {
 import { Theme, useTheme } from "@mui/material/styles";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { SendAction, SendFn } from "../../../hooks/websocket/types";
+import { Outlet } from "react-router";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -89,83 +90,87 @@ const AddProject = () => {
 
   return (
     <StyledAddProject>
-      <TextField
-        label="Title"
-        variant="standard"
-        color="info"
-        value={title}
-        onChange={handleChangeTitle}
-        fullWidth
-      />
-      <TextField
-        label="Content"
-        multiline
-        rows={4}
-        variant="outlined"
-        color="info"
-        value={content}
-        onChange={handleChangeContent}
-        fullWidth
-      />
-      <FormControl fullWidth variant="outlined">
-        <InputLabel id="label-categories" color="info">
-          Categories
-        </InputLabel>
-        <Select
+      <StyledAddProjectColumn>
+        <TextField
+          label="Title"
+          variant="standard"
           color="info"
-          labelId="label-categories"
-          multiple
-          value={categorieName}
-          onChange={handleChangemultiple}
-          input={<OutlinedInput label="Categories" />}
-          MenuProps={MenuProps}
-        >
-          {categories.map((categorie) => (
-            <MenuItem
-              key={categorie.name}
-              value={categorie.id}
-              style={getStyles(categorie.name, categorieName, theme)}
-            >
-              {categorie.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel id="select-label" color="info">
-          Status
-        </InputLabel>
-        <Select
-          labelId="select-label"
-          value={statusName}
-          label="Status"
-          onChange={handleChange}
+          value={title}
+          onChange={handleChangeTitle}
+          fullWidth
+        />
+        <TextField
+          label="Content"
+          multiline
+          rows={4}
+          variant="outlined"
           color="info"
+          value={content}
+          onChange={handleChangeContent}
+          fullWidth
+        />
+      </StyledAddProjectColumn>
+      <StyledAddProjectColumn>
+        <FormControl fullWidth variant="outlined">
+          <InputLabel id="label-categories" color="info">
+            Categories
+          </InputLabel>
+          <Select
+            color="info"
+            labelId="label-categories"
+            multiple
+            value={categorieName}
+            onChange={handleChangemultiple}
+            input={<OutlinedInput label="Categories" />}
+            MenuProps={MenuProps}
+          >
+            {categories.map((categorie) => (
+              <MenuItem
+                key={categorie.name}
+                value={categorie.id}
+                style={getStyles(categorie.name, categorieName, theme)}
+              >
+                {categorie.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel id="select-label" color="info">
+            Status
+          </InputLabel>
+          <Select
+            labelId="select-label"
+            value={statusName}
+            label="Status"
+            onChange={handleChange}
+            color="info"
+          >
+            {statuses.map((status) => (
+              <MenuItem key={status.name} value={status.id}>
+                {status.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        {(!content || !title) && (
+          <Alert severity="error">Wypełnij wszystkie pola</Alert>
+        )}
+        <Button
+          variant="outlined"
+          color="info"
+          fullWidth
+          disabled={!title || !content}
+          onClick={() => {
+            if (title === "" || content === "") {
+              return;
+            }
+            addProjectButton(send, statusName, categorieName, title, content);
+          }}
         >
-          {statuses.map((status) => (
-            <MenuItem key={status.name} value={status.id}>
-              {status.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      {(!content || !title) && (
-        <Alert severity="error">Wypełnij wszystkie pola</Alert>
-      )}
-      <Button
-        variant="outlined"
-        color="info"
-        fullWidth
-        disabled={!title || !content}
-        onClick={() => {
-          if (title === "" || content === "") {
-            return;
-          }
-          addProjectButton(send, statusName, categorieName, title, content);
-        }}
-      >
-        Add Project
-      </Button>
+          Add Project
+        </Button>
+      </StyledAddProjectColumn>
     </StyledAddProject>
   );
 };
