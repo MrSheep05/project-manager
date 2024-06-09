@@ -7,7 +7,6 @@ import Redirect from "./redirect";
 import Categories from "../views/categories";
 import Status from "../views/status";
 import Users from "../views/users";
-import AddProject from "../views/home/widgets/addProject";
 
 const routerConfig: RouteObject[] = [
   {
@@ -18,9 +17,7 @@ const routerConfig: RouteObject[] = [
     path: AppRoutes.Home,
     element: <Home />,
     children: [
-      { path: AppRoutes.Project, element: <Projects />, children: [
-        { path: AppRoutes.Project, element: <AddProject /> }
-      ] },
+      { path: AppRoutes.Project, element: <Projects /> },
       { path: AppRoutes.Categories, element: <Categories /> },
       { path: AppRoutes.Status, element: <Status /> },
       { path: AppRoutes.Accounts, element: <Users /> },

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { StyledAddProject, StyledAddProjectColumn } from "../styled";
+import { StyledAddProject, StyledAddProjectColumn } from "./styled";
 import { WebsocketState } from "../../../hooks/websocket";
 import {
   TextField,
@@ -14,7 +14,6 @@ import {
 import { Theme, useTheme } from "@mui/material/styles";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { SendAction, SendFn } from "../../../hooks/websocket/types";
-import { Outlet } from "react-router";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -54,14 +53,14 @@ function getStyles(name: string, categorieName: string[], theme: Theme) {
 }
 
 const AddProject = () => {
-  const { isAvailable, send, state } = useContext(WebsocketState);
+  const { send, state } = useContext(WebsocketState);
   const categories = state.categories;
   const statuses = state.status;
   const theme = useTheme();
   const [categorieName, setCategorieName] = useState<string[]>([]);
   const [statusName, setStatusName] = React.useState("");
   const [title, setTitle] = React.useState("");
-  const [content, setCpntent] = React.useState("");
+  const [content, setContent] = React.useState("");
 
   const handleChangemultiple = (
     event: SelectChangeEvent<typeof categorieName>
@@ -85,7 +84,7 @@ const AddProject = () => {
   const handleChangeContent = (event: {
     target: { value: React.SetStateAction<string> };
   }) => {
-    setCpntent(event.target.value);
+    setContent(event.target.value);
   };
 
   return (
