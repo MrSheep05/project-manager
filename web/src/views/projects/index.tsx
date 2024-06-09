@@ -12,6 +12,7 @@ import { getWindow } from "../../utils";
 import ScrollableView from "../../components/scrollable-view";
 import { StyledLoadingProject } from "./widgets/styled";
 import { ProjectBody } from "../../utils/types";
+import AddProject from "./widgets/addProject";
 
 const renderProjects = (list: ProjectBody[]): JSX.Element[] => {
   return getWindow(list, 2).map(([first, second], i) => (
@@ -34,7 +35,9 @@ const Projects = () => {
   const { send, state } = useContext(WebsocketState);
   return (
     <StyledContainer>
-      <StyledContainer flex={1} border={"1px solid red"}></StyledContainer>
+      <StyledContainer flex={1}>
+        <AddProject />
+      </StyledContainer>
       <StyledContainer flex={2}>
         <StyledRow alignItems={"flex-start"}>
           {state.projects.length > 0 ? (

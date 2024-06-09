@@ -61,3 +61,22 @@ export const StyledLoadingProject = styled(Box)(({ theme }) => ({
   transition: "all linear .6s",
   animation: `${shine} 2s infinite ease`,
 }));
+
+export const StyledAddProject = styled(Box)(({ theme }) => ({
+  display: "flex",
+  gap: "1vmin",
+  alignItems: "stretch",
+  marginBottom: "1vmin",
+  width: "100%",
+}));
+
+export const StyledAddProjectColumn = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: "1vmin",
+  alignItems: "stretch",
+  justifyContent: "center",
+  width: "100%",
+  flexGrow: 1,
+  padding: "1vmin",
+}));

@@ -22,6 +22,5 @@ export const addStatusOrCategoryMessage: AddStatusOrCategoryMessageFn = async ({
       ...(action === Action.AddCategory && { categories: result }),
     },
   });
-  println({}, "CATEGORIES RESULT");
   postToConnections({ everyone: true, message: data });
 };

@@ -17,7 +17,7 @@ const routerConfig: RouteObject[] = [
     path: AppRoutes.Home,
     element: <Home />,
     children: [
-      { path: AppRoutes.Project, element: <Projects />, index: true },
+      { path: AppRoutes.Project, element: <Projects /> },
       { path: AppRoutes.Categories, element: <Categories /> },
       { path: AppRoutes.Status, element: <Status /> },
       { path: AppRoutes.Accounts, element: <Users /> },

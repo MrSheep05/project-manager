@@ -1,15 +1,5 @@
 import { Avatar, Box, Typography, styled } from "@mui/material";
 
-export const StyledAddProject = styled(Box)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  gap: "1vmin",
-  width: "20vw",
-  height: "100vh",
-  justifyContent: "center",
-  alignItems: "stretch",
-}));
-
 export const StyledSidebar = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",

@@ -44,7 +44,7 @@ const Home = () => {
               <PermissionBracet role={user?.role}></PermissionBracet>
             </StyledColumn>
           </StyledRow>
-
+          
           <NavigationSidebar />
         </StyledSidebar>
         <StyledContent>
