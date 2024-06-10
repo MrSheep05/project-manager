@@ -7,32 +7,62 @@ import {
   StyledRow,
   StyledStatus,
 } from "./styled";
-import { useContext, useState } from "react";
-import { TextField, Typography } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
+import { Button, IconButton, TextField, Typography } from "@mui/material";
 import { WebsocketState } from "../../hooks/websocket";
 import StatusWidget from "./widgets/status";
 import { CategoryOrStatusBody } from "../../utils/types";
+import { Cancel } from "@mui/icons-material";
+import { SendAction } from "../../hooks/websocket/types";
 
 const Status = () => {
   useAdminRoute();
+  const { send } = useContext(WebsocketState);
+
   const { state } = useContext(WebsocketState);
   const [color, setColor] = useState("#aabbcc");
   const [name, setName] = useState("Status");
+  const [isEditing, setIsEditing] = useState(false);
 
+  useEffect(() => {
+    if (isEditing) return;
+    clear();
+  }, [isEditing]);
+
+  const clear = () => {
+    setColor("#aabbcc");
+    setName("Status");
+  };
+
+  const edit = (status: CategoryOrStatusBody) => {
+    setColor(status.color);
+    setName(status.name);
+    setIsEditing(true);
+  };
   return (
     <StyledRow>
       <StyledColumn flex="2">
         <StyledColumnList>
           {state.status.map((status) => (
-            <StatusWidget status={status} edit={(_) => {}} key={status.id} />
+            <StatusWidget status={status} edit={edit} key={status.id} />
           ))}
         </StyledColumnList>
       </StyledColumn>
       <StyledColumn>
         <StyledRow justifyContent={"space-around !important"}>
-          <HexColorPicker color={color} onChange={setColor} />
+          <StyledColumn>
+            <StyledRow>
+              {isEditing ? (
+                <IconButton onClick={() => setIsEditing(false)}>
+                  <Cancel />
+                </IconButton>
+              ) : undefined}
+            </StyledRow>
+            <HexColorPicker color={color} onChange={setColor} />
+          </StyledColumn>
           <StyledColumn flex="1">
             <TextField
+              disabled={isEditing}
               value={name}
               onChange={({ target }) => setName(target.value)}
             ></TextField>
@@ -62,6 +92,17 @@ const Status = () => {
                 <Typography>{name.length > 0 ? name : "Status"}</Typography>
               </StyledStatus>
             </StyledRow>
+            <Button
+              onClick={() => {
+                send({
+                  action: SendAction.AddStatus,
+                  payload: { color, name },
+                });
+                clear();
+              }}
+            >
+              {isEditing ? "Edytuj" : "Dodaj"}
+            </Button>
           </StyledColumn>
         </StyledRow>
       </StyledColumn>

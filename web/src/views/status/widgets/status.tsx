@@ -31,7 +31,7 @@ const StatusWidget = ({ edit, status }: StatusWidgetProps) => {
       <StyledStatusPreview color={status.color}>
         <Typography color={status.color}>{status.name}</Typography>
       </StyledStatusPreview>
-      <IconButton>
+      <IconButton onClick={status.visible ? () => edit(status) : undefined}>
         <EditIcon />
       </IconButton>
       <StyledToRight>
