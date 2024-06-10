@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { WebsocketState } from "../../hooks/websocket";
 import {
   StyledColumn,
@@ -14,16 +14,27 @@ import { StyledLoadingProject } from "./widgets/styled";
 import { ProjectBody } from "../../utils/types";
 import AddProject from "./widgets/addProject";
 
-const renderProjects = (list: ProjectBody[]): JSX.Element[] => {
+const renderProjects = (
+  list: ProjectBody[],
+  setIsScrolling: React.Dispatch<React.SetStateAction<boolean>>
+): JSX.Element[] => {
   return getWindow(list, 2).map(([first, second], i) => (
     <StyledColumn key={i}>
       {first ? (
-        <Project project={first} key={first.id} />
+        <Project
+          project={first}
+          key={first.id}
+          setIsScrolling={setIsScrolling}
+        />
       ) : (
         <StyledPlaceholder />
       )}
       {second ? (
-        <Project project={second} key={second.id} />
+        <Project
+          project={second}
+          key={second.id}
+          setIsScrolling={setIsScrolling}
+        />
       ) : (
         <StyledPlaceholder />
       )}
@@ -33,6 +44,7 @@ const renderProjects = (list: ProjectBody[]): JSX.Element[] => {
 
 const Projects = () => {
   const { send, state } = useContext(WebsocketState);
+  const [isScrollingProject, setIsScrollingProject] = useState(false);
   return (
     <StyledContainer>
       <StyledContainer flex={1}>
@@ -42,8 +54,11 @@ const Projects = () => {
         <StyledRow alignItems={"flex-start"}>
           {state.projects.length > 0 ? (
             <ScrollableView
+              shouldNotScroll={isScrollingProject}
               reachedEnd={state.reachedAllProjects}
               onReachedEnd={() => {
+                if (state.projects.length === 0 || state.reachedAllProjects)
+                  return;
                 send({
                   action: SendAction.GetProjects,
                   payload: { offsetId: state.projects.slice(-1)[0]?.id },
@@ -63,7 +78,7 @@ const Projects = () => {
                 </StyledColumn>
               }
             >
-              {renderProjects(state.projects)}
+              {renderProjects(state.projects, setIsScrollingProject)}
             </ScrollableView>
           ) : !state.reachedAllProjects ? (
             <StyledColumn>

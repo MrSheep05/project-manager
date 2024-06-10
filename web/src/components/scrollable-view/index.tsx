@@ -9,6 +9,7 @@ interface ScrollableViewProps {
   loader: JSX.Element;
   style?: React.CSSProperties;
   isVertical?: boolean;
+  shouldNotScroll?: boolean;
 }
 
 const ScrollableView = ({
@@ -18,6 +19,7 @@ const ScrollableView = ({
   loader,
   style,
   isVertical = false,
+  shouldNotScroll = false,
 }: ScrollableViewProps) => {
   const intersectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -70,8 +72,12 @@ const ScrollableView = ({
         <StyledRowList
           ref={scrollable}
           style={style}
-          onWheelCapture={({ deltaY }) => {
-            if (scrollable.current && scrollable.current.scrollTop === 0)
+          onWheel={({ deltaY }) => {
+            if (
+              scrollable.current &&
+              scrollable.current.scrollTop === 0 &&
+              !shouldNotScroll
+            )
               scrollable.current.scrollLeft += deltaY * SCROLL_OFFSET;
           }}
         >

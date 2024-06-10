@@ -66,11 +66,11 @@ IF in_project_id IS NOT NULL AND in_project_id != ""
 THEN
     WITH all_projects_rows AS (
         SELECT ROW_NUMBER() OVER (ORDER BY timestamp DESC) AS RowNumber, id
-        FROM user
+        FROM project
     ), selected_project_row AS (
         SELECT RowNumber
         FROM all_projects_rows
-        WHERE CASE WHEN in_role = 'user' THEN id = in_uid ELSE 1=1 END
+        WHERE CASE WHEN in_role = 'user' THEN user_id = in_uid ELSE 1=1 END AND id = in_project_id
     )
     SELECT RowNumber
     INTO in_offset
