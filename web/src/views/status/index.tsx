@@ -99,6 +99,7 @@ const Status = () => {
                   payload: { color, name },
                 });
                 clear();
+                setIsEditing(false);
               }}
             >
               {isEditing ? "Edytuj" : "Dodaj"}
