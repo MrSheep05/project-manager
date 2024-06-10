@@ -65,7 +65,7 @@ END IF;
 IF in_project_id IS NOT NULL AND in_project_id != ""
 THEN
     WITH all_projects_rows AS (
-        SELECT ROW_NUMBER() OVER (ORDER BY timestamp DESC) AS RowNumber, id
+        SELECT ROW_NUMBER() OVER (ORDER BY timestamp DESC) AS RowNumber, id, user_id
         FROM project
     ), selected_project_row AS (
         SELECT RowNumber
