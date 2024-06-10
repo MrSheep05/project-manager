@@ -6,12 +6,20 @@ import {
   StyledRow,
   StyledTitle,
 } from "./styled";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { WebsocketState } from "../../../hooks/websocket";
 
 //TODO Filip move to styled
-export const Project = ({ project }: { project: ProjectBody }) => {
+export const Project = ({
+  project,
+  setIsScrolling,
+}: {
+  project: ProjectBody;
+  setIsScrolling: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const { state } = useContext(WebsocketState);
+  const [timeout, setTimeoutS] = useState<NodeJS.Timeout | undefined>();
+
   return (
     <StyledProjectContainer>
       <StyledRow key={project.id}>
@@ -22,7 +30,17 @@ export const Project = ({ project }: { project: ProjectBody }) => {
           </StyledCategory>
         ))}
       </StyledRow>
-      <Typography style={{ overflow: "auto" }}>{project.content}</Typography>
+      <div
+        style={{ overflow: "scroll" }}
+        onScroll={(_) => {
+          console.log("SCROLL");
+          clearTimeout(timeout);
+          setIsScrolling(true);
+          setTimeoutS(setTimeout(() => setIsScrolling(false), 500));
+        }}
+      >
+        <Typography>{project.content}</Typography>
+      </div>
       <StyledRow style={{ marginTop: "auto", justifyContent: "space-between" }}>
         <Typography style={{ textDecoration: "underline" }}>
           {new Intl.DateTimeFormat("en-GB", {

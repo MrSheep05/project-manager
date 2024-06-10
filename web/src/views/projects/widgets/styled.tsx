@@ -16,6 +16,8 @@ export const StyledProjectContainer = styled(Box)(({ theme }) => ({
   borderRadius: "2vmin",
   width: "45vmin",
   flex: 1,
+  maxHeight: "45%",
+
   backgroundColor: theme.palette.shadow[theme.palette.mode],
   color: "black",
   padding: "1vmin",
