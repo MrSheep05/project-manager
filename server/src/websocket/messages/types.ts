@@ -5,6 +5,7 @@ import {
   GetProjectsMessage,
   GetUsersMessage,
   RemoveStatusOrCategoryMessage,
+  UpdateProjectMessage,
 } from "../types";
 import { WebSocket } from "ws";
 
@@ -14,6 +15,14 @@ export type AddProjectMessageFn = ({
 }: {
   connectionId: string;
   message: AddProjectMessage;
+}) => Promise<void>;
+
+export type UpdateProjectMessageFn = ({
+  connectionId,
+  message,
+}: {
+  connectionId: string;
+  message: UpdateProjectMessage;
 }) => Promise<void>;
 export type AddStatusOrCategoryMessageFn = ({
   connectionId,

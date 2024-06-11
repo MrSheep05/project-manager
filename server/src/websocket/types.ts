@@ -34,6 +34,7 @@ export enum Action {
   GetStatusAndCategory = "getStatusAndCategory",
   GetProjects = "getProjects",
   ChangeAccountState = "changeAccountState",
+  UpdateProject = "updateProject",
   GetUsers = "getUsers",
 }
 
@@ -44,7 +45,8 @@ export type Mesages =
   | RemoveStatusOrCategoryMessage
   | ChangeAccountStateMessage
   | GetUsersMessage
-  | GetProjectsMessage;
+  | GetProjectsMessage
+  | UpdateProjectMessage;
 
 export type GetProjectsMessage = {
   action: Action.GetProjects;
@@ -59,6 +61,15 @@ export type AddProjectMessage = {
     content: string;
   };
 };
+
+export type UpdateProjectMessage = {
+  action: Action.UpdateProject;
+  payload: {
+    statusId: string;
+    projectId: string;
+  };
+};
+
 export type ChangeAccountStateMessage = {
   action: Action.ChangeAccountState;
   payload: { state: boolean; uid: string };

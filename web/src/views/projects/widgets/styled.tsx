@@ -1,4 +1,11 @@
-import { Box, Typography, keyframes, styled } from "@mui/material";
+import {
+  Box,
+  ButtonBase,
+  Select,
+  Typography,
+  keyframes,
+  styled,
+} from "@mui/material";
 
 const shine = keyframes`
   from {
@@ -33,6 +40,19 @@ export const StyledTitle = styled(Typography)({
   fontSize: "2vmin",
   fontWeight: "bold",
 });
+export const StyledStatus = styled(Select)({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "3vmin",
+  padding: "0 5px",
+  borderRadius: "1.5vmin",
+  "& .MuiSelect-select": {
+    paddingRight: "0 !important",
+    padding: "0 !important",
+  },
+});
+
 export const StyledCategory = styled(Box)(({ color }) => ({
   display: "flex",
   justifyContent: "center",
@@ -40,6 +60,7 @@ export const StyledCategory = styled(Box)(({ color }) => ({
   height: "3vmin",
   padding: "0 5px",
   borderRadius: "1.5vmin",
+  backgroundColor: `${color}`,
   border: `1px solid ${color}`,
 }));
 

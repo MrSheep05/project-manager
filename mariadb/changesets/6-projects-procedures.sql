@@ -116,3 +116,43 @@ LEFT JOIN user u ON u.id = p.user_id
 WHERE CASE WHEN in_role = 'user' THEN p.user_id = in_uid ELSE 1=1 END GROUP BY p.id ORDER BY p.timestamp DESC LIMIT in_offset,20;
 END//
 -- rollback DROP PROCEDURE `GetProjects`;
+
+
+-- changeset liquibase:update_project_procedure endDelimiter://
+CREATE PROCEDURE `UpdateProject`(IN `in_connection_id` VARCHAR(256), IN `in_project_id` VARCHAR(36),IN `in_status_id` VARCHAR(36))
+BEGIN   
+DECLARE in_user_id VARCHAR(256);
+DECLARE in_role ENUM('admin','user') DEFAULT 'user';
+SET in_user_id = getUserId(in_connection_id);
+
+IF in_user_id IS NULL OR in_user_id = "" THEN
+    SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'User id is null or empty', MYSQL_ERRNO = 1001;
+END IF;
+IF NOT EXISTS (SELECT * FROM user WHERE id = in_user_id AND enabled = TRUE) THEN
+    SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'User does not exist', MYSQL_ERRNO = 1002;
+    ELSE IF EXISTS (SELECT * FROM user WHERE in_uid = id AND role = 'admin')
+    THEN
+    	SET in_role = 'admin';
+    END IF;
+END IF;
+IN NOT EXISTS (SELECT * FROM project WHERE id = in_project_id AND CASE WHEN in_role = "user" THEN user_id = in_user_id ELSE 1=1 END) THEN
+    SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'User does not have project with such id', MYSQL_ERRNO = 1002;
+END IF;
+IF NOT EXISTS (SELECT * FROM status WHERE id = in_status_id AND CASE WHEN in_role = "user" THEN visible = TRUE ELSE 1=1 END) THEN
+    SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'Cannot assign such status id', MYSQL_ERRNO = 1002;
+END IF;
+
+UPDATE project SET status_id = in_status_id WHERE id = in_project_id;
+SELECT 
+p.id 'id',
+u.id 'user_id',
+u.email 'user_email',
+JSON_OBJECT('id',s.id,'name',s.name,'color',s.color) 'status',
+JSON_ARRAYAGG(JSON_OBJECT('id',c.id,'name',c.name,'color',c.color)) 'categories',
+p.title 'title',
+p.content 'content',
+p.timestamp 'timestamp'
+FROM project p LEFT JOIN project_category pc ON pc.project_id = p.id LEFT JOIN category c ON c.id = pc.category_id
+LEFT JOIN status s ON s.id = p.status_id LEFT JOIN user u ON u.id = p.user_id WHERE p.id = in_project_id;
+END//
+-- rollback DROP PROCEDURE `UpdateProject`;

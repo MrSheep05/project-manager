@@ -12,6 +12,7 @@ import {
   RemoveCategory,
   RemoveConnectionFn,
   RemoveStatus,
+  UpdateProjectFn,
 } from "./types";
 
 export const addConnection: AddConnectionFn = async ({ connectionId, uid }) =>
@@ -31,6 +32,13 @@ export const addProject: AddProjectFn = async (payload) => {
   if (result.key === ProcedureResponse.CreatedProject) return result.body;
 
   throw Error("Unexpected result from AddProject procedure");
+};
+
+export const updateProject: UpdateProjectFn = async (payload) => {
+  const result = await runProcedure({ type: Procedure.UpdateProject, payload });
+  if (result.key === ProcedureResponse.CreatedProject) return result.body;
+
+  throw Error("Unexpected result from UpdateProject procedure");
 };
 
 export const addCategory: AddCategoryStatusFn = async (payload) => {

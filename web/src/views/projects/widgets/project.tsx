@@ -1,13 +1,15 @@
-import { Typography } from "@mui/material";
+import { ButtonBase, MenuItem, Typography } from "@mui/material";
 import { ProjectBody } from "../../../utils/types";
 import {
   StyledCategory,
   StyledProjectContainer,
   StyledRow,
+  StyledStatus,
   StyledTitle,
 } from "./styled";
 import { useContext, useState } from "react";
 import { WebsocketState } from "../../../hooks/websocket";
+import { FaEyeSlash } from "react-icons/fa";
 
 //TODO Filip move to styled
 export const Project = ({
@@ -17,7 +19,9 @@ export const Project = ({
   project: ProjectBody;
   setIsScrolling: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { state } = useContext(WebsocketState);
+  const {
+    state: { uid, status },
+  } = useContext(WebsocketState);
   const [timeout, setTimeoutS] = useState<NodeJS.Timeout | undefined>();
 
   return (
@@ -26,7 +30,7 @@ export const Project = ({
         <StyledTitle>{project.title}</StyledTitle>
         {project.categories.map((category) => (
           <StyledCategory color={category.color} key={category.id}>
-            <Typography color={category.color}>{category.name}</Typography>
+            <Typography color="white">{category.name}</Typography>
           </StyledCategory>
         ))}
       </StyledRow>
@@ -48,14 +52,29 @@ export const Project = ({
             timeStyle: "short",
           }).format(new Date(project.timestamp))}
         </Typography>
-        <StyledCategory color={project.status.color}>
-          {" "}
-          <Typography color={project.status.color}>
-            {project.status.name}
-          </Typography>
-        </StyledCategory>
+
+        <StyledStatus
+          style={{
+            border: `1px solid ${project.status.color}`,
+            textAlign: "right",
+          }}
+          value={project.status.id}
+          IconComponent={() => null}
+        >
+          {status
+            .sort((a) => (a.visible ? -1 : 1))
+            .map((status) => (
+              <MenuItem
+                key={status.id}
+                value={status.id}
+                style={{ display: "flex", flexDirection: "row" }}
+              >
+                <Typography color={status.color}>{status.name}</Typography>
+              </MenuItem>
+            ))}
+        </StyledStatus>
       </StyledRow>
-      {project.user_id !== state.uid ? (
+      {project.user_id !== uid ? (
         <Typography>{`Created by ${project.user_email}`}</Typography>
       ) : null}
     </StyledProjectContainer>
