@@ -68,6 +68,7 @@ export enum SendAction {
   GetProjects = "getProjects",
   ChangeAccountState = "changeAccountState",
   GetUsers = "getUsers",
+  UpdateProject = "updateProject",
 }
 
 export type Mesages =
@@ -78,8 +79,13 @@ export type Mesages =
   | ChangeAccountStateMessage
   | GetUsersMessage
   | GetProjectsMessage
+  | UpdateProjectMessage
   | "reconnect";
 
+export type UpdateProjectMessage = {
+  action: SendAction.UpdateProject;
+  payload: { projectId: string; statusId: string };
+};
 export type GetProjectsMessage = {
   action: SendAction.GetProjects;
   payload: { offsetId?: string };
