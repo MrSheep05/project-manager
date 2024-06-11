@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { StyledAddProject, StyledAddProjectColumn } from "./styled";
+import { StyledAddProject, StyledAddProjectColumn, StyledRow } from "./styled";
 import { WebsocketState } from "../../../hooks/websocket";
 import {
   TextField,
@@ -14,6 +14,7 @@ import {
 import { Theme, useTheme } from "@mui/material/styles";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { SendAction, SendFn } from "../../../hooks/websocket/types";
+import { FaEyeSlash } from "react-icons/fa";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -145,11 +146,20 @@ const AddProject = () => {
             onChange={handleChange}
             color="info"
           >
-            {statuses.map((status) => (
-              <MenuItem key={status.name} value={status.id}>
-                {status.name}
-              </MenuItem>
-            ))}
+            {statuses
+              .sort((a, b) => (a.visible ? -1 : 1))
+              .map((status) => (
+                <MenuItem
+                  key={status.name}
+                  value={status.id}
+                  style={{ display: "flex", flexDirection: "row" }}
+                >
+                  {status.name}{" "}
+                  {!status.visible ? (
+                    <FaEyeSlash style={{ marginLeft: "auto" }} />
+                  ) : undefined}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
         {(!content || !title) && (

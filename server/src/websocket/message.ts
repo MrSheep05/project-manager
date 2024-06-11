@@ -10,45 +10,44 @@ import {
   getUsersMessage,
   removeStatusOrCategoryMessage,
 } from "./messages";
-import { webSocket } from "../configs/websocket";
 
 export const onMessage: OnMessageFn = async ({ data, ws }) => {
   try {
-    const { action, payload } = JSON.parse(data.toString()) as Mesages;
+    const message = JSON.parse(data.toString()) as Mesages;
     const { connectionId } = ws;
-    if (!action || !payload) return;
-    switch (action) {
+    if (!message.action || !message.payload) return;
+    switch (message.action) {
       case Action.AddProject: {
-        println({ severity: Severity.Info }, "ADDPROJECT", payload);
+        println({ severity: Severity.Info }, "ADDPROJECT", message.payload);
 
-        await addProjectMessage({ connectionId, message: { action, payload } });
+        await addProjectMessage({ connectionId, message });
         break;
       }
       case Action.AddStatus: {
         await addStatusOrCategoryMessage({
           connectionId,
-          message: { action, payload },
+          message,
         });
         break;
       }
       case Action.AddCategory: {
         await addStatusOrCategoryMessage({
           connectionId,
-          message: { action, payload },
+          message,
         });
         break;
       }
       case Action.RemoveCategory: {
         await removeStatusOrCategoryMessage({
           connectionId,
-          message: { action, payload },
+          message,
         });
         break;
       }
       case Action.RemoveStatus: {
         await removeStatusOrCategoryMessage({
           connectionId,
-          message: { action, payload },
+          message,
         });
         break;
       }
@@ -59,23 +58,26 @@ export const onMessage: OnMessageFn = async ({ data, ws }) => {
       case Action.ChangeAccountState: {
         await changeAccountStateMessage({
           connectionId,
-          message: { action, payload },
+          message,
         });
         break;
       }
       case Action.GetUsers: {
-        await getUsersMessage({ ws, message: { action, payload } });
+        await getUsersMessage({ ws, message });
         break;
       }
       case Action.GetProjects: {
-        await getProjectsMessage({ ws, message: { action, payload } });
+        await getProjectsMessage({ ws, message });
         break;
+      }
+      case Action.UpdateProject: {
+        console.log();
       }
       default: {
         println(
           { severity: Severity.Warning },
           "No such matching action for",
-          action
+          message
         );
       }
     }

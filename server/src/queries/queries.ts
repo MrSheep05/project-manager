@@ -103,6 +103,14 @@ export const runProcedure = async (
       const { uid, connectionId } = action.payload;
       return await createCall(action.type, [connectionId, uid], 2);
     }
+    case Procedure.UpdateProject: {
+      const { connectionId, projectId, statusId } = action.payload;
+      return await createCall(
+        action.type,
+        [connectionId, projectId, statusId],
+        3
+      );
+    }
     default: {
       return { key: 0, body: "NONE" };
     }

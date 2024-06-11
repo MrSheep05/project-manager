@@ -18,7 +18,8 @@ export type StoredProcedure =
   | RemoveStatusProcedure
   | GetUserProcedure
   | GetAllUsersProcedure
-  | GetProjectsProcedure;
+  | GetProjectsProcedure
+  | UpdateProjectProcedure;
 
 export enum Procedure {
   AddCategory = "AddCategory",
@@ -32,6 +33,7 @@ export enum Procedure {
   GetConnection = "GetConnection",
   GetStatus = "GetStatus",
   GetProjects = "GetProjects",
+  UpdateProject = "UpdateProject",
   RemoveCategory = "RemoveCategory",
   RemoveConnection = "RemoveConnection",
   RemoveStatus = "RemoveStatus",
@@ -59,6 +61,14 @@ type GetAllUsersProcedure = {
   payload: {
     connectionId: string;
     offsetUid?: string;
+  };
+};
+type UpdateProjectProcedure = {
+  type: Procedure.UpdateProject;
+  payload: {
+    connectionId: string;
+    projectId: string;
+    statusId: string;
   };
 };
 type AddCategoryProcedure = {
@@ -303,6 +313,9 @@ export namespace Procedure {
       }
       case Procedure.GetProjects: {
         return ProcedureResponse.AllProjects;
+      }
+      case Procedure.UpdateProject: {
+        return ProcedureResponse.CreatedProject;
       }
       default: {
         return ProcedureResponse.None;

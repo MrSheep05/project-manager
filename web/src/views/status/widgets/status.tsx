@@ -31,9 +31,11 @@ const StatusWidget = ({ edit, status }: StatusWidgetProps) => {
       <StyledStatusPreview color={status.color}>
         <Typography color={status.color}>{status.name}</Typography>
       </StyledStatusPreview>
-      <IconButton>
-        <EditIcon />
-      </IconButton>
+      {!status.visible ? (
+        <IconButton onClick={() => edit(status)}>
+          <EditIcon />
+        </IconButton>
+      ) : undefined}
       <StyledToRight>
         <StyledSwitch
           value={visible}

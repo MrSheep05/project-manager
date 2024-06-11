@@ -30,6 +30,16 @@ export type AddProjectFn = ({
   connectionId: string;
 }) => Promise<ProjectBody>;
 
+export type UpdateProjectFn = ({
+  projectId,
+  statusId,
+  connectionId,
+}: {
+  statusId: string;
+  projectId: string;
+  connectionId: string;
+}) => Promise<ProjectBody>;
+
 export type AddCategoryStatusFn = ({
   connectionId,
   name,
