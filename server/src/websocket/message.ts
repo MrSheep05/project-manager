@@ -10,6 +10,7 @@ import {
   getUsersMessage,
   removeStatusOrCategoryMessage,
 } from "./messages";
+import { updateProjectMessage } from "./messages/updateProject";
 
 export const onMessage: OnMessageFn = async ({ data, ws }) => {
   try {
@@ -71,7 +72,8 @@ export const onMessage: OnMessageFn = async ({ data, ws }) => {
         break;
       }
       case Action.UpdateProject: {
-        console.log();
+        await updateProjectMessage({ connectionId, message });
+        break;
       }
       default: {
         println(

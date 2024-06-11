@@ -1,4 +1,9 @@
-import { ButtonBase, MenuItem, Typography } from "@mui/material";
+import {
+  ButtonBase,
+  MenuItem,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material";
 import { ProjectBody } from "../../../utils/types";
 import {
   StyledCategory,
@@ -10,6 +15,7 @@ import {
 import { useContext, useState } from "react";
 import { WebsocketState } from "../../../hooks/websocket";
 import { FaEyeSlash } from "react-icons/fa";
+import { SendAction } from "../../../hooks/websocket/types";
 
 //TODO Filip move to styled
 export const Project = ({
@@ -21,9 +27,14 @@ export const Project = ({
 }) => {
   const {
     state: { uid, status },
+    send,
   } = useContext(WebsocketState);
   const [timeout, setTimeoutS] = useState<NodeJS.Timeout | undefined>();
-
+  const statusToDisplay = [...status];
+  const index = statusToDisplay.findIndex(({ id }) => id === project.status.id);
+  index >= 0
+    ? (statusToDisplay[index] = project.status)
+    : statusToDisplay.push(project.status);
   return (
     <StyledProjectContainer>
       <StyledRow key={project.id}>
@@ -60,8 +71,17 @@ export const Project = ({
           }}
           value={project.status.id}
           IconComponent={() => null}
+          onChange={({ target }) =>
+            send({
+              action: SendAction.UpdateProject,
+              payload: {
+                statusId: target.value as string,
+                projectId: project.id,
+              },
+            })
+          }
         >
-          {status
+          {statusToDisplay
             .sort((a) => (a.visible ? -1 : 1))
             .map((status) => (
               <MenuItem

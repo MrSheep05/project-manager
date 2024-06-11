@@ -49,13 +49,13 @@ DECLARE in_uid VARCHAR(256);
 DECLARE in_offset BIGINT DEFAULT 0;
 DECLARE in_role ENUM('admin','user') DEFAULT 'user';
 SET in_uid = getUserId(in_connection_id);
-IF EXISTS (SELECT * FROM user WHERE in_uid = id)
+IF EXISTS (SELECT * FROM user WHERE id = in_uid)
 THEN
-	IF EXISTS (SELECT * FROM user WHERE in_uid = id AND enabled = FALSE)
+	IF EXISTS (SELECT * FROM user WHERE id = in_uid AND enabled = FALSE)
     THEN
     	SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'User is disabled', MYSQL_ERRNO = 1002;
     END IF;
-    IF EXISTS (SELECT * FROM user WHERE in_uid = id AND enabled = TRUE AND role = 'admin')
+    IF EXISTS (SELECT * FROM user WHERE id = in_uid AND enabled = TRUE AND role = 'admin')
     THEN
     	SET in_role = 'admin';
     END IF;
@@ -130,12 +130,12 @@ IF in_user_id IS NULL OR in_user_id = "" THEN
 END IF;
 IF NOT EXISTS (SELECT * FROM user WHERE id = in_user_id AND enabled = TRUE) THEN
     SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'User does not exist', MYSQL_ERRNO = 1002;
-    ELSE IF EXISTS (SELECT * FROM user WHERE in_uid = id AND role = 'admin')
+    ELSE IF EXISTS (SELECT * FROM user WHERE id = in_user_id AND role = 'admin')
     THEN
     	SET in_role = 'admin';
     END IF;
 END IF;
-IN NOT EXISTS (SELECT * FROM project WHERE id = in_project_id AND CASE WHEN in_role = "user" THEN user_id = in_user_id ELSE 1=1 END) THEN
+IF NOT EXISTS (SELECT * FROM project WHERE id = in_project_id AND CASE WHEN in_role = "user" THEN user_id = in_user_id ELSE 1=1 END) THEN
     SIGNAL SQLSTATE '10000' SET MESSAGE_TEXT = 'User does not have project with such id', MYSQL_ERRNO = 1002;
 END IF;
 IF NOT EXISTS (SELECT * FROM status WHERE id = in_status_id AND CASE WHEN in_role = "user" THEN visible = TRUE ELSE 1=1 END) THEN
