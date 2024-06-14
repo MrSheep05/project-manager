@@ -1,24 +1,47 @@
 import { useContext, useEffect } from "react";
 import useAdminRoute from "../../hooks/useAdminRoute";
 import { WebsocketState } from "../../hooks/websocket";
-import { SendAction } from "../../hooks/websocket/types";
+import { SendAction, SendFn } from "../../hooks/websocket/types";
 import { Box, ListItem, ListItemButton, ListItemText } from "@mui/material";
-import { FixedSizeList, ListChildComponentProps } from "react-window";
+import { FixedSizeList } from "react-window";
 import AutoSizer, { Size } from "react-virtualized-auto-sizer";
-import { UserBody } from "../../utils/types";
-import { StyledBox } from "./styled";
+import { Role, UserBody } from "../../utils/types";
+import { EnabledSwitch, StyledBox } from "./styled";
 
-function renderRow(index: number, users: UserBody[]) {
+function renderRow(
+  index: number,
+  users: UserBody[],
+  send: SendFn,
+  uid: String | undefined
+) {
   const user = users[index];
+  const enabled = Boolean(user.enabled);
 
-  const ListStyle = {
-    color: "black",
-  };
+  const ListStyle = enabled
+    ? { color: "black" }
+    : { color: "rgba(0, 0, 0, 0.6)" };
 
   return (
     <ListItem style={ListStyle} key={index} component="div" disablePadding>
       <ListItemButton>
         <ListItemText primary={`${user.email}`} />
+        <EnabledSwitch
+          disabled={user.id === uid || user.role === Role.Admin}
+          defaultChecked={enabled}
+          onChange={() =>
+            send(
+              !enabled
+                ? {
+                    action: SendAction.ChangeAccountState,
+                    payload: { state: true, uid: user.id },
+                  }
+                : {
+                    action: SendAction.ChangeAccountState,
+                    payload: { state: false, uid: user.id },
+                  }
+            )
+          }
+        />
       </ListItemButton>
     </ListItem>
   );
@@ -42,7 +65,7 @@ const Users = () => {
           flexDirection: "column",
           width: "100%",
           height: "100vh",
-          maxWidth: 360,
+          maxWidth: 460,
           bgcolor: "background.paper",
           overflow: "hidden",
           border: "1px solid rgba(0, 0, 0, 0.05)",
@@ -56,7 +79,7 @@ const Users = () => {
               itemCount={state.users.length}
               itemSize={35}
             >
-              {(props) => renderRow(props.index, state.users)}
+              {(props) => renderRow(props.index, state.users, send, state.uid)}
             </FixedSizeList>
           )}
         </AutoSizer>
