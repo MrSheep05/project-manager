@@ -10,25 +10,34 @@ const ReconnectWidget = ({ children, user }: ReconnectWidgetProps) => {
   useEffect(() => {
     console.log(isAvailable);
   }, [isAvailable]);
+
+  const isUserEnabled = user?.enabled ?? false;
+  const isUserUndefined = !user && user !== false;
   return (
     <StyledContainer>
-      {isAvailable ? (
-        !user ? (
-          <Loading message={"Getting user data..."} />
-        ) : user?.enabled ?? false ? (
-          <>{children}</>
-        ) : !isAvailable ? (
-          <StyledContainer>
-            <Typography>Your account is disabled, try again</Typography>
-            <StyledButton onClick={() => send("reconnect")}>
-              Try again
-            </StyledButton>
-          </StyledContainer>
+      {isUserUndefined ? (
+        isAvailable ? (
+          <Loading message={"Getting user data"} />
         ) : (
-          <Loading message={"Reconnecting..."} />
+          <Loading message={"Connecting"} />
         )
+      ) : isAvailable ? (
+        isUserEnabled ? (
+          <>{children}</>
+        ) : (
+          <Loading message={"Reconnecting"} />
+        )
+      ) : isUserEnabled ? (
+        <Loading message={"Reconnecting"} />
       ) : (
-        <Loading message={"Connecting..."} />
+        <StyledContainer>
+          <Typography color="black">
+            Your account is disabled, try again
+          </Typography>
+          <StyledButton onClick={() => send("reconnect")}>
+            Try again
+          </StyledButton>
+        </StyledContainer>
       )}
     </StyledContainer>
   );
