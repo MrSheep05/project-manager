@@ -1,9 +1,9 @@
-import { Box, Switch, styled } from "@mui/material";
+import { Box, Card, Switch, styled } from "@mui/material";
 import { convertSvg } from "../../../utils";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 
-export const StyledStatusContainer = styled(Box)(({ theme }) => ({
+export const StyledStatusContainer = styled(Card)(({ theme }) => ({
   display: "flex",
   flex: 1,
   flexDirection: "row",
@@ -13,10 +13,9 @@ export const StyledStatusContainer = styled(Box)(({ theme }) => ({
   padding: "1vmin",
   backgroundColor: theme.palette.shadow[theme.palette.mode],
   alignContent: "center",
-  boxShadow: "inset 0px 0px 5px 1px rgba(66, 68, 90, 1)",
 }));
 
-export const StyledStatusPreview = styled(Box)(({ color }) => ({
+export const StyledStatusPreview = styled(Card)(({ color }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",

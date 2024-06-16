@@ -1,9 +1,18 @@
-import { Box, styled } from "@mui/material";
+import { Box, Card, styled } from "@mui/material";
 
 export const StyledRow = styled(Box)(() => ({
   display: "flex",
   flexDirection: "row",
   justifyContent: "center",
+  alignItems: "center",
+  width: "100%",
+  gap: "1vmin",
+}));
+
+export const StyledRowCard = styled(Card)(() => ({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-evenly",
   alignItems: "center",
   width: "100%",
   gap: "1vmin",
