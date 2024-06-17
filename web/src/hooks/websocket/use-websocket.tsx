@@ -127,13 +127,14 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
             break;
           }
           case Message.ChangeAccountState: {
-            if (state.uid === message.payload.id)
+            if (state.uid === message.payload.id) {
               saveUser({
                 type: AppAction.ChangeAccountState,
                 payload: { state: message.payload.enabled },
               });
-            setIsAccountEnabled(message.payload.enabled);
-            websocket.close();
+              setIsAccountEnabled(message.payload.enabled);
+              websocket.close();
+            }
             break;
           }
         }

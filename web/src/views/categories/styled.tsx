@@ -35,13 +35,14 @@ export const StyledCircle = styled(Box)({
   boxShadow: "0px 0px 12px -5px rgba(66, 68, 90, 1)",
 });
 
-export const StyledStatus = styled(Box)(({ color }) => ({
+export const StyledCategory = styled(Box)(({ color }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   height: "3vmin",
   padding: "0 5px",
   borderRadius: "1.5vmin",
+  backgroundColor: `${color}`,
   border: `1px solid ${color}`,
 }));
 

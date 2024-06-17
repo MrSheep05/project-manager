@@ -5,6 +5,7 @@ import {
   StyledColumn,
   StyledColumnList,
   StyledRow,
+  StyledRowCard,
   StyledStatus,
 } from "./styled";
 import { useContext, useEffect, useState } from "react";
@@ -79,8 +80,7 @@ const Status = () => {
                 {color}
               </Typography>
             </StyledRow>
-            <StyledRow
-              justifyContent={"space-evenly !important"}
+            <StyledRowCard
               style={{
                 backgroundColor: "white",
                 padding: "1vmin",
@@ -91,7 +91,7 @@ const Status = () => {
               <StyledStatus color={color}>
                 <Typography>{name.length > 0 ? name : "Status"}</Typography>
               </StyledStatus>
-            </StyledRow>
+            </StyledRowCard>
             <Button
               onClick={() => {
                 send({
