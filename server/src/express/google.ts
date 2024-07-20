@@ -7,7 +7,10 @@ export const googleOAuth: GoogleOAuthFn = async (_request, response) => {
   const client = getClient();
   const redirectURL = client.generateAuthUrl({
     access_type: "offline",
-    scope: "https://www.googleapis.com/auth/userinfo.email openid",
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email",
+    ],
     redirect_uri: "http://localhost:3000/oauth2callback",
   });
   response.redirect(redirectURL);
