@@ -1,3 +1,5 @@
+--liquibase formatted sql
+
 -- changeset liquibase:get_csv_procedure endDelimiter://
 CREATE PROCEDURE `CsvProjects`(IN `in_connection_id` VARCHAR(256), IN `in_users_id` TEXT)
 BEGIN
