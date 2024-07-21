@@ -75,6 +75,15 @@ export const onMessage: OnMessageFn = async ({ data, ws }) => {
         await updateProjectMessage({ connectionId, message });
         break;
       }
+      case Action.GetConnectionId: {
+        ws.send(
+          JSON.stringify({
+            message: Action.GetConnectionId,
+            payload: { connectionId: ws.connectionId },
+          })
+        );
+        break;
+      }
       default: {
         println(
           { severity: Severity.Warning },

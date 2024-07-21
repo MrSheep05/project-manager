@@ -2,7 +2,13 @@ import { useContext, useEffect } from "react";
 import useAdminRoute from "../../hooks/useAdminRoute";
 import { WebsocketState } from "../../hooks/websocket";
 import { SendAction, SendFn } from "../../hooks/websocket/types";
-import { Box, ListItem, ListItemButton, ListItemText } from "@mui/material";
+import {
+  Box,
+  Button,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+} from "@mui/material";
 import { FixedSizeList } from "react-window";
 import AutoSizer, { Size } from "react-virtualized-auto-sizer";
 import { Role, UserBody } from "../../utils/types";
@@ -84,6 +90,9 @@ const Users = () => {
           )}
         </AutoSizer>
       </Box>
+      <Button variant="contained" onClick={() => send}>
+        Csv
+      </Button>
     </StyledBox>
   );
 };

@@ -19,7 +19,8 @@ export type StoredProcedure =
   | GetUserProcedure
   | GetAllUsersProcedure
   | GetProjectsProcedure
-  | UpdateProjectProcedure;
+  | UpdateProjectProcedure
+  | CsvProjectsProcedure;
 
 export enum Procedure {
   AddCategory = "AddCategory",
@@ -39,6 +40,7 @@ export enum Procedure {
   RemoveStatus = "RemoveStatus",
   GetUser = "GetUser",
   GetAllUsers = "GetAllUsers",
+  CsvProjects = "CsvProjects",
 }
 export type QueryResponse =
   | DataResponse
@@ -54,8 +56,13 @@ export type DataResponse =
   | GetConnectionResponse
   | GetUserResponse
   | AllUsersResponse
-  | GetProjectsResponse;
+  | GetProjectsResponse
+  | CsvResponse;
 
+export type CsvProjectsProcedure = {
+  type: Procedure.CsvProjects;
+  payload: { connectionId: string; usersId: string };
+};
 type GetAllUsersProcedure = {
   type: Procedure.GetAllUsers;
   payload: {
@@ -251,6 +258,12 @@ type GetProjectsResponse = {
   key: ProcedureResponse.AllProjects;
   body: ProjectBody[];
 };
+
+type CsvResponse = {
+  key: ProcedureResponse.CsvProjects;
+  body: any;
+};
+
 export enum ProcedureResponse {
   None = 0,
   GetUserResult = "user",
@@ -267,6 +280,7 @@ export enum ProcedureResponse {
   RemovedStatus = "RemovedStatus",
   AllAccounts = "AllAccounts",
   AllProjects = "AllProjects",
+  CsvProjects = "CsvProjects",
 }
 
 export namespace Procedure {
@@ -316,6 +330,9 @@ export namespace Procedure {
       }
       case Procedure.UpdateProject: {
         return ProcedureResponse.CreatedProject;
+      }
+      case Procedure.CsvProjects: {
+        return ProcedureResponse.CsvProjects;
       }
       default: {
         return ProcedureResponse.None;

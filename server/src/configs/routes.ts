@@ -3,6 +3,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { googleOAuth, googleToken } from "../express/google";
 import { println } from "../log";
+import { exportProject } from "../express/export_projects";
 
 const config = (app: express.Express) => {
   app.use(bodyParser.urlencoded({ extended: false }));
@@ -12,6 +13,8 @@ const config = (app: express.Express) => {
   app.get("/auth/google", googleOAuth);
 
   app.post("/auth/tokens", googleToken);
+
+  app.post("/csv", exportProject);
 
   app.get("/oauth2callback", (req, res) => {
     const { code } = req.query;

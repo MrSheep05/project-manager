@@ -36,6 +36,7 @@ export enum Action {
   ChangeAccountState = "changeAccountState",
   UpdateProject = "updateProject",
   GetUsers = "getUsers",
+  GetConnectionId = "getConnectionId",
 }
 
 export type Mesages =
@@ -46,12 +47,19 @@ export type Mesages =
   | ChangeAccountStateMessage
   | GetUsersMessage
   | GetProjectsMessage
-  | UpdateProjectMessage;
+  | UpdateProjectMessage
+  | GetConnectionIdMessage;
 
 export type GetProjectsMessage = {
   action: Action.GetProjects;
   payload: { offsetId?: string };
 };
+
+export type GetConnectionIdMessage = {
+  action: Action.GetConnectionId;
+  payload: {};
+};
+
 export type AddProjectMessage = {
   action: Action.AddProject;
   payload: {

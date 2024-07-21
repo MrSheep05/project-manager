@@ -14,7 +14,8 @@ export type MessageObject =
   | GetProjectsMessage
   | GetUsersMessage
   | RemoveStatusOrCategoryMessage
-  | UserInfoMessage;
+  | UserInfoMessage
+  | GetConnectionId;
 
 export enum Message {
   AddProject = "addProject",
@@ -25,6 +26,7 @@ export enum Message {
   ChangeAccountState = "changeAccountState",
   GetUsers = "getUsers",
   UserData = "userData",
+  GetConnectionId = "getConnectionId",
 }
 
 type AddProjectMessage = {
@@ -32,6 +34,10 @@ type AddProjectMessage = {
   payload: ProjectBody;
 };
 
+type GetConnectionId = {
+  message: Message.GetConnectionId;
+  payload: { connectionId: string };
+};
 type GetStatusAndCategoryMessage = {
   message: Message.GetStatusAndCategory;
   payload: {

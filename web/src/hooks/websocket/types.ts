@@ -40,6 +40,7 @@ export type CreateWebsocketFn = (
 ) => WebSocket | undefined;
 
 export type DataState = {
+  connectionId?: string;
   isAdmin: boolean;
   uid?: string;
   categories: CategoryOrStatusBody[];
@@ -69,6 +70,7 @@ export enum SendAction {
   ChangeAccountState = "changeAccountState",
   GetUsers = "getUsers",
   UpdateProject = "updateProject",
+  GetConnectionId = "getConnectionId",
 }
 
 export type Mesages =
@@ -80,7 +82,8 @@ export type Mesages =
   | GetUsersMessage
   | GetProjectsMessage
   | UpdateProjectMessage
-  | "reconnect";
+  | "reconnect"
+  | GetConnectionIdMessage;
 
 export type UpdateProjectMessage = {
   action: SendAction.UpdateProject;
@@ -121,6 +124,10 @@ export type GetStatusAndCategoryMessage = {
   payload: {};
 };
 
+export type GetConnectionIdMessage = {
+  action: SendAction.GetConnectionId;
+  payload: {};
+};
 export type RemoveStatusOrCategoryMessage = {
   action: SendAction.RemoveStatus | SendAction.RemoveCategory;
   payload: {

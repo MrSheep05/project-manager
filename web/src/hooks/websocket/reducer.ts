@@ -84,6 +84,14 @@ export const reducer = (state: DataState, action: MessageObject): DataState => {
         isAccountEnabled: payload.enabled,
       };
     }
+
+    case Message.GetConnectionId: {
+      console.log(`CONNECTION ID ${payload.connectionId}`);
+      return {
+        ...state,
+        connectionId: payload.connectionId,
+      };
+    }
     default: {
       return state;
     }

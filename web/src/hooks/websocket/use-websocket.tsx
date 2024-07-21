@@ -15,6 +15,7 @@ import { Message } from "./on-message.types";
 import { AppAction } from "../app-state/types";
 import { AppRoutes } from "../../routes/types";
 import { isBinary } from "../../utils";
+import { WebsocketState } from ".";
 
 const HEARTBEAT_TIMEOUT = 1000 * 17;
 const HEARTBEAT_VALUE = 1;
@@ -86,6 +87,9 @@ export const useWebsocket: UseWebsocketHook = (state, dispatch) => {
             action: SendAction.GetStatusAndCategory,
             payload: {},
           })
+        );
+        websocket.send(
+          JSON.stringify({ action: SendAction.GetConnectionId, payload: {} })
         );
         websocket.send(
           JSON.stringify({ action: SendAction.GetProjects, payload: {} })

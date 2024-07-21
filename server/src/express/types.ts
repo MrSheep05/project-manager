@@ -24,6 +24,10 @@ export type GoogleTokenFn = (
   res: TypedResponseJSON<{ accessToken: string; refreshToken: string }>
 ) => Promise<any>;
 
+export type ExportProjectsFn = (
+  req: TypedRequestBody<{ connectionId: string; usersId: string }>,
+  res: Response
+) => Promise<void>;
 export type AuthorizeUpgradeFn = (
   request: IncomingMessage,
   socket: stream.Duplex,

@@ -111,6 +111,10 @@ export const runProcedure = async (
         3
       );
     }
+    case Procedure.CsvProjects: {
+      const { connectionId, usersId } = action.payload;
+      return await createCall(action.type, [connectionId, usersId], 2);
+    }
     default: {
       return { key: 0, body: "NONE" };
     }
@@ -136,6 +140,7 @@ const createCall = async (
   if (args === 0) return;
   try {
     const connection = await getDatabaseConnection();
+
     const response = getData(
       await connection.query(
         `CALL ${process.env.MYSQL_DATABASE}.${procedureName}(${Array.from(
@@ -145,8 +150,12 @@ const createCall = async (
         variables
       )
     );
+    println({ severity: Severity.Warning }, "PROCEDURE RESPONSE", response);
+
     await connection.end();
     const responseType = Procedure.getResponse(procedureName);
+
+    println({ severity: Severity.Warning }, "PROCEDURE TYPE", responseType);
 
     if (mayBeEmptyProcedures.includes(responseType)) {
       const list = response ? JSON.parse(response) : [];
