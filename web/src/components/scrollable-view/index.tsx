@@ -3,18 +3,18 @@ import { StyledColumnList, StyledIntersection, StyledRowList } from "./styled";
 
 const SCROLL_OFFSET = 5;
 interface ScrollableViewProps {
-  onReachedEnd: () => void;
-  reachedEnd: boolean;
+  onReachedEnd?: () => void;
+  reachedEnd?: boolean;
   children: JSX.Element | JSX.Element[];
-  loader: JSX.Element;
+  loader?: JSX.Element;
   style?: React.CSSProperties;
   isVertical?: boolean;
   shouldNotScroll?: boolean;
 }
 
 const ScrollableView = ({
-  onReachedEnd,
-  reachedEnd,
+  onReachedEnd = () => {},
+  reachedEnd = true,
   children,
   loader,
   style,

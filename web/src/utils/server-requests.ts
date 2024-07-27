@@ -3,6 +3,7 @@ import { PostFn } from "./server-requests.types";
 const serverURL = "http://localhost:8080";
 
 export const post: PostFn = async ({ body, path }) => {
+  console.log(body);
   const response = await fetch(`${serverURL}${path}`, {
     method: "POST",
     headers: {
@@ -10,5 +11,5 @@ export const post: PostFn = async ({ body, path }) => {
     },
     body: JSON.stringify(body),
   });
-  return response.json();
+  return response;
 };

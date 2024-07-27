@@ -9,18 +9,20 @@ import {
   ListItemButton,
   ListItemText,
 } from "@mui/material";
-import { FixedSizeList } from "react-window";
-import AutoSizer, { Size } from "react-virtualized-auto-sizer";
 import { Role, UserBody } from "../../utils/types";
 import { EnabledSwitch, StyledBox } from "./styled";
+import { post } from "../../utils/server-requests";
+import ScrollableView from "../../components/scrollable-view";
+import path from "path";
+import { writeFileSync } from "fs";
 
 function renderRow(
   index: number,
-  users: UserBody[],
+  user: UserBody,
   send: SendFn,
+  connectionId: String | undefined,
   uid: String | undefined
 ) {
-  const user = users[index];
   const enabled = Boolean(user.enabled);
 
   const ListStyle = enabled
@@ -49,6 +51,30 @@ function renderRow(
           }
         />
       </ListItemButton>
+      <Button
+        variant="contained"
+        onClick={async () => {
+          try {
+            const blob = await post({
+              path: "/csv",
+              body: { connectionId, usersId: uid },
+            }).then((response) => response.blob());
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `${user.email}_${new Date()
+              .toJSON()
+              .slice(0, 10)
+              .replace(/-/g, "-")}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          } catch (e) {
+            console.warn(e);
+          }
+        }}
+      >
+        Csv
+      </Button>
     </ListItem>
   );
 }
@@ -56,7 +82,7 @@ function renderRow(
 const Users = () => {
   const { state, send } = useContext(WebsocketState);
   useAdminRoute();
-
+  const { connectionId } = state;
   useEffect(() => {
     if (state.users.length === 0) {
       send({ action: SendAction.GetUsers, payload: {} });
@@ -77,22 +103,12 @@ const Users = () => {
           border: "1px solid rgba(0, 0, 0, 0.05)",
         }}
       >
-        <AutoSizer>
-          {({ height, width }: Size) => (
-            <FixedSizeList
-              height={height}
-              width={width}
-              itemCount={state.users.length}
-              itemSize={35}
-            >
-              {(props) => renderRow(props.index, state.users, send, state.uid)}
-            </FixedSizeList>
+        <ScrollableView isVertical={true} onReachedEnd={() => {}}>
+          {state.users.map((user, index) =>
+            renderRow(index, user, send, connectionId, state.uid)
           )}
-        </AutoSizer>
+        </ScrollableView>
       </Box>
-      <Button variant="contained" onClick={() => send}>
-        Csv
-      </Button>
     </StyledBox>
   );
 };

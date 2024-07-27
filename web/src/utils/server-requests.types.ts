@@ -1,1 +1,4 @@
-export type PostFn = <T>(data: { body: Object; path: String }) => Promise<T>;
+export type PostFn = (data: {
+  body: Object;
+  path: String;
+}) => Promise<Response>;

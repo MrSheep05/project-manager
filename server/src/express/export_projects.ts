@@ -22,8 +22,8 @@ export const exportProject: ExportProjectsFn = async (req, res) => {
       header: true,
       columns: [
         { key: "id", header: "ID" },
-        { key: "user_id", header: "User ID" },
-        { key: "user_email", header: "User Email" },
+        { key: "user_id", header: "UserID" },
+        { key: "user_email", header: "UserEmail" },
         { key: "title", header: "Title" },
         { key: "content", header: "Content" },
         { key: "timestamp", header: "Timestamp" },

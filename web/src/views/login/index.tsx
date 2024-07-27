@@ -22,10 +22,10 @@ const Login = () => {
 
     const getTokens = async (code: String) => {
       try {
-        const { accessToken, refreshToken } = await post<Tokens>({
+        const { accessToken, refreshToken } = await post({
           body: { code },
           path: "/auth/tokens",
-        });
+        }).then((response) => response.json());
         if (accessToken && refreshToken) {
           console.log("ACCESS", accessToken, "REFRESH", refreshToken);
           setLoadingText(LoadingText.Home);
