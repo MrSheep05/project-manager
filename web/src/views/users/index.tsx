@@ -57,7 +57,7 @@ function renderRow(
           try {
             const blob = await post({
               path: "/csv",
-              body: { connectionId, usersId: uid },
+              body: { connectionId, usersId: user.id },
             }).then((response) => response.blob());
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
